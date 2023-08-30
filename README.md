@@ -45,6 +45,9 @@ npm audit fix
   - A vulnerability classified as problematic has been found in debug-js debug up to 3.0.x. This affects the function useColors of the file src/node.js. The manipulation of the argument str leads to inefficient regular expression complexity.
   - **Fixed** automatically with *npm audit fix*, updating affected version from v2.2.0 to v2.6.9.
 
+- express  2.5.8 - 4.15.4 || 5.0.0-alpha.1 - 5.0.0-alpha.5 (**high**), depends on vulnerable versions of debug, finalhandler, fresh, qs, send and serve-static.
+  - **Fixed** automatically with *npm audit fix*, updating affected version from v4.14.0 to v4.18.2.
+
 - finalhandler <=1.0.5 (**high**), depends on vulnerable versions of debug.
   - **Fixed** automatically with *npm audit fix*, updating affected version from v0.5.0 to v1.2.0.
 
