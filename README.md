@@ -42,7 +42,7 @@ npm audit fix
 
 Explanation of vulnerabilities:
 
-**ReDoS** - Regular Expression Denial of Service. Can in an attack or even by accident by a developer make an application become slow, unresponsive or even crash by consuming lots of system resources like CPU time or memory.[^1]
+**ReDoS** - Regular Expression Denial of Service. Can in an attack or even by accident by a developer make an application become slow, unresponsive or even crash by consuming lots of system resources like CPU time or memory.[^1] 
 
 **Inefficient Regular Expression Complexity Vulnerability** - Meaning that the use of regular expressions is unoptimized and leads to inefficiency in the system. Doesn't necessarily lead to a ReDoS, but can slow the application down.[^2]
 
@@ -91,11 +91,11 @@ Explanation of vulnerabilities:
 
 Running *npm audit fix* after changing package.json manually added 7 packages, removed 20 packages, changed 24 packages.
 
-[^1] https://www.regular-expressions.info/redos.html, last visited 2023-08-30.
+[^1]: https://www.regular-expressions.info/redos.html
 
-[^2] https://www.martellosecurity.com/kb/mitre/cwe/1333/, last visited 2023-08-30.
+[^2]: https://www.martellosecurity.com/kb/mitre/cwe/1333/
 
-[^3] https://portswigger.net/web-security/prototype-pollution, last visited 2023-08-30.
+[^3]: https://portswigger.net/web-security/prototype-pollution
 
 
 ## Frontend
