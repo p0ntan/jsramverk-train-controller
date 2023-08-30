@@ -2,11 +2,11 @@
 This is the repository for the course *jsramverk* (h23).
 It is maintained by *elmo22* and *poak22*.
 
-# Backend
+## Backend
 
-## Start app
+### Steps to make backend work locally from original repo
 
-Register at [Trafikverket](https://api.trafikinfo.trafikverket.se/) to receive a personal API key, then create an .env file, following the template in .env.example, and store your API key in that file.
+Created account [Trafikverket](https://api.trafikinfo.trafikverket.se/) to receive a personal API key, then create an .env file, following the template in .env.example, and store your API key in that file.
 
 ```
 # When opening the repo for the first time
@@ -15,12 +15,16 @@ Register at [Trafikverket](https://api.trafikinfo.trafikverket.se/) to receive a
 node -v
 npm -v
 npm install
+```
 
+### Start app
+
+```
 # To run the app
 node app.js
 ```
 
-## Run a security audit
+### Run a security audit
 
 To check our app for vulnerabilities, run an *npm audit*. For help, check the [documentation](https://docs.npmjs.com/cli/v6/commands/npm-audit).
 
@@ -32,19 +36,19 @@ npm audit
 npm audit fix
 ```
 
-### Vulnerabilities found (Specifikation)
+**Vulnerabilities found (Specifikation)**
 
 Here we can write about the security holes you found and how you fixed them.
 
-# Frontend
+## Frontend
 
-## Start app
+### Start app
 
 ```
 # To run the app on *http://localhost:9000/frontend/*
 python3 -m http.server 9000
 ```
 
-# Choice of framework
+## Choice of framework
 
 Here we can write about the framework we chose for this project.
