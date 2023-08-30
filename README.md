@@ -38,10 +38,10 @@ npm audit fix
 
 **Vulnerabilities found (Specifikation)**
 
+11 vulnerabilities found in first repor where 3 are moderate and 8 high.
+
 - node-fetch <2.6.7, vulnerable to Exposure of Sensitive Information to an Unauthorized Actor.
   - Fixed by manually setting node-fetch to ^v2.7.0 in package.json.
-
-Here we can write about the security holes you found and how you fixed them.
 
 ## Frontend
 
