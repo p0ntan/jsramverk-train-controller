@@ -109,4 +109,11 @@ python3 -m http.server 9000
 
 ## Choice of framework
 
-Here we can write about the framework we chose for this project.
+For this project we opted to use the [Vue](https://vuejs.org/) framework for the frontend development of our app. This decision primarily stems from Vue's reputation for its user-friendly and intuitive nature, setting it apart from the potentially steeper learning curves associated with React and Angular. Vue seems furthermore the better choice for a simple application like ours. [^1]
+Another advantage of Vue is that it has excellent documentation and learning resources. Compared to Svelte, another JavaScript framework we considered because of it beginner-friendly features, Vue has a wider and more robust community, which might be advantageous when we run into difficulties during development. [^2]
+
+While selecting a JavaScript framework, we documented the advantages and disadvantages of each option, considering their relevance to our project and our level of experience. This information can be found in this [Google document](https://docs.google.com/document/d/1Iu-NJp805nbHyn00gttPkZc4HA0VUaw7iiD8hViXYVc/edit?pli=1#heading=h.7b137ldgxec0). For a more comprehensive understanding of our selection process, we encourage you to take a look at it.
+
+[^1]: *Vue vs React vs... Svelte?!*: https://medium.com/@faulknerproject/vue-vs-react-vs-svelte-5f93d70d2618, last visited 2023-08-30.
+
+[^2]: *React vs Vue vs Angular vs Svelte*: https://dev.to/hb/react-vs-vue-vs-angular-vs-svelte-1fdm, last visited 2023-08-30.
