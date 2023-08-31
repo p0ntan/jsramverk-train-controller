@@ -2,6 +2,18 @@
 This is the repository for the course *jsramverk* (h23).
 It is maintained by *elmo22* and *poak22*.
 
+```
+# To initialze the application you need to run the following script from root folder in repo.
+bash setup_app.bash
+
+# Which runs the following commands:
+# cd backend
+# npm install
+# bash db/reset_db.bash
+```
+
+You also need a .env file in the /backend folder with API-key, see *.env.example* for structure.
+
 ## Backend
 
 ### Steps to make backend work locally from original repo
@@ -9,12 +21,15 @@ It is maintained by *elmo22* and *poak22*.
 Created account [Trafikverket](https://api.trafikinfo.trafikverket.se/) to receive a personal API key, then create an .env file, following the template in .env.example, and store your API key in that file.
 
 ```
-# When opening the repo for the first time
+# When opening the repo for the first time, stand in the folder /backend.
 # Make sure node and npm are installed
 # Then install the dependencies in the local node_modules folder
 node -v
 npm -v
 npm install
+
+# To reset the database the following command was needed from the folder /backend:
+bash setup_app.bash
 ```
 
 ### Start app
@@ -103,7 +118,8 @@ Running *npm audit fix* after changing package.json manually added 7 packages, r
 ### Start app
 
 ```
-# To run the app on *http://localhost:9000/frontend/*
+# To run the app on *http://localhost:9000/*
+# Stand in the folder folder /frontend
 python3 -m http.server 9000
 ```
 
