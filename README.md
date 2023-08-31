@@ -29,7 +29,7 @@ npm -v
 npm install
 
 # To reset the database the following command was needed from the folder /backend:
-bash setup_app.bash
+bash db/reset_db.bash
 ```
 
 ### Start app
