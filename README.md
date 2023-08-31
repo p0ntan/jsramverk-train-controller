@@ -106,11 +106,11 @@ Explanation of vulnerabilities:
 
 Running *npm audit fix* after changing package.json manually added 7 packages, removed 20 packages, changed 24 packages.
 
-[^1]: https://www.regular-expressions.info/redos.html
+[^1]: https://www.regular-expressions.info/redos.html, last visited 2023-08-30.
 
-[^2]: https://www.martellosecurity.com/kb/mitre/cwe/1333/
+[^2]: https://www.martellosecurity.com/kb/mitre/cwe/1333/, last visited 2023-08-30.
 
-[^3]: https://portswigger.net/web-security/prototype-pollution
+[^3]: https://portswigger.net/web-security/prototype-pollution, last visited 2023-08-30.
 
 
 ## Frontend
