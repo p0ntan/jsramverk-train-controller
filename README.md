@@ -119,7 +119,7 @@ Running *npm audit fix* after changing package.json manually added 7 packages, r
 
 ```
 # To run the app on *http://localhost:9000/*
-# Stand in the folder folder /frontend
+# Stand in the folder /frontend
 python3 -m http.server 9000
 ```
 
