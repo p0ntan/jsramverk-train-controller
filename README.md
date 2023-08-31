@@ -5,11 +5,6 @@ It is maintained by *elmo22* and *poak22*.
 ```
 # To initialze the application you need to run the following script from root folder in repo.
 bash setup_app.bash
-
-# Which runs the following commands:
-# cd backend
-# npm install
-# bash db/reset_db.bash
 ```
 
 You also need a .env file in the /backend folder with API-key, see *.env.example* for structure.
