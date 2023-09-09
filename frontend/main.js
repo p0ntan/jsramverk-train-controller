@@ -145,8 +145,7 @@ function renderTicketView(item) {
     fetch("http://localhost:1337/tickets")
         .then((response) => response.json())
         .then((result) => {
-            var lastId = result.data[1] ? result.data[1].id : 0;
-
+            var lastId = result.data[1] ? result.data[1].id : 0; // TODO this is probably not working as intented with mongoDb
             newTicketId = lastId + 1;
 
             let newTicketIdSpan = document.getElementById("new-ticket-id");
@@ -156,7 +155,9 @@ function renderTicketView(item) {
             result.data.forEach((ticket) => {
                 let element = document.createElement("div");
 
-                element.innerHTML = `${ticket.id} - ${ticket.code} - ${ticket.trainnumber} - ${ticket.traindate}`;
+                console.log(ticket);
+
+                element.innerHTML = `${ticket._id} - ${ticket.code} - ${ticket.trainnumber} - ${ticket.traindate}`;
 
                 oldTickets.appendChild(element);
             });
