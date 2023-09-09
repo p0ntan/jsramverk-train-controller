@@ -1,12 +1,16 @@
 const database = require('../db/database.js');
 
+/**
+ * Object for working with collection tickets in database
+ */
 const tickets = {
     getTickets: async function getTickets(req, res){
-        var db = await database.openDb();
+        const collectionName = "tickets";
+        const db = await database.openDb();
+        const collection = await db.collection(collectionName);
+        const allTickets = await collection.find().toArray();
 
-        var allTickets = await db.all(`SELECT *, ROWID as id FROM tickets ORDER BY ROWID DESC`);
-
-        await db.close();
+        await db.client.close();
 
         return res.json({
             data: allTickets
@@ -14,20 +18,21 @@ const tickets = {
     },
 
     createTicket: async function createTicket(req, res){
-        var db = await database.openDb();
+        const collectionName = "tickets";
+        const db = await database.openDb();
+        const collection = await db.collection(collectionName);
 
-        const result = await db.run(
-            'INSERT INTO tickets (code, trainnumber, traindate) VALUES (?, ?, ?)',
-            req.body.code,
-            req.body.trainnumber,
-            req.body.traindate,
-        );
+        const result = await collection.insertOne({
+            code: req.body.code,
+            trainnumber: req.body.trainnumber,
+            traindate: req.body.traindate
+        })
 
-        await db.close();
+        await db.client.close();
 
         return res.json({
             data: {
-                id: result.lastID,
+                id: result.insertedId, // TODO look up what this id is used for
                 code: req.body.code,
                 trainnumber: req.body.trainnumber,
                 traindate: req.body.traindate,
