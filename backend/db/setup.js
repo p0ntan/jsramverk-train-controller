@@ -36,17 +36,17 @@ async function resetCollection(dsn, colName, doc) {
     try {
         const client  = await mongo.connect(dsn);
         const db = await client.db();
-        // const col = await db.collection(colName); // Can be used for getting 1 wanted collections by name and delete only the data keeping the collection itself
-
-        const collections = await db.listCollections().toArray(); // This finds all collections
+        const col = await db.collection(colName); // Can be used for getting 1 wanted collections by name and delete only the data keeping the collection itself
+        await db.createCollection(colName); // Create collection if it dosen't exist
+        // const collections = await db.listCollections().toArray(); // This finds all collections // TODO remove this and other code if not wanted
         
-        for (const collection of collections) {
-            await db.collection(collection.name).drop(); // This removes each collection, completly resetting the database
-            // await col.deleteMany(); // This deletes only the data in the collection
-        }
+        // for (const collection of collections) {
+        //     await db.collection(collection.name).drop(); // This removes each collection, completly resetting the database
+        //     // await col.deleteMany(); // This deletes only the data in the collection
+        // }
 
-        // await col.deleteMany(); // This deletes the data in one the collection
-        // await col.insertMany(doc); Uncomment this to insert data based on the doc file (setup.json in the folder)
+        await col.deleteMany(); // This deletes the data in one the collectio
+        // await col.insertMany(doc); // Uncomment this to insert data based on the doc file (setup.json in the folder)
     
         await client.close();
     } catch (err) {
