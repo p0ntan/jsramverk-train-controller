@@ -4,10 +4,11 @@ const database = require('../db/database.js');
  * Object for working with collection tickets in database
  */
 const tickets = {
+    collectionName: "tickets",
+
     getTickets: async function getTickets(req, res){
-        const collectionName = "tickets";
         const db = await database.openDb();
-        const collection = await db.collection(collectionName);
+        const collection = await db.collection(tickets.collectionName);
         const allTickets = await collection.find().toArray();
 
         await db.client.close();
@@ -18,9 +19,8 @@ const tickets = {
     },
 
     createTicket: async function createTicket(req, res){
-        const collectionName = "tickets";
         const db = await database.openDb();
-        const collection = await db.collection(collectionName);
+        const collection = await db.collection(tickets.collectionName);
 
         const result = await collection.insertOne({
             code: req.body.code,
