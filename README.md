@@ -30,8 +30,8 @@ bash db/reset_db.bash
 ### Start app
 
 ```
-# To run the app
-node app.js
+# To run the app from /backend folder
+npm run start-dev
 ```
 
 ### Run a security audit
