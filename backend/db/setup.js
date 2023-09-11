@@ -9,14 +9,13 @@ const database = require('../db/database.js');
 // const setupFile = "setup.json";
 // const fs = require("fs");
 // const path = require("path");
-// const docs = JSON.parse(fs.readFileSync(
+// const doc = JSON.parse(fs.readFileSync(
 //     path.resolve(__dirname, setupFile),
 //     "utf8"
 // ));
 
 // Do it.
-resetCollection("tickets")
-    .catch(err => console.log(err));
+resetCollection("tickets");
 
 /**
  * Reset a collection by removing existing content.
@@ -26,8 +25,6 @@ resetCollection("tickets")
  *
  * @param {string} colName Name of collection.
  * @param {string=} doc    Documents to be inserted into collection.
- *
- * @throws Error when database operation fails.
  *
  * @return {Promise<void>} Void
  */
@@ -46,6 +43,5 @@ async function resetCollection(colName, doc) {
         await db.client.close();
     } catch (err) {
         console.log(err);
-        throw err;
     }
 }
