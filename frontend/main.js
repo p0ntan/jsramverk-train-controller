@@ -155,10 +155,7 @@ function renderTicketView(item) {
             result.data.forEach((ticket) => {
                 let element = document.createElement("div");
 
-                console.log(ticket);
-
                 element.innerHTML = `${ticket._id} - ${ticket.code} - ${ticket.trainnumber} - ${ticket.traindate}`;
-
                 oldTickets.appendChild(element);
             });
         });

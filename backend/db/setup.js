@@ -36,9 +36,9 @@ async function resetCollection(colName, doc) {
         const db = await database.openDb();
         const col = await db.collection(colName); 
 
-        await col.deleteMany(); // This deletes the data in one the collection
+        await col.deleteMany(); // This deletes the data in the collection
 
-        // Insert default data is provied as JSON
+        // Insert default data if provied as JSON-string
         if (doc) {
             await col.insertMany(doc);
         }
