@@ -1,4 +1,2 @@
-# $(> db/trains.sqlite)
-# cat db/migrate.sql | sqlite3 db/trains.sqlite
-# Should run setup.js
+# Runs the file db/setup.js to reset the database
 node db/setup.js
