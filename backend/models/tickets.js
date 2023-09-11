@@ -32,7 +32,7 @@ const tickets = {
 
         return res.json({
             data: {
-                id: result.insertedId, // TODO look up what this id is used for
+                id: result.insertedId,
                 code: req.body.code,
                 trainnumber: req.body.trainnumber,
                 traindate: req.body.traindate,
