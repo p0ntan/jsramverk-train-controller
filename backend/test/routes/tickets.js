@@ -53,7 +53,8 @@ describe('route', () => {
                 code: "ANAtest01",
                 trainnumber: "12345",
                 traindate: "2020-02-20"
-            }
+            };
+
             chai.request(httpServer)
                 .post('/tickets')
                 .send(inData)
@@ -65,7 +66,7 @@ describe('route', () => {
                     done();
                 });
         });
-        
+
         it('should get status 200 with 1 ticket', (done) => {
             chai.request(httpServer)
                 .get('/tickets')
@@ -79,14 +80,15 @@ describe('route', () => {
 
                     done();
                 });
-        })
+        });
 
         it('should get status 201 with inserted data', (done) => {
             const inData = {
                 code: "ANAtest02",
                 trainnumber: "151hhd",
                 traindate: "2021-12-20"
-            }
+            };
+
             chai.request(httpServer)
                 .post('/tickets')
                 .send(inData)
@@ -98,7 +100,7 @@ describe('route', () => {
                     done();
                 });
         });
-        
+
         it('should get status 200 with 2 ticket', (done) => {
             chai.request(httpServer)
                 .get('/tickets')
@@ -112,6 +114,6 @@ describe('route', () => {
 
                     done();
                 });
-        })
+        });
     });
 });
