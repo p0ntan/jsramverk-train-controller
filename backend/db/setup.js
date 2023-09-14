@@ -24,11 +24,11 @@ resetCollection("tickets");
  * @async
  *
  * @param {string} colName Name of collection.
- * @param {string=} doc    Documents to be inserted into collection.
+ * @param {string=} doc    Optional, documents to be inserted into collection.
  *
  * @return {Promise<void>} Void
  */
-async function resetCollection(colName, doc) {
+async function resetCollection(colName, doc=null) {
     try {
         const db = await database.openDb();
         const col = await db.collection(colName); 
