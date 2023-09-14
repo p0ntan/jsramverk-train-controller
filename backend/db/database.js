@@ -1,12 +1,24 @@
 const mongo = require("mongodb").MongoClient;
-const dsn =  "mongodb://localhost:27017/trains";
 
 /**
  * Object to use for opening the mongoDb connection
  */
 const database = {
+    /**
+     * Opens a connection to the MongoDB database.
+     *
+     * @returns {Promise<object>} A Promise that resolves to a MongoDB database object.
+     * @throws {Error} If there is an error connecting to the MongoDB database.
+     */
     openDb: async function openDb() {
         try {
+            let dsn = "mongodb://localhost:27017/trains";
+
+            // Use test database when doing test
+            if (process.env.NODE_ENV === 'test') {
+                dsn = "mongodb://localhost:27017/test";
+            }
+
             const client  = await mongo.connect(dsn);
             const db = await client.db();
 
