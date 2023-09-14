@@ -1,8 +1,8 @@
 /**
- * Test suits for database
- * 
- * global it describe before
+ * Test opening and resetting the database
  */
+
+/*global it describe before */
 
 process.env.NODE_ENV = 'test';
 
@@ -59,9 +59,9 @@ describe('Test database', () => {
             await resetCollection(colName, doc);
 
             const res = await database.getCollection(colName, doc);
-            
+
             res.should.be.a('array');
             res.should.have.lengthOf(2);
-        })
+        });
     });
-})
+});
