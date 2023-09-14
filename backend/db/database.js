@@ -27,6 +27,28 @@ const database = {
             console.error("Error connecting to MongoDB:", err);
             throw err;
         }
+    },
+
+    /**
+     * Get collection from database as an array
+     * 
+     * @param {string} colName Name of the collection
+     * @returns {array}
+     */
+    getCollection: async function getCollection(colName) {
+        const db = await database.openDb();
+        let data;
+
+        try {
+            const collection = await db.collection(colName);
+            data = await collection.find().toArray();
+        } catch (err) {
+            console.error(`Error getting ${colName}:`, err)
+        }
+
+        await db.client.close();
+
+        return data || [];
     }
 };
 
