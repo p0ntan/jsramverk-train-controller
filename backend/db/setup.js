@@ -5,15 +5,6 @@
 
 const database = require('../db/database.js');
 
-// // This is for setting up database with data from setup.json
-// const setupFile = "setup.json";
-// const fs = require("fs");
-// const path = require("path");
-// const doc = JSON.parse(fs.readFileSync(
-//     path.resolve(__dirname, setupFile),
-//     "utf8"
-// ));
-
 // Do it.
 resetCollection("tickets");
 
@@ -24,7 +15,7 @@ resetCollection("tickets");
  * @async
  *
  * @param {string} colName Name of collection.
- * @param {string=} doc    Optional, documents to be inserted into collection.
+ * @param {object=} doc    Optional, documents to be inserted into collection in JSON-format.
  *
  * @return {Promise<void>} Void
  */
@@ -45,3 +36,5 @@ async function resetCollection(colName, doc=null) {
         console.log(err);
     }
 }
+
+module.exports = resetCollection;
