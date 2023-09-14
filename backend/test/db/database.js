@@ -16,7 +16,7 @@ chai.should();
 
 describe('Test database', () => {
     /**
-     * Before each test, reset the database and remove all collections
+     * Before test, reset the database and remove all collections
      */
     before(async () => {
         const db = await database.openDb();
