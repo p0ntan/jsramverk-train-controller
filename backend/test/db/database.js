@@ -7,15 +7,12 @@
 process.env.NODE_ENV = 'test';
 
 const chai = require('chai');
-const chaiHttp = require('chai-http');
 const database = require('../../db/database.js');
 const resetCollection = require('../../db/setup.js');
 const fs = require("fs");
 const path = require("path");
 
 chai.should();
-
-chai.use(chaiHttp);
 
 describe('Test database', () => {
     /**
