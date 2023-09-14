@@ -31,7 +31,7 @@ resetCollection("tickets");
 async function resetCollection(colName, doc=null) {
     try {
         const db = await database.openDb();
-        const col = await db.collection(colName); 
+        const col = await db.collection(colName);
 
         await col.deleteMany(); // This deletes the data in the collection
 
