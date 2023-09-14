@@ -47,6 +47,5 @@ httpServer.listen(port, () => {
 
 fetchTrainPositions(io);
 
-const server = app.listen(port, () => console.log(`Example app listening on port ${port}!`));
-
-module.exports = server;
+// Export httpServer so it can be used for testing
+module.exports = httpServer;

@@ -6,7 +6,7 @@
   "scripts": {
     "start-dev": "nodemon app.js",
     "eslint": "eslint .",
-    "test": "nyc --reporter=html --reporter=text mocha 'test/**/*.js'"
+    "test": "nyc --reporter=html --reporter=text mocha --exit 'test/**/*.js'"
   },
   "keywords": [],
   "author": "",
