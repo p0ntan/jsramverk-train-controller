@@ -34,9 +34,15 @@ describe('Test database', () => {
         }
     });
 
+    /**
+     * Test the database setup function. Maybe this could be removed or moved but
+     * it's good to have a way to easy reset a collection while still in develop-mode that
+     * is separated from the database.js file.
+     */
     describe('Test reset function', () => {
         const colName = "testCol";
 
+        // Resets the collection
         it('should return empty array', async () => {
             await resetCollection(colName);
 
@@ -46,6 +52,7 @@ describe('Test database', () => {
             res.should.have.lengthOf(0);
         });
 
+        // Using testdata.json to insert documents
         it('should return 2 documents', async () => {
             const testdata = "testdata.json";
             const doc = JSON.parse(fs.readFileSync(
@@ -59,6 +66,18 @@ describe('Test database', () => {
 
             res.should.be.a('array');
             res.should.have.lengthOf(2);
+            res[0].should.have.property("name");
+            res[1].should.have.property("name");
+        });
+
+        // Resets the collection again
+        it('should return empty array', async () => {
+            await resetCollection(colName);
+
+            const res = await database.getCollection(colName);
+
+            res.should.be.a('array');
+            res.should.have.lengthOf(0);
         });
     });
 });
