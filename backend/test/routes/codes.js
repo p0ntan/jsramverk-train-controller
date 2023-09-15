@@ -14,6 +14,9 @@ chai.should();
 
 chai.use(chaiHttp);
 
+/**
+ * Test the route /codes. Checking that the properties used in frontend is returned
+ */
 describe('route', () => {
     describe('GET /codes', () => {
         it('should get status 200 with a non empty array', (done) => {

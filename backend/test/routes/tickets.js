@@ -15,6 +15,9 @@ chai.should();
 
 chai.use(chaiHttp);
 
+/**
+ * Test the route /tickets that used the database
+ */
 describe('route', () => {
     /**
      * Before test, reset the database and remove all collections
@@ -35,7 +38,11 @@ describe('route', () => {
         }
     });
 
-    describe('GET /tickets', () => {
+    describe('GET and POST /tickets', () => {
+        /**
+         * First test to see that the collection is empty since all collections are
+         * dropped before test.
+         */
         it('should get status 200 with empty array', (done) => {
             chai.request(httpServer)
                 .get('/tickets')
@@ -48,6 +55,9 @@ describe('route', () => {
                 });
         });
 
+        /**
+         * Insert ticket with POST same way as in frontend
+         */
         it('should get status 201 with inserted data', (done) => {
             const inData = {
                 code: "ANAtest01",
@@ -67,6 +77,9 @@ describe('route', () => {
                 });
         });
 
+        /**
+         * Get tickets after inserting one ticket
+         */
         it('should get status 200 with 1 ticket', (done) => {
             chai.request(httpServer)
                 .get('/tickets')
@@ -82,6 +95,9 @@ describe('route', () => {
                 });
         });
 
+        /**
+         * Insert another ticket into the collection
+         */
         it('should get status 201 with inserted data', (done) => {
             const inData = {
                 code: "ANAtest02",
@@ -101,6 +117,9 @@ describe('route', () => {
                 });
         });
 
+        /**
+         * Check that two documents are returned as expected
+         */
         it('should get status 200 with 2 ticket', (done) => {
             chai.request(httpServer)
                 .get('/tickets')

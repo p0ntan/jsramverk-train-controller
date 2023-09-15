@@ -14,6 +14,9 @@ chai.should();
 
 chai.use(chaiHttp);
 
+/**
+ * Test the route /delayed. Checking that the properties used in frontend is returned.
+ */
 describe('route', () => {
     describe('GET /delayed', () => {
         it('should get status 200 with an array in data', (done) => {
