@@ -16,7 +16,8 @@ chai.should();
 chai.use(chaiHttp);
 
 /**
- * Test the route /tickets that used the database
+ * Test the route /tickets that used the database.
+ * Checking that the properties used in frontend is returned.
  */
 describe('route', () => {
     /**
@@ -90,6 +91,7 @@ describe('route', () => {
                     res.body.data[0].should.have.property('_id');
                     res.body.data[0].should.have.property('code');
                     res.body.data[0].should.have.property('traindate');
+                    res.body.data[0].should.have.property('trainnumber');
 
                     done();
                 });
@@ -130,6 +132,7 @@ describe('route', () => {
                     res.body.data[0].should.have.property('_id');
                     res.body.data[0].should.have.property('code');
                     res.body.data[0].should.have.property('traindate');
+                    res.body.data[0].should.have.property('trainnumber');
 
                     done();
                 });
