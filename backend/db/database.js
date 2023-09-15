@@ -1,4 +1,9 @@
+// dotenv is needed for accesing .env variables for tests.
+require('dotenv').config();
+
 const mongo = require("mongodb").MongoClient;
+const dbUser = process.env.ATLAS_USERNAME;
+const dbPass = process.env.ATLAS_PASSWORD;
 
 /**
  * Object to use for opening the mongoDb connection
@@ -12,13 +17,14 @@ const database = {
      */
     openDb: async function openDb() {
         try {
-            let dsn = "mongodb://localhost:27017/trains";
+            let dbName = 'trains';
 
             // Use test database when doing test
             if (process.env.NODE_ENV === 'test') {
-                dsn = "mongodb://localhost:27017/test";
+                dbName = 'test';
             }
-
+            const dsn = `mongodb+srv://${dbUser}:${dbPass}@jsramverk.a93x1lp.mongodb.net/` +
+                `${dbName}?retryWrites=true&w=majority`;
             const client  = await mongo.connect(dsn);
             const db = await client.db();
 
