@@ -1,13 +1,13 @@
 <script setup>
-import Example from './components/Example.vue'
-import Delayed from './components/Delayed.vue'
+import DelayedTable from './components/DelayedTable.vue'
+import DelayedMap from './components/DelayedMap.vue'
 </script>
 
 <template>
-  <main>
-    <!-- <Example /> -->
-    <Delayed />
-  </main>
+  <div class="container">
+    <DelayedTable />
+    <DelayedMap />
+  </div>
 </template>
 
 <style scoped>

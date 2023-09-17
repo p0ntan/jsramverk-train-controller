@@ -43,11 +43,6 @@ p {
   background-color: white;
 }
 
-.map {
-  height: 100vh;
-  width: 60vw;
-}
-
 .delayed-trains {
   display: flex;
   flex-direction: column;

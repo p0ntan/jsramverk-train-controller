@@ -2,7 +2,7 @@
 <div class="delayed">
     <h1>Försenade Tåg</h1>
     <div class="delayed-trains" v-if="delayedTrains">
-        <div v-for="trains in delayedTrains">
+        <div v-for="trains in delayedTrains" :key="trains">
             <div class="train-number">
                 {{ trains.AdvertisedTrainIdent }}
             </div>
@@ -41,7 +41,7 @@ export default {
                 const date2 = new Date(this.delayedTrains[i].EstimatedTimeAtLocation);
                 // Calculate delay in minutes
                 const differenceInMilliseconds = Math.abs(date1 - date2);
-                const differenceInMinutes = differenceInMilliseconds / (1000 * 60);
+                const differenceInMinutes = Math.floor(differenceInMilliseconds / (1000 * 60));
                 // Add delay to object
                 this.delayedTrains[i].delayInMin = differenceInMinutes;
             }
