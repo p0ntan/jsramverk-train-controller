@@ -1,13 +1,12 @@
 <script setup>
 import Example from './components/Example.vue'
+import Delayed from './components/Delayed.vue'
 </script>
 
 <template>
-  <header>
-    <h1>Hello world</h1>
-  </header>
   <main>
-    <Example />
+    <!-- <Example /> -->
+    <Delayed />
   </main>
 </template>
 
