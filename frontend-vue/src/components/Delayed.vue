@@ -1,18 +1,19 @@
 <template>
-<header>
+<div class="delayed">
     <h1>Försenade Tåg</h1>
-</header>
-<div>
-    <div v-if="delayedTrains">
+    <div class="delayed-trains" v-if="delayedTrains">
         <div v-for="trains in delayedTrains">
-            <div>{{ trains.AdvertisedTrainIdent }}</div>
-            <div>
-                <span>{{ trains.LocationSignature }}</span>
-                <p v-if="trains.FromLocation && trains.ToLocation">{{ trains.FromLocation[0].LocationName }} -> {{ trains.ToLocation[0].LocationName }}</p>
-                <p v-else>No departure location</p>
-                <span>{{ trains.delayInMin }} minuter</span>
+            <div class="train-number">
+                {{ trains.AdvertisedTrainIdent }}
             </div>
-            <div></div>
+            <div class="current-station">
+                <div>{{ trains.LocationSignature }}</div>
+                <div v-if="trains.FromLocation && trains.ToLocation">{{ trains.FromLocation[0].LocationName }} -> {{ trains.ToLocation[0].LocationName }}</div>
+                <div v-else></div>
+            </div>
+            <div class="delay">
+                {{ trains.delayInMin }} minuter
+            </div>
         </div>
     </div>
     <div v-else>
@@ -50,7 +51,4 @@ export default {
         });
     },
 };
-// TODO display AdvertisedTrainIdent, LocationSignature,
-// FromLocation.LocationName, ToLocation.LocationName,
-// EstimatedTimeAtLocation - AdvertisedTimeAtLocation
 </script>
