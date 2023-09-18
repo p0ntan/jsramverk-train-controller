@@ -31,12 +31,9 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
         
-    # First steps is for backend, make sure to change to frontend folder when adding frontend test
-    - name: Change working directory to backend for backend-tests
-      run: cd backend
-
+    # First steps is for backend, make sure to change use frontend folder when adding frontend test
     - name: Install backend dependencies
-      run: npm install
+      run: cd backend && npm install
 
     - name: Run backend tests
-      run: npm test
+      run: cd backend && npm test
