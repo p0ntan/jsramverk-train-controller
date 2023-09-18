@@ -9,8 +9,6 @@ process.env.NODE_ENV = 'test';
 const chai = require('chai');
 const database = require('../../db/database.js');
 const resetCollection = require('../../db/setup.js');
-const fs = require("fs");
-const path = require("path");
 
 chai.should();
 
@@ -52,13 +50,17 @@ describe('Test database', () => {
             res.should.have.lengthOf(0);
         });
 
-        // Using testdata.json to insert documents
+        // Simulates using an JSON-file as inputdata
         it('should return 2 documents', async () => {
-            const testdata = "testdata.json";
-            const doc = JSON.parse(fs.readFileSync(
-                path.resolve(__dirname, testdata),
-                "utf8"
-            ));
+            // Using an array to simulate documents from a JSON-file.
+            const doc = [
+                {
+                    "name": "first document"
+                },
+                {
+                    "name": "second document"
+                }
+            ];
 
             await resetCollection(colName, doc);
 
