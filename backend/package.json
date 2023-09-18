@@ -5,7 +5,8 @@
   "main": "app.js",
   "scripts": {
     "start-dev": "nodemon app.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "eslint": "eslint .",
+    "test": "nyc --reporter=html --reporter=text mocha --exit 'test/**/*.js'"
   },
   "keywords": [],
   "author": "",
@@ -22,6 +23,12 @@
     "socket.io": "^4.6.1"
   },
   "devDependencies": {
-    "nodemon": "^3.0.1"
+    "chai": "^4.3.8",
+    "chai-http": "^4.4.0",
+    "eslint": "^8.49.0",
+    "javascript-style-guide": "^1.0.1",
+    "mocha": "^10.2.0",
+    "nodemon": "^3.0.1",
+    "nyc": "^15.1.0"
   }
 }

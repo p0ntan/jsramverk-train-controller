@@ -1,3 +1,10 @@
 node_modules/
 .env
 *.sqlite
+
+# Backend coverage directory used by tools like istanbul
+backend/coverage
+backend/*.lcov
+
+# Backend nyc test coverage
+backend/.nyc_output

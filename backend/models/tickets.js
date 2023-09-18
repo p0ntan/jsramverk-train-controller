@@ -6,7 +6,7 @@ const database = require('../db/database.js');
 const tickets = {
     collectionName: "tickets",
 
-    getTickets: async function getTickets(req, res){
+    getTickets: async function getTickets(req, res) {
         const db = await database.openDb();
         const collection = await db.collection(tickets.collectionName);
         const allTickets = await collection.find().toArray();
@@ -18,7 +18,7 @@ const tickets = {
         });
     },
 
-    createTicket: async function createTicket(req, res){
+    createTicket: async function createTicket(req, res) {
         const db = await database.openDb();
         const collection = await db.collection(tickets.collectionName);
 
@@ -26,11 +26,11 @@ const tickets = {
             code: req.body.code,
             trainnumber: req.body.trainnumber,
             traindate: req.body.traindate
-        })
+        });
 
         await db.client.close();
 
-        return res.json({
+        return res.status(201).json({
             data: {
                 id: result.insertedId,
                 code: req.body.code,
