@@ -10,6 +10,7 @@ const fetchTrainPositions = require('./models/trains.js');
 const delayed = require('./routes/delayed.js');
 const tickets = require('./routes/tickets.js');
 const codes = require('./routes/codes.js');
+const port = process.env.PORT || 1337;
 
 const app = express();
 const httpServer = require("http").createServer(app);
@@ -28,8 +29,6 @@ const io = require("socket.io")(httpServer, {
         methods: ["GET", "POST"]
     }
 });
-
-const port = 1337;
 
 app.get('/', (req, res) => {
     res.json({
