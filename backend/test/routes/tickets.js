@@ -21,17 +21,15 @@ chai.use(chaiHttp);
  */
 describe('route', () => {
     /**
-     * Before test, reset the database and remove all collections
+     * Before test, reset the collection
      */
     before(async () => {
         const db = await database.openDb();
 
         try {
-            const collections = await db.listCollections().toArray();
+            const col = await db.collection('tickets');
 
-            for (const col of collections) {
-                await db.collection(col.name).drop();
-            }
+            await col.deleteMany(); // This deletes the data in the collection
         } catch (err) {
             console.log("During setup following error occured:", err);
         } finally {
