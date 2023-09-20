@@ -7,11 +7,7 @@ const tickets = {
     collectionName: "tickets",
 
     getTickets: async function getTickets(req, res) {
-        const db = await database.openDb();
-        const collection = await db.collection(tickets.collectionName);
-        const allTickets = await collection.find().toArray();
-
-        await db.client.close();
+        const allTickets = await database.getCollection(tickets.collectionName);
 
         return res.json({
             data: allTickets
