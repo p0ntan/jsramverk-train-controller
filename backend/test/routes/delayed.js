@@ -1,5 +1,5 @@
 /**
- * Test the route /tickets
+ * Test the route /delayed
  */
 
 /*global it describe */

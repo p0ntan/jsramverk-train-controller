@@ -1,5 +1,5 @@
 /**
- * Test the route /tickets
+ * Test the route /codes
  */
 
 /*global it describe */
