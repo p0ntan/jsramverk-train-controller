@@ -4,7 +4,7 @@
     <div class="delayed-trains" v-if="delayedTrains">
         <div v-for="trains in delayedTrains" :key="trains">
             <div class="train-number">
-                {{ trains.AdvertisedTrainIdent }}
+                {{ trains.OperationalTrainNumber }}
             </div>
             <div class="current-station">
                 <div>{{ trains.LocationSignature }}</div>
