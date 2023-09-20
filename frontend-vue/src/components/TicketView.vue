@@ -1,9 +1,13 @@
 <template>
     <div class="ticket-container">
         <div class="ticket">
-            <a href="" id="back">&#8592; Tillbaka</a>
+            <a href="" @click="renderTrainsView">&#8592; Tillbaka</a>
             <h1>Nytt ärende #<span id="new-ticket-id"></span></h1>
-            <p><strong>Försenad:</strong></p>
+            <h3 v-if="trainObject.FromLocation && trainObject.ToLocation">
+                Tåg från {{ trainObject.FromLocation[0].LocationName }} till {{ trainObject.ToLocation[0].LocationName }}.
+                Just nu i {{ trainObject.LocationSignature }}.
+            </h3>
+            <p><strong>Försenad:</strong> {{ trainObject.delayInMin }} minuter</p>
             <form id="new-ticket-form">
                 <label>Orsakskod</label><br>
                 <select id="reason-code"></select><br><br>
@@ -18,4 +22,21 @@
 </template>
 
 <script>
+export default {
+    data() {
+        return {
+            trainObject: null,
+        };
+    },
+    created() {
+        const train = sessionStorage.getItem("train");
+        console.log(JSON.parse(train));
+        this.trainObject = JSON.parse(train);
+    },
+    methods: {
+        renderTrainsView() {
+            this.$router.push('/');
+        }
+    }
+}
 </script>
