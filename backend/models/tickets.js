@@ -9,7 +9,7 @@ const tickets = {
     getTickets: async function getTickets(req, res) {
         const allTickets = await database.getCollection(tickets.collectionName);
 
-        return res.json({
+        return await res.json({
             data: allTickets
         });
     },
@@ -26,7 +26,7 @@ const tickets = {
 
         await db.client.close();
 
-        return res.status(201).json({
+        return await res.status(201).json({
             data: {
                 id: result.insertedId,
                 code: req.body.code,

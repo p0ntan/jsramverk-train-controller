@@ -42,7 +42,7 @@ const delayed = {
         );
         const result = await response.json();
 
-        return res.json({
+        return await res.json({
             data: result.RESPONSE.RESULT[0].TrainAnnouncement
         });
     }
