@@ -13,18 +13,18 @@ const resetCollection = require('../../db/setup.js');
 chai.should();
 
 describe('Test database', () => {
+    const colName = "testCol";
+
     /**
-     * Before test, reset the database and remove all collections
+     * Before test, reset the collection for test
      */
     before(async () => {
         const db = await database.openDb();
 
         try {
-            const collections = await db.listCollections().toArray();
+            const col = await db.collection(colName);
 
-            for (const col of collections) {
-                await db.collection(col.name).drop();
-            }
+            await col.deleteMany();
         } catch (err) {
             console.log("During setup following error occured:", err);
         } finally {
@@ -38,8 +38,6 @@ describe('Test database', () => {
      * is separated from the database.js file.
      */
     describe('Test reset function', () => {
-        const colName = "testCol";
-
         // Resets the collection
         it('should return empty array', async () => {
             await resetCollection(colName);
