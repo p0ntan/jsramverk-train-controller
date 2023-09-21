@@ -5,15 +5,18 @@
 <script>
 import "leaflet/dist/leaflet.css";
 import L from "leaflet";
+import io from "socket.io-client";
 
 export default {
     data() {
         return {
-            center: [62.173276, 14.942265]
+            center: [62.173276, 14.942265],
         };
     },
     methods: {
         setupMap: function () {
+            const socket = io("http://localhost:1337");
+
             this.map = L.map('map').setView(this.center, 5);
 
             L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -21,13 +24,27 @@ export default {
                 attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
             }).addTo(this.map);
 
-            L.marker([51.505, -0.09]).addTo(this.map)
-            .bindPopup('A sample marker!');
+            let markers = {};
+
+            socket.on("message", (data) => {
+                if (data.trainnumber in markers) {
+                    let marker = markers[data.trainnumber]
+
+                    marker.setLatLng(data.position);
+                } else {
+                    let marker = L.marker(data.position).bindPopup(data.trainnumber).addTo(this.map);
+
+                    markers[data.trainnumber] = marker
+                }
+            });
         },
     },
     mounted() {
-        this.setupMap()
-    }
+        this.setupMap();
+    },
+    // beforeDestroy() {
+    //     this.socket.disconnect();
+    // }
 }
 </script>
 
