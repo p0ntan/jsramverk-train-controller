@@ -17,7 +17,7 @@ export default {
         };
     },
     created() {
-        fetch('http://localhost:1337/tickets')
+        fetch(`https://jsramverk-train-poak22-elmo22.azurewebsites.net/tickets`)
         .then(response => response.json())
         .then(data => {
             this.oldTickets = data.data;

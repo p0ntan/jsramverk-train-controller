@@ -15,7 +15,7 @@ export default {
     },
     methods: {
         setupMap: function () {
-            const socket = io("http://localhost:1337");
+            const socket = io(`https://jsramverk-train-poak22-elmo22.azurewebsites.net/`);
 
             this.map = L.map('map').setView(this.center, 5);
 

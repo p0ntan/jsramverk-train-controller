@@ -18,7 +18,6 @@
 </template>
 
 <script>
-// TODO add correct new ticket id (probably need to add 'id' to db or use _id?)
 export default {
     data() {
         return {
@@ -31,7 +30,7 @@ export default {
         const train = sessionStorage.getItem("train");
         this.trainObject = JSON.parse(train);
 
-        fetch('http://localhost:1337/codes')
+        fetch(`https://jsramverk-train-poak22-elmo22.azurewebsites.net/codes`)
         .then(response => response.json())
         .then(data => {
             this.codes = data.data;
@@ -52,9 +51,7 @@ export default {
                 traindate: this.trainObject.EstimatedTimeAtLocation.substring(0, 10)
             }
 
-            // console.log(newTicket);
-
-            fetch("http://localhost:1337/tickets", {
+            fetch(`https://jsramverk-train-poak22-elmo22.azurewebsites.net/tickets`, {
                 body: JSON.stringify(newTicket),
                 headers: {
                     'content-type': 'application/json'
@@ -63,7 +60,6 @@ export default {
             })
             .then((response) => response.json())
             .then((result) => {
-                // console.log(result);
                 if (result) {
                     window.location.reload();
                 }

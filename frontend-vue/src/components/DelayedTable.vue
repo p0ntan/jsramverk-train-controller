@@ -31,7 +31,7 @@ export default {
         };
     },
     created() {
-        fetch('http://localhost:1337/delayed')
+        fetch(`https://jsramverk-train-poak22-elmo22.azurewebsites.net/delayed`)
         .then(response => response.json())
         .then(data => {
             this.delayedTrains = data.data;
