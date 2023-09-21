@@ -1,6 +1,6 @@
 <template>
     <a href="" @click="renderTrainsView">&#8592; Tillbaka</a>
-    <h1>Nytt ärende #<span id="new-ticket-id">{{ trainObject.OperationalTrainNumber }}</span></h1>
+    <h1>Nytt ärende för tåg #<span>{{ trainObject.OperationalTrainNumber }}</span></h1>
     <h3 v-if="trainObject.FromLocation && trainObject.ToLocation">
         Tåg från {{ trainObject.FromLocation[0].LocationName }} till {{ trainObject.ToLocation[0].LocationName }}.
         Just nu i {{ trainObject.LocationSignature }}.
