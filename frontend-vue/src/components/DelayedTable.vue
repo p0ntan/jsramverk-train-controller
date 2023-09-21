@@ -53,7 +53,7 @@ export default {
     methods: {
         renderViewTicket(trainObject) {
             sessionStorage.setItem("train", JSON.stringify(trainObject));
-            this.$router.push('/ticket');
+            window.location.reload();
         }
     }
 };

@@ -42,6 +42,7 @@ export default {
     },
     methods: {
         renderTrainsView() {
+            sessionStorage.removeItem("train");
             this.$router.push('/');
         },
         addNewTicket() {
