@@ -7,7 +7,8 @@
     "build": "vite build",
     "preview": "vite preview",
     "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs --fix --ignore-path .gitignore",
-    "format": "prettier --write src/"
+    "format": "prettier --write src/",
+    "cy": "cypress open"
   },
   "dependencies": {
     "leaflet": "^1.9.4",
@@ -21,6 +22,7 @@
     "@vue/eslint-config-prettier": "^8.0.0",
     "cypress": "^13.2.0",
     "eslint": "^8.49.0",
+    "eslint-plugin-cypress": "^2.15.1",
     "eslint-plugin-vue": "^9.17.0",
     "prettier": "^3.0.3",
     "vite": "^4.4.9"
