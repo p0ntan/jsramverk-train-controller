@@ -36,9 +36,15 @@ npm run lint
 
 ## End-to-end testing
 
-This app is E2E tested with Cypress.
+This app is E2E tested with [Cypress](https://docs.cypress.io/guides/guides/command-line#cypress-run).
 
 ```
 # to run the tests with the Cypress app
 npm run cy
+
+# to run all test
+npm run cy:run --e2e
+
+# to run all test with a specific browser
+npm run cy:run --browser chrome --e2e
 ```
