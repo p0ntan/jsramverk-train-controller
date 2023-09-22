@@ -37,3 +37,9 @@ jobs:
 
     - name: Run backend tests
       run: cd backend && npm test
+
+    - name: Install frontend dependencies
+      run: cd frontend-vue && npm install
+
+    - name: Run frontend tests
+      run: cd frontend-vue && npm run cy:run --e2e
