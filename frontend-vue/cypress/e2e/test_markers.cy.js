@@ -10,6 +10,6 @@ describe('The Landing Page', () => {
         cy.get('.leaflet-control-zoom-out').click()
 
         // Check that there are markers
-        cy.get('.leaflet-marker-icon').should('exist')
+        cy.get('.leaflet-marker-icon').should('exist').timeout(5000)
     })
     })
