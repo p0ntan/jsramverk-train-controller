@@ -1,5 +1,5 @@
-describe('The Landing Page', () => {
-    it('successfully loads', () => {
+describe('The Map and Markers', () => {
+    it('successfully load', () => {
         cy.visit('/')
 
         // Check if a div with id "map" exists
@@ -10,6 +10,6 @@ describe('The Landing Page', () => {
         cy.get('.leaflet-control-zoom-out').click()
 
         // Check that there are markers
-        cy.get('.leaflet-marker-icon').should('exist').timeout(5000)
+        cy.get('.leaflet-marker-icon', { timeout: 5000 }).should('exist')
     })
     })
