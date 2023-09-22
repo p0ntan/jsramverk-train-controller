@@ -42,4 +42,4 @@ jobs:
       run: cd frontend-vue && npm install
 
     - name: Run frontend tests
-      run: cd frontend-vue && npm cy:run --e2e
+      run: cd frontend-vue && npm run cy:run --e2e
