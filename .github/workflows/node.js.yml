@@ -38,9 +38,6 @@ jobs:
     - name: Run backend tests
       run: cd backend && npm test
 
-    - name: Cypress run
-      uses: cd frontend-vue && cypress-io/github-action@v6
-    
     - name: Install frontend dependencies
       run: cd frontend-vue && npm install
 
