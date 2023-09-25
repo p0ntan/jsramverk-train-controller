@@ -18,8 +18,8 @@ const database = {
     openDb: async function openDb() {
         try {
             let dbName = 'trains';
-            
-            // Use test database when doing test
+
+            // Use test database when doing test or a development db if in development
             if (process.env.NODE_ENV === 'test') {
                 dbName = 'test';
             } else if (process.env.NODE_ENV === 'development') {
