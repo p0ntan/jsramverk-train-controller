@@ -6,6 +6,7 @@
 import 'leaflet/dist/leaflet.css'
 import L from 'leaflet'
 import io from 'socket.io-client'
+const baseURL = import.meta.env.VITE_BASE_URL
 
 export default {
   data() {
@@ -15,7 +16,7 @@ export default {
   },
   methods: {
     setupMap: function () {
-      const socket = io(`https://jsramverk-train-poak22-elmo22.azurewebsites.net/`)
+      const socket = io(`${baseURL}/`)
 
       this.map = L.map('map').setView(this.center, 5)
 

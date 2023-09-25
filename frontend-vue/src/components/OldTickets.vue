@@ -10,6 +10,8 @@
 </template>
 
 <script>
+const baseURL = import.meta.env.VITE_BASE_URL
+
 export default {
   data() {
     return {
@@ -17,7 +19,7 @@ export default {
     }
   },
   created() {
-    fetch(`https://jsramverk-train-poak22-elmo22.azurewebsites.net/tickets`)
+    fetch(`${baseURL}/tickets`)
       .then((response) => response.json())
       .then((data) => {
         this.oldTickets = data.data

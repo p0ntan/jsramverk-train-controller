@@ -21,6 +21,9 @@
 </template>
 
 <script>
+const baseURL = import.meta.env.VITE_BASE_URL
+console.log(`backend: ${baseURL}`)
+
 export default {
   data() {
     return {
@@ -29,7 +32,7 @@ export default {
     }
   },
   created() {
-    fetch(`https://jsramverk-train-poak22-elmo22.azurewebsites.net/delayed`)
+    fetch(`${baseURL}/delayed`)
       .then((response) => response.json())
       .then((data) => {
         this.delayedTrains = data.data

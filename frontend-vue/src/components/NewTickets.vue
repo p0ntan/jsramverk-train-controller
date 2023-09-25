@@ -20,6 +20,8 @@
 </template>
 
 <script>
+const baseURL = import.meta.env.VITE_BASE_URL
+
 export default {
   data() {
     return {
@@ -32,7 +34,7 @@ export default {
     const train = sessionStorage.getItem('train')
     this.trainObject = JSON.parse(train)
 
-    fetch(`https://jsramverk-train-poak22-elmo22.azurewebsites.net/codes`)
+    fetch(`${baseURL}/codes`)
       .then((response) => response.json())
       .then((data) => {
         this.codes = data.data
@@ -53,7 +55,7 @@ export default {
         traindate: this.trainObject.EstimatedTimeAtLocation.substring(0, 10)
       }
 
-      fetch(`https://jsramverk-train-poak22-elmo22.azurewebsites.net/tickets`, {
+      fetch(`${baseURL}/tickets`, {
         body: JSON.stringify(newTicket),
         headers: {
           'content-type': 'application/json'
