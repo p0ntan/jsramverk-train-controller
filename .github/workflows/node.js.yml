@@ -42,10 +42,10 @@ jobs:
       run: cd frontend-vue && npm install
 
     - name: Start backend server
-      run: cd backend && npm run start & wait-on http://localhost:1337
+      run: cd backend && npm run start &
 
     - name: Start frontend server
-      run: cd frontend-vue && npm run dev & wait-on http://localhost:5173
+      run: cd frontend-vue && npm run dev &
 
     - name: Run frontend tests
       run: cd frontend-vue && npm run cy:run --e2e
