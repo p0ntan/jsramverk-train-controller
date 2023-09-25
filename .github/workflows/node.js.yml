@@ -18,7 +18,6 @@ jobs:
       TRAFIKVERKET_API_KEY: ${{ secrets.TRAFIKVERKET_API_KEY }}
       ATLAS_USERNAME: ${{ secrets.ATLAS_USERNAME }}
       ATLAS_PASSWORD: ${{ secrets.ATLAS_PASSWORD }}
-      NODE_ENV: 'test'
 
     strategy:
       matrix:
@@ -43,7 +42,7 @@ jobs:
       run: cd frontend-vue && npm install
 
     - name: Start backend server
-      run: cd backend && npm run start &
+      run: cd backend && npm run start-test &
 
     - name: Start frontend server
       run: cd frontend-vue && npm run dev &
