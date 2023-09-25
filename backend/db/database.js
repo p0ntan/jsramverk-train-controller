@@ -19,9 +19,11 @@ const database = {
         try {
             let dbName = 'trains';
 
-            // Use test database when doing test
+            // Use test database when doing test or a development db if in development
             if (process.env.NODE_ENV === 'test') {
                 dbName = 'test';
+            } else if (process.env.NODE_ENV === 'development') {
+                dbName = 'development';
             }
             const dsn = `mongodb+srv://${dbUser}:${dbPass}@jsramverk.a93x1lp.mongodb.net/` +
                 `${dbName}?retryWrites=true&w=majority`;

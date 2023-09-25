@@ -5,9 +5,10 @@
   "main": "app.js",
   "scripts": {
     "start": "node app.js",
-    "start-dev": "nodemon app.js",
+    "start-test": "NODE_ENV=test node app.js",
+    "start-dev": "NODE_ENV=development nodemon app.js",
     "eslint": "eslint .",
-    "test": "nyc --reporter=html --reporter=text mocha --exit 'test/**/*.js' --timeout 10000"
+    "test": "NODE_ENV=test nyc --reporter=html --reporter=text mocha --exit 'test/**/*.js' --timeout 10000"
   },
   "keywords": [],
   "author": "",
