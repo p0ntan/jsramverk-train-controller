@@ -1,5 +1,5 @@
 <template>
-  <a href="" @click="renderViewTrains">&#8592; Tillbaka</a>
+  <a href="" @click="renderTrainsView">&#8592; Tillbaka</a>
   <h1>
     Nytt ärende för tåg #<span>{{ trainObject.OperationalTrainNumber }}</span>
   </h1>
@@ -48,7 +48,7 @@ export default {
       })
   },
   methods: {
-    renderViewTrains() {
+    renderTrainsView() {
       this.$router.push('/')
     },
     addNewTicket() {

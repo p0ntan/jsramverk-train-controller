@@ -2,7 +2,7 @@
   <div class="delayed">
     <h1>Försenade Tåg</h1>
     <div class="delayed-trains" v-if="delayedTrains">
-      <div v-for="trains in delayedTrains" :key="trains" @click="renderViewTicket(trains)">
+      <div v-for="trains in delayedTrains" :key="trains" @click="renderTicketView(trains)">
         <div class="train-number">
           {{ trains.OperationalTrainNumber }}
         </div>
@@ -53,7 +53,7 @@ export default {
       })
   },
   methods: {
-    renderViewTicket(trainObject) {
+    renderTicketView(trainObject) {
       // Save train in store, then change route.
       store.train = trainObject
       this.$router.push('/tickets')
