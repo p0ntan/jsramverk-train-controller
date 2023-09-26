@@ -2,7 +2,7 @@
   <div class="delayed">
     <h1>Försenade Tåg</h1>
     <div class="delayed-trains" v-if="delayedTrains">
-      <div v-for="trains in delayedTrains" :key="trains" @click="renderViewTicket(trains)">
+      <div v-for="trains in delayedTrains" :key="trains" @click="renderTicketView(trains)">
         <div class="train-number">
           {{ trains.OperationalTrainNumber }}
         </div>
@@ -21,8 +21,9 @@
 </template>
 
 <script>
+// Store is used to store train-data when clicking a delayed train
+import store from '../store/store'
 const baseURL = import.meta.env.VITE_BASE_URL
-console.log(`backend: ${baseURL}`)
 
 export default {
   data() {
@@ -52,9 +53,10 @@ export default {
       })
   },
   methods: {
-    renderViewTicket(trainObject) {
-      sessionStorage.setItem('train', JSON.stringify(trainObject))
-      window.location.reload()
+    renderTicketView(trainObject) {
+      // Save train in store, then change route.
+      store.train = trainObject
+      this.$router.push('/tickets')
     }
   }
 }

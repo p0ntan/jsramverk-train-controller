@@ -15,11 +15,15 @@ const baseURL = import.meta.env.VITE_BASE_URL
 export default {
   data() {
     return {
-      oldTickets: null
+      oldTickets: []
     }
   },
   created() {
-    fetch(`${baseURL}/tickets`)
+    this.fetchTickets()
+  },
+  methods: {
+    fetchTickets() {
+      fetch(`${baseURL}/tickets`)
       .then((response) => response.json())
       .then((data) => {
         this.oldTickets = data.data
@@ -27,6 +31,7 @@ export default {
       .catch((error) => {
         console.error('Error fetching data:', error)
       })
+    }
   }
 }
 </script>

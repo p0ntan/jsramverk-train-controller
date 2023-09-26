@@ -1,18 +1,7 @@
 import './assets/main.css'
 
 import { createApp } from 'vue'
-import { createRouter, createWebHistory } from 'vue-router'
-import TrainsView from './components/TrainsView.vue'
-
 import App from './App.vue'
+import router from './router/index'
 
-const router = createRouter({
-  history: createWebHistory(),
-  routes: [{ path: '/', component: TrainsView }]
-})
-
-const app = createApp(App)
-
-app.use(router)
-
-app.mount('#app')
+createApp(App).use(router).mount('#app')

@@ -20,9 +20,14 @@
 </template>
 
 <script>
+// Store is used to store train-data when clicking a delayed train
+import store from '../store/store'
 const baseURL = import.meta.env.VITE_BASE_URL
 
 export default {
+  emits: [
+    'ticketAdded'
+  ],
   data() {
     return {
       trainObject: null,
@@ -31,8 +36,7 @@ export default {
     }
   },
   created() {
-    const train = sessionStorage.getItem('train')
-    this.trainObject = JSON.parse(train)
+    this.trainObject = store.train
 
     fetch(`${baseURL}/codes`)
       .then((response) => response.json())
@@ -45,7 +49,6 @@ export default {
   },
   methods: {
     renderTrainsView() {
-      sessionStorage.removeItem('train')
       this.$router.push('/')
     },
     addNewTicket() {
@@ -65,9 +68,9 @@ export default {
         .then((response) => response.json())
         .then((result) => {
           if (result) {
-            window.location.reload()
+            this.$emit('ticketAdded', result.data);
           }
-        })
+      })
     }
   }
 }
