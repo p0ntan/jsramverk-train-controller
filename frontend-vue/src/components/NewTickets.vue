@@ -25,6 +25,9 @@ import store from '../store/store'
 const baseURL = import.meta.env.VITE_BASE_URL
 
 export default {
+  emits: [
+    'ticketAdded'
+  ],
   data() {
     return {
       trainObject: null,
@@ -65,9 +68,9 @@ export default {
         .then((response) => response.json())
         .then((result) => {
           if (result) {
-            window.location.reload()
+            this.$emit('ticketAdded', result.data);
           }
-        })
+      })
     }
   }
 }
