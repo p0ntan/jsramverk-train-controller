@@ -27,13 +27,19 @@ export default {
 
       let markers = {}
 
+      let trainMarker = L.icon({
+            iconUrl: "icons/marker-icon.png",
+            iconSize: [25, 41],
+            iconAnchor: [12, 41],
+      });
+
       socket.on('message', (data) => {
         if (data.trainnumber in markers) {
           let marker = markers[data.trainnumber]
 
           marker.setLatLng(data.position)
         } else {
-          let marker = L.marker(data.position).bindPopup(data.trainnumber).addTo(this.map)
+          let marker = L.marker(data.position, {icon: trainMarker}).bindPopup(data.trainnumber).addTo(this.map)
 
           markers[data.trainnumber] = marker
         }
