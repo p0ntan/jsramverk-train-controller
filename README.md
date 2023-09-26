@@ -1,6 +1,9 @@
 # Repository *jsramverk-train-controller*
+
 This is the repository for the course *jsramverk* (h23).
 It is maintained by *elmo22* and *poak22*.
+
+## How to use this repo
 
 ```
 # To initialze the application you need to run the following script from root folder in repo.
@@ -9,9 +12,55 @@ bash setup_app.bash
 
 You also need a .env file in the /backend folder with API-key, see *.env.example* for structure.
 
-## Backend
+When developing in this repo you will need start both the backend and frontend locally. This will run backend and frontend in the development environment, which won't effect the database used in the deployed application.
 
-### Steps to make backend work locally from original repo
+```
+# Run backend from /backend folder
+npm run start-dev
+```
+
+```
+# Run frontend from /frontend-vue folder
+npm run dev
+```
+### Reset development database
+
+If needed during development, you can reset the database.
+
+```
+# To reset the development database, stand in /backend folder.
+npm run dev-reset-db
+```
+
+### Tests
+
+Test can be run for both backend and frontend.
+
+#### Backend
+
+```
+# Stand in /backend folder.
+npm run test
+```
+
+#### Frontend
+
+You need to start the backend in the test enviroment.
+
+```
+# Stand in /backend folder.
+npm run start-test
+
+# Start the front-end server from /fronend-vue
+npm run dev
+
+# Then run the test from /frontend-vue
+npm run cy:run
+```
+
+## Steps to make backend work locally from original repo
+
+### Backend
 
 Created account [Trafikverket](https://api.trafikinfo.trafikverket.se/) to receive a personal API key, then create an .env file, following the template in .env.example, and store your API key in that file.
 
@@ -27,14 +76,14 @@ npm install
 bash db/reset_db.bash
 ```
 
-### Start app
+#### Start app
 
 ```
-# To run the app from /backend folder
+# To run the app from /backend folder (using a npm-script)
 npm run start-dev
 ```
 
-### Run a security audit
+#### Run a security audit
 
 To check our app for vulnerabilities, run an *npm audit*. For help, check the [documentation](https://docs.npmjs.com/cli/v6/commands/npm-audit).
 
@@ -108,9 +157,9 @@ Running *npm audit fix* after changing package.json manually added 7 packages, r
 [^3]: https://portswigger.net/web-security/prototype-pollution, last visited 2023-08-30.
 
 
-## Frontend
+### Frontend
 
-### Start app
+#### Start app
 
 ```
 # To run the app on *http://localhost:9000/*

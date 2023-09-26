@@ -1,6 +1,8 @@
+#!/usr/bin/env bash
+#
+# Just a simple script to set up the application when cloning repo
+#
 cd backend
 npm install
-bash db/reset_db.bash
-# Uncomment lines below when using npm in frontend
-# cd ../frontend
-# npm install
+cd ../frontend-vue
+npm install
