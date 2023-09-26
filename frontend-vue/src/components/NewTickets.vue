@@ -1,5 +1,5 @@
 <template>
-  <a href="" @click="renderTrainsView">&#8592; Tillbaka</a>
+  <a href="" @click="renderViewTrains">&#8592; Tillbaka</a>
   <h1>
     Nytt ärende för tåg #<span>{{ trainObject.OperationalTrainNumber }}</span>
   </h1>
@@ -20,6 +20,8 @@
 </template>
 
 <script>
+// Store is used to store train-data when clicking a delayed train
+import store from '../store/store'
 const baseURL = import.meta.env.VITE_BASE_URL
 
 export default {
@@ -31,8 +33,7 @@ export default {
     }
   },
   created() {
-    const train = sessionStorage.getItem('train')
-    this.trainObject = JSON.parse(train)
+    this.trainObject = store.train
 
     fetch(`${baseURL}/codes`)
       .then((response) => response.json())
@@ -44,8 +45,7 @@ export default {
       })
   },
   methods: {
-    renderTrainsView() {
-      sessionStorage.removeItem('train')
+    renderViewTrains() {
       this.$router.push('/')
     },
     addNewTicket() {
