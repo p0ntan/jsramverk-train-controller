@@ -12,9 +12,9 @@ The application can be found here: [Train-controller](https://www.student.bth.se
 bash setup_app.bash
 ```
 
-A a .env file is needed in the /backend folder with API-key, see *.env.example* for structure.
+An .env file is needed in the /backend folder with API-key, see *.env.example* for structure.
 
-When developing this repo both the backend and frontend locally needs to be started locally. This will run backend and frontend in the development environment, which won't effect the database used in the deployed application. When starting frontend in development the URL 'localhost:1337' is used to fetch data, where backend then uses it's own database 'development' in the Atlas Cloud.
+When developing, both, the backend and frontend, need to be started locally. This will run backend and frontend in the development environment, which won't effect the database used in the deployed application. When starting frontend in development the URL 'localhost:1337' is used to fetch data, where backend then uses it's own database 'development' in the Atlas Cloud.
 
 ```
 # Run backend from /backend folder
@@ -49,17 +49,17 @@ npm run test
 
 #### Frontend (Vue)
 
-For frontend testing cypress is used for end to end testing. Testing uses the API and also the 'test' database in the Atlas Cloud. Therefor the backend needs to be started locally in 'test-mode'. To run the test the commands below is needed to be run, which is also the way it's done during continuous integration.
+For frontend testing cypress is used for end to end testing. Testing uses the API and also the 'test' database in the Atlas Cloud. The backend needs to be started locally in 'test-mode'. To run the test the commands below is needed to be run, which is also the way it's done during continuous integration.
 
 ```
 # Stand in /backend folder.
 npm run start-test
 
-# Start the front-end server from /fronend-vue
+# Start the front-end server from /frontend-vue
 npm run dev
 
 # Then run the test from /frontend-vue
-npm run cy:run
+npm run cy:run --e2e
 ```
 
 ### Deploying the app
@@ -68,7 +68,7 @@ The backend is deployed in the Azure Cloud, and can be found here: [Backend](htt
 Deploying the frontend is done with rsync and put on the BTH:s student server. Using Vue and vue-router a root specific root needs to be setup before deploying the application. In the '/frontend-vue/src/router/index.js' the 'createWebHistory()' needs to have the correct root. In our case '/~elmo22/train/'. The deployed application can be found here: [Frontend](https://www.student.bth.se/~elmo22/train/).
 
 ```
-# Deploy the frontend from /fronend-vue
+# Deploy the frontend from /frontend-vue
 npm run deploy
 ```
 
