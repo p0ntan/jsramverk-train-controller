@@ -3,6 +3,8 @@
 This is the repository for the course *jsramverk* (h23).
 It is maintained by *elmo22* and *poak22*.
 
+The application can be found here: [Train-controller](https://www.student.bth.se/~elmo22/train/). And the backend can be found here: [Backend](https://jsramverk-train-poak22-elmo22.azurewebsites.net/).
+
 ## How to use this repo
 
 ```
@@ -59,6 +61,17 @@ npm run dev
 # Then run the test from /frontend-vue
 npm run cy:run
 ```
+
+### Deploying the app
+The backend is deployed in the Azure Cloud, and can be found here: [Backend](https://jsramverk-train-poak22-elmo22.azurewebsites.net/).
+
+Deploying the frontend is done with rsync and put on the BTH:s student server. Using Vue and vue-router a root specific root needs to be setup before deploying the application. In the '/frontend-vue/src/router/index.js' the 'createWebHistory()' needs to have the correct root. In our case '/~elmo22/train/'. The deployed application can be found here: [Frontend](https://www.student.bth.se/~elmo22/train/).
+
+```
+# Deploy the frontend from /fronend-vue
+npm run deploy
+```
+
 
 ## Steps to make backend work locally from original repo
 

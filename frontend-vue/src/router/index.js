@@ -19,8 +19,9 @@ const routes = [
 ]
 
 // Router
+// Router root is "" when in development and "/~elmo22/train/" in production
 const router = createRouter({
-  history: createWebHistory(),
+history: createWebHistory(import.meta.env.VITE_ROUTER_ROOT),
   routes: routes
 })
 

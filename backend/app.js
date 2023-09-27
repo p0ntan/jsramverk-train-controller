@@ -32,8 +32,8 @@ const io = require("socket.io")(httpServer, {
     cors: {
         origins: [
             "http://localhost:5173",
-            "https://www.student.bth.se/~elmo22/editor",
-            "https://www.student.bth.se/~poak22/editor"
+            "https://www.student.bth.se/~elmo22/train",
+            "https://www.student.bth.se/~poak22/train"
         ],
         methods: ["GET", "POST"]
     }
