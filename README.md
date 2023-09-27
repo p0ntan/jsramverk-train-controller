@@ -6,13 +6,13 @@ It is maintained by *elmo22* and *poak22*.
 ## How to use this repo
 
 ```
-# To initialze the application you need to run the following script from root folder in repo.
+# To initialze the application, run the following script from root folder in repo.
 bash setup_app.bash
 ```
 
-You also need a .env file in the /backend folder with API-key, see *.env.example* for structure.
+A a .env file is needed in the /backend folder with API-key, see *.env.example* for structure.
 
-When developing in this repo you will need start both the backend and frontend locally. This will run backend and frontend in the development environment, which won't effect the database used in the deployed application.
+When developing in this repo both the backend and frontend locally needs to be started locally. This will run backend and frontend in the development environment, which won't effect the database used in the deployed application since the frontend in will use 'localhost:1337' when sending request to the API.
 
 ```
 # Run backend from /backend folder
@@ -25,7 +25,7 @@ npm run dev
 ```
 ### Reset development database
 
-If needed during development, you can reset the database.
+If needed during development, the development database can be reset.
 
 ```
 # To reset the development database, stand in /backend folder.
@@ -38,7 +38,7 @@ Test can be run for both backend and frontend.
 
 #### Backend
 
-For testing the backend mocha is used for together with chai. Testing is done on a own database called 'test' that is setup in the Atlas Cloud. The command below is also the command used in github actions for continuous integration.
+Mocha together with chai is used for backend testing. Testing is done on a it's own database called 'test' that is setup in the Atlas Cloud. The command below is also the command used in github actions for continuous integration.
 
 ```
 # Stand in /backend folder.
@@ -47,7 +47,7 @@ npm run test
 
 #### Frontend (Vue)
 
-For testing the frontend cypress is used for end to end testing. Testing uses the api and also the 'test' database in the Atlas Cloud. Therefor the backend needs to be started locally in 'test-mode'. To run the test the commands below is needed to be run, which is also the way it's done during continuous integration.
+For frontend testing cypress is used for end to end testing. Testing uses the API and also the 'test' database in the Atlas Cloud. Therefor the backend needs to be started locally in 'test-mode'. To run the test the commands below is needed to be run, which is also the way it's done during continuous integration.
 
 ```
 # Stand in /backend folder.
@@ -57,7 +57,7 @@ npm run start-test
 npm run dev
 
 # Then run the test from /frontend-vue
-npm run cy:run --e2e
+npm run cy:run
 ```
 
 ## Steps to make backend work locally from original repo
