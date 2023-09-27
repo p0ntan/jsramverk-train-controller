@@ -38,14 +38,16 @@ Test can be run for both backend and frontend.
 
 #### Backend
 
+For testing the backend mocha is used for together with chai. Testing is done on a own database called 'test' that is setup in the Atlas Cloud. The command below is also the command used in github actions for continuous integration.
+
 ```
 # Stand in /backend folder.
 npm run test
 ```
 
-#### Frontend
+#### Frontend (Vue)
 
-You need to start the backend in the test enviroment.
+For testing the frontend cypress is used for end to end testing. Testing uses the api and also the 'test' database in the Atlas Cloud. Therefor the backend needs to be started locally in 'test-mode'. To run the test the commands below is needed to be run, which is also the way it's done during continuous integration.
 
 ```
 # Stand in /backend folder.
@@ -55,7 +57,7 @@ npm run start-test
 npm run dev
 
 # Then run the test from /frontend-vue
-npm run cy:run
+npm run cy:run --e2e
 ```
 
 ## Steps to make backend work locally from original repo
