@@ -12,7 +12,7 @@ bash setup_app.bash
 
 A a .env file is needed in the /backend folder with API-key, see *.env.example* for structure.
 
-When developing in this repo both the backend and frontend locally needs to be started locally. This will run backend and frontend in the development environment, which won't effect the database used in the deployed application since the frontend in will use 'localhost:1337' when sending request to the API.
+When developing this repo both the backend and frontend locally needs to be started locally. This will run backend and frontend in the development environment, which won't effect the database used in the deployed application. When starting frontend in development the URL 'localhost:1337' is used to fetch data, where backend then uses it's own database 'development' in the Atlas Cloud.
 
 ```
 # Run backend from /backend folder
@@ -38,7 +38,7 @@ Test can be run for both backend and frontend.
 
 #### Backend
 
-Mocha together with chai is used for backend testing. Testing is done on a it's own database called 'test' that is setup in the Atlas Cloud. The command below is also the command used in github actions for continuous integration.
+Mocha together with chai is used for backend testing. Testing is done on a it's own database called 'test' that is set-up in the Atlas Cloud. The command below is also the command used in github actions for continuous integration.
 
 ```
 # Stand in /backend folder.
