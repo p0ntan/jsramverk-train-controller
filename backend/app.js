@@ -5,6 +5,15 @@ const cors = require('cors');
 const morgan = require('morgan');
 const bodyParser = require('body-parser');
 
+// GraphQL imports & setup
+const visual = true;
+const { graphqlHTTP } = require('express-graphql');
+const {
+    GraphQLSchema
+} = require("graphql");
+
+const RootQueryType = require("./graphql/root.js");
+
 const fetchTrainPositions = require('./models/trains.js');
 const delayed = require('./routes/delayed.js');
 const tickets = require('./routes/tickets.js');
@@ -38,6 +47,16 @@ const io = require("socket.io")(httpServer, {
         methods: ["GET", "POST"]
     }
 });
+
+// GraphQL route
+const schema = new GraphQLSchema({
+    query: RootQueryType
+});
+
+app.all('/graphql', graphqlHTTP({
+    schema: schema,
+    graphiql: visual,
+}));
 
 // Routes
 app.get('/', (req, res) => {
