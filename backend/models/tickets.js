@@ -6,12 +6,8 @@ const database = require('../db/database.js');
 const tickets = {
     collectionName: "tickets",
 
-    getTickets: async function getTickets(req, res) {
+    getTickets: async function getTickets() {
         const allTickets = await database.getCollection(tickets.collectionName);
-
-        // return await res.json({
-        //     data: allTickets
-        // });
 
         return allTickets;
     },
