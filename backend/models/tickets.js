@@ -9,9 +9,11 @@ const tickets = {
     getTickets: async function getTickets(req, res) {
         const allTickets = await database.getCollection(tickets.collectionName);
 
-        return await res.json({
-            data: allTickets
-        });
+        // return await res.json({
+        //     data: allTickets
+        // });
+
+        return allTickets;
     },
 
     createTicket: async function createTicket(req, res) {

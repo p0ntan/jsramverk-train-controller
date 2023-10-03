@@ -6,11 +6,13 @@ const {
     GraphQLNonNull
 } = require('graphql');
 
-// const OrderType = require("./order.js");
-const TicketType = require("./ticket.js");
-const ticketsModel = require('../models/tickets.js');
 
-// const ordersModel = require("../models/orders.js");
+const TicketType = require("./ticket.js");
+const CodeType = require("./code.js");
+const DelayedType = require("./delayed.js");
+const ticketsModel = require('../models/tickets.js');
+const codeModel = require('../models/codes.js');
+const delayedModel = require('../models/delayed.js');
 
 const RootQueryType = new GraphQLObjectType({
     name: 'Query',
@@ -24,14 +26,26 @@ const RootQueryType = new GraphQLObjectType({
             }
         },
         tickets: {
-            type: new GraphQLList(TicketType),
+            type: GraphQLList(TicketType),
             description: 'A list of tickets',
             resolve: async function() {
-                const res = await ticketsModel.getTickets();
-
-                return res;
+                return await ticketsModel.getTickets();
             }
         },
+        codes: {
+            type: GraphQLList(CodeType),
+            description: 'A list of codes',
+            resolve: async function() {
+                return await codeModel.getCodes();
+            }
+        },
+        delayed: {
+            type: GraphQLList(DelayedType),
+            description: 'A list of delayed trains',
+            resolve: async function() {
+                return await delayedModel.getDelayedTrains();
+            }
+        }
         // teacher: {
         //     type: TeacherType,
         //     description: 'A single teacher',

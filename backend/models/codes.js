@@ -21,9 +21,7 @@ const codes = {
         );
         const result = await response.json();
 
-        return await res.json({
-            data: result.RESPONSE.RESULT[0].ReasonCode
-        });
+        return result.RESPONSE.RESULT[0].ReasonCode;
     }
 };
 
