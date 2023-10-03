@@ -64,6 +64,7 @@ app.get('/', (req, res) => {
         data: 'This is the API for the course jsramverk, by students poak22 and elmo22'
     });
 });
+// TODO ta bort 
 app.use("/delayed", delayed);
 app.use("/tickets", tickets);
 app.use("/codes", codes);
