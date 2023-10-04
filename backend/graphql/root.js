@@ -14,6 +14,7 @@ const ticketsModel = require('../models/tickets.js');
 const codeModel = require('../models/codes.js');
 const delayedModel = require('../models/delayed.js');
 
+// TODO remove test in RootQueryType?
 const RootQueryType = new GraphQLObjectType({
     name: 'Query',
     description: 'Root Query',
@@ -46,32 +47,6 @@ const RootQueryType = new GraphQLObjectType({
                 return await delayedModel.getDelayedTrains();
             }
         }
-        // teacher: {
-        //     type: TeacherType,
-        //     description: 'A single teacher',
-        //     args: {
-        //         acronym: { type: GraphQLString }
-        //     },
-        //     resolve: async function (parent, args) {
-        //         let teachers = await getPeople("teachers");
-
-        //         return teachers.find(teacher => teacher.acronym === args.acronym)
-        //     }
-        // },
-        // teachers: {
-        //     type: GraphQLList(TeacherType),
-        //     description: 'List of teachers',
-        //     resolve: async function() {
-        //         return await getPeople("teachers");
-        //     }
-        // },
-        // students: {
-        //     type: GraphQLList(StudentType),
-        //     description: 'List of students',
-        //     resolve: async function() {
-        //         return await getPeople("students");
-        //     }
-        // }
     })
 });
 
