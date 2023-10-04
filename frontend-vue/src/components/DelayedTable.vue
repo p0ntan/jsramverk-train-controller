@@ -23,7 +23,22 @@
 <script>
 // Store is used to store train-data when clicking a delayed train
 import store from '../store/store'
-const baseURL = import.meta.env.VITE_BASE_URL
+const graphqlURL = import.meta.env.VITE_GRAPHQL_URL
+// Define data needed from backend
+const queryDelayed = `{
+  delayed {
+    AdvertisedTimeAtLocation
+    EstimatedTimeAtLocation
+    OperationalTrainNumber
+    LocationSignature
+    FromLocation {
+      LocationName
+    }
+    ToLocation {
+      LocationName
+    }
+  }
+}`
 
 export default {
   data() {
@@ -33,25 +48,35 @@ export default {
     }
   },
   created() {
-    fetch(`${baseURL}/delayed`)
-      .then((response) => response.json())
-      .then((data) => {
-        this.delayedTrains = data.data
-        const numberOfDelays = Object.entries(this.delayedTrains).length
-        for (let i = 0; i < numberOfDelays; i++) {
-          const date1 = new Date(this.delayedTrains[i].AdvertisedTimeAtLocation)
-          const date2 = new Date(this.delayedTrains[i].EstimatedTimeAtLocation)
-          // Calculate delay in minutes
-          const differenceInMilliseconds = Math.abs(date1 - date2)
-          const differenceInMinutes = Math.floor(differenceInMilliseconds / (1000 * 60))
-          // Add delay to object
-          this.delayedTrains[i].delayInMin = differenceInMinutes
-        }
-      })
-      .catch((error) => {
-        console.error('Error fetching data:', error)
-      })
-  },
+      try {
+        // Fetch data via graphql
+        fetch(`${graphqlURL}`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+        },
+        body: JSON.stringify({ query: queryDelayed })
+        })
+        .then(response => response.json())
+        .then(data => {
+          // Store received data in component variable
+          this.delayedTrains = data.data.delayed
+          const numberOfDelays = Object.entries(this.delayedTrains).length
+          for (let i = 0; i < numberOfDelays; i++) {
+            const date1 = new Date(this.delayedTrains[i].AdvertisedTimeAtLocation)
+            const date2 = new Date(this.delayedTrains[i].EstimatedTimeAtLocation)
+            // Calculate delay in minutes
+            const differenceInMilliseconds = Math.abs(date1 - date2)
+            const differenceInMinutes = Math.floor(differenceInMilliseconds / (1000 * 60))
+            // Add delay to object
+            this.delayedTrains[i].delayInMin = differenceInMinutes
+          }
+        })
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+    },
   methods: {
     renderTicketView(trainObject) {
       // Save train in store, then change route.

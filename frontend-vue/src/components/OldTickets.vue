@@ -10,7 +10,16 @@
 </template>
 
 <script>
-const baseURL = import.meta.env.VITE_BASE_URL
+const graphqlURL = import.meta.env.VITE_GRAPHQL_URL
+// Define data needed from backend
+const queryTickets = `{
+  tickets {
+    _id
+    code
+    trainnumber
+    traindate
+  }
+}`
 
 export default {
   data() {
@@ -23,14 +32,24 @@ export default {
   },
   methods: {
     fetchTickets() {
-      fetch(`${baseURL}/tickets`)
-      .then((response) => response.json())
-      .then((data) => {
-        this.oldTickets = data.data
-      })
-      .catch((error) => {
-        console.error('Error fetching data:', error)
-      })
+      try {
+        // Fetch data via graphql
+        fetch(`${graphqlURL}`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+        },
+        body: JSON.stringify({ query: queryTickets })
+        })
+        .then(response => response.json())
+        .then(data => {
+          // Store received data in component variable
+          this.oldTickets = data.data.tickets
+        })
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
     }
   }
 }

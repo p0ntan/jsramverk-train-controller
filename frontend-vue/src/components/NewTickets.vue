@@ -23,6 +23,14 @@
 // Store is used to store train-data when clicking a delayed train
 import store from '../store/store'
 const baseURL = import.meta.env.VITE_BASE_URL
+const graphqlURL = import.meta.env.VITE_GRAPHQL_URL
+// Define data needed from backend
+const queryCodes = `{
+  codes {
+    Code
+    Level3Description
+  }
+}`
 
 export default {
   emits: [
@@ -38,14 +46,24 @@ export default {
   created() {
     this.trainObject = store.train
 
-    fetch(`${baseURL}/codes`)
-      .then((response) => response.json())
-      .then((data) => {
-        this.codes = data.data
+    try {
+      // Fetch data via graphql
+      fetch(`${graphqlURL}`, {
+      method: 'POST',
+      headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+      },
+      body: JSON.stringify({ query: queryCodes })
       })
-      .catch((error) => {
-        console.error('Error fetching data:', error)
+      .then(response => response.json())
+      .then(data => {
+        // Store received data in component variable
+        this.codes = data.data.codes
       })
+    } catch (error) {
+      console.error('Error fetching data:', error);
+    }
   },
   methods: {
     renderTrainsView() {
