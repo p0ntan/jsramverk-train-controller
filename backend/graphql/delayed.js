@@ -24,6 +24,7 @@ const DelayedType = new GraphQLObjectType({
         ActivityId: { type: GraphQLString },
         ActivityType: { type: GraphQLString },
         AdvertisedTimeAtLocation: { type: GraphQLString },
+        EstimatedTimeAtLocation: {type: GraphQLString},
         AdvertisedTrainIdent: { type: GraphQLString},
         OperationalTrainNumber: { type: GraphQLString},
         Canceled: { type: GraphQLBoolean},
