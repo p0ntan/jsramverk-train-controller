@@ -1,9 +1,6 @@
 const {
     GraphQLObjectType,
-    GraphQLString,
-    GraphQLList,
-    GraphQLInt,
-    GraphQLNonNull
+    GraphQLList
 } = require('graphql');
 
 
@@ -14,18 +11,10 @@ const ticketsModel = require('../models/tickets.js');
 const codeModel = require('../models/codes.js');
 const delayedModel = require('../models/delayed.js');
 
-// TODO remove test in RootQueryType?
 const RootQueryType = new GraphQLObjectType({
     name: 'Query',
     description: 'Root Query',
     fields: () => ({
-        test: {
-            type: GraphQLString,
-            description: 'A test',
-            resolve: function() {
-                return "hello world";
-            }
-        },
         tickets: {
             type: GraphQLList(TicketType),
             description: 'A list of tickets',

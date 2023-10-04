@@ -44,17 +44,34 @@ describe('Test model', () => {
             res.should.have.lengthOf(0);
         });
 
-        // TODO set up test to insert data, ticket model needs to be updated for that
-        // it('should data and array with 1 ticket', async () => {
-        //     const inData = {
-        //         code: "ANAtest01",
-        //         trainnumber: "12345",
-        //         traindate: "2020-02-20"
-        //     };
-        //     const res = await ticketsModel.createTicket();
+        it('should data and array with 1 ticket', async () => {
+            const inData = {
+                code: "ANAtest03",
+                trainnumber: "13579",
+                traindate: "1984-01-01"
+            };
+            const res = await ticketsModel.createTicket(inData);
 
-        //     res.should.be.a('array');
-        //     res.should.have.lengthOf(0);
-        // });
+            res.should.be.a('object');
+            res.should.have.property('_id');
+            res.code.should.equal('ANAtest03');
+        });
+
+        it('should return array with one item', async () => {
+            const res = await ticketsModel.getTickets();
+
+            res.should.be.a('array');
+            res.should.have.lengthOf(1);
+            res[0].should.have.property('_id');
+            res[0].trainnumber.should.equal('13579');
+        });
+
+        it('should throw TypeError', async () => {
+            try {
+                await ticketsModel.createTicket();
+            } catch (error) {
+                error.should.be.an.instanceOf(TypeError);
+            }
+        });
     });
 });

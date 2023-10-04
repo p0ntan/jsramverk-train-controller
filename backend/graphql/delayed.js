@@ -3,8 +3,7 @@ const {
     GraphQLString,
     GraphQLInt,
     GraphQLBoolean,
-    GraphQLList,
-    GraphQLNonNull
+    GraphQLList
 } = require('graphql');
 
 const LocationType = new GraphQLObjectType({

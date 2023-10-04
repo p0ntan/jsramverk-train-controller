@@ -13,11 +13,9 @@ const {
 } = require("graphql");
 
 const RootQueryType = require("./graphql/root.js");
+const RootMutationType = require("./graphql/mutation.js");
 
 const fetchTrainPositions = require('./models/trains.js');
-const delayed = require('./routes/delayed.js');
-const tickets = require('./routes/tickets.js');
-const codes = require('./routes/codes.js');
 const port = process.env.PORT || 1337;
 
 const app = express();
@@ -50,7 +48,8 @@ const io = require("socket.io")(httpServer, {
 
 // GraphQL route
 const schema = new GraphQLSchema({
-    query: RootQueryType
+    query: RootQueryType,
+    mutation: RootMutationType
 });
 
 app.all('/graphql', graphqlHTTP({
@@ -64,10 +63,6 @@ app.get('/', (req, res) => {
         data: 'This is the API for the course jsramverk, by students poak22 and elmo22'
     });
 });
-// TODO ta bort 
-app.use("/delayed", delayed);
-app.use("/tickets", tickets);
-app.use("/codes", codes);
 
 httpServer.listen(port, () => {
     console.log(`Example app listening on port ${port}`);

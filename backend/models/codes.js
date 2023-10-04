@@ -1,7 +1,7 @@
 const fetch = require('node-fetch');
 
 const codes = {
-    getCodes: async function getCodes(req, res) {
+    getCodes: async function getCodes() {
         const query = `<REQUEST>
             <LOGIN authenticationkey="${process.env.TRAFIKVERKET_API_KEY}" />
             <QUERY objecttype="ReasonCode" schemaversion="1">

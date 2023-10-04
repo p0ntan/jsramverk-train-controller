@@ -1,7 +1,6 @@
 const {
     GraphQLObjectType,
-    GraphQLString,
-    GraphQLNonNull
+    GraphQLString
 } = require('graphql');
 
 const CodeType = new GraphQLObjectType({

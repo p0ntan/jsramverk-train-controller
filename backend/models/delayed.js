@@ -1,7 +1,7 @@
 const fetch = require('node-fetch');
 
 const delayed = {
-    getDelayedTrains: async function getDelayedTrains(req, res) {
+    getDelayedTrains: async function getDelayedTrains() {
         const query = `<REQUEST>
             <LOGIN authenticationkey="${process.env.TRAFIKVERKET_API_KEY}" />
             <QUERY
