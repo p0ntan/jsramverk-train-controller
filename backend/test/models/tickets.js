@@ -17,6 +17,7 @@ describe('Test model', () => {
     /**
      * Before test, reset the user database
      */
+
     before(async () => {
         const db = await database.openDb();
 
