@@ -5,10 +5,17 @@ const cors = require('cors');
 const morgan = require('morgan');
 const bodyParser = require('body-parser');
 
+// GraphQL imports & setup
+const visual = true;
+const { graphqlHTTP } = require('express-graphql');
+const {
+    GraphQLSchema
+} = require("graphql");
+
+const RootQueryType = require("./graphql/root.js");
+const RootMutationType = require("./graphql/mutation.js");
+
 const fetchTrainPositions = require('./models/trains.js');
-const delayed = require('./routes/delayed.js');
-const tickets = require('./routes/tickets.js');
-const codes = require('./routes/codes.js');
 const port = process.env.PORT || 1337;
 
 const app = express();
@@ -39,15 +46,23 @@ const io = require("socket.io")(httpServer, {
     }
 });
 
+// GraphQL route
+const schema = new GraphQLSchema({
+    query: RootQueryType,
+    mutation: RootMutationType
+});
+
+app.all('/graphql', graphqlHTTP({
+    schema: schema,
+    graphiql: visual,
+}));
+
 // Routes
 app.get('/', (req, res) => {
     res.json({
         data: 'This is the API for the course jsramverk, by students poak22 and elmo22'
     });
 });
-app.use("/delayed", delayed);
-app.use("/tickets", tickets);
-app.use("/codes", codes);
 
 httpServer.listen(port, () => {
     console.log(`Example app listening on port ${port}`);

@@ -1,5 +1,5 @@
 <template>
-  <a href="" @click="renderTrainsView">&#8592; Tillbaka</a>
+  <a href="" @click.prevent="renderTrainsView">&#8592; Tillbaka</a>
   <h1>
     Nytt ärende för tåg #<span>{{ trainObject.OperationalTrainNumber }}</span>
   </h1>
@@ -22,7 +22,14 @@
 <script>
 // Store is used to store train-data when clicking a delayed train
 import store from '../store/store'
-const baseURL = import.meta.env.VITE_BASE_URL
+const graphqlURL = import.meta.env.VITE_GRAPHQL_URL
+// Define data needed from backend
+const queryCodes = `{
+  codes {
+    Code
+    Level3Description
+  }
+}`
 
 export default {
   emits: [
@@ -38,39 +45,58 @@ export default {
   created() {
     this.trainObject = store.train
 
-    fetch(`${baseURL}/codes`)
-      .then((response) => response.json())
-      .then((data) => {
-        this.codes = data.data
+    try {
+      // Fetch data via graphql
+      fetch(`${graphqlURL}`, {
+      method: 'POST',
+      headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+      },
+      body: JSON.stringify({ query: queryCodes })
       })
-      .catch((error) => {
-        console.error('Error fetching data:', error)
+      .then(response => response.json())
+      .then(data => {
+        // Store received data in component variable
+        this.codes = data.data.codes
       })
+    } catch (error) {
+      console.error('Error fetching data:', error);
+    }
   },
   methods: {
     renderTrainsView() {
       this.$router.push('/')
     },
     addNewTicket() {
-      const newTicket = {
-        code: this.selectedOption,
-        trainnumber: this.trainObject.OperationalTrainNumber,
-        traindate: this.trainObject.EstimatedTimeAtLocation.substring(0, 10)
-      }
+      const mutateTicket = `mutation {
+          createTicket (
+          code: "${this.selectedOption}",
+          trainnumber: "${this.trainObject.OperationalTrainNumber}",
+          traindate: "${this.trainObject.EstimatedTimeAtLocation.substring(0, 10)}"
+          ) { trainnumber }
+      }`
 
-      fetch(`${baseURL}/tickets`, {
-        body: JSON.stringify(newTicket),
-        headers: {
-          'content-type': 'application/json'
-        },
-        method: 'POST'
+      try {
+      // Fetch data via graphql
+      fetch(`${graphqlURL}`, {
+      method: 'POST',
+      headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+      },
+      body: JSON.stringify({ query: mutateTicket })
       })
-        .then((response) => response.json())
-        .then((result) => {
-          if (result) {
-            this.$emit('ticketAdded', result.data);
-          }
+      .then(response => response.json())
+      .then(result => {
+        // Store received data in component variable
+        //TODO Adjust what data should be returned?
+        // console.log(result.data.createTicket.trainnumber);
+        this.$emit('ticketAdded', result.data);
       })
+    } catch (error) {
+      console.error('Error fetching data:', error);
+    }
     }
   }
 }
