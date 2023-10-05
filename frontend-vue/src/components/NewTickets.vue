@@ -22,7 +22,6 @@
 <script>
 // Store is used to store train-data when clicking a delayed train
 import store from '../store/store'
-const baseURL = import.meta.env.VITE_BASE_URL
 const graphqlURL = import.meta.env.VITE_GRAPHQL_URL
 // Define data needed from backend
 const queryCodes = `{
@@ -70,25 +69,34 @@ export default {
       this.$router.push('/')
     },
     addNewTicket() {
-      const newTicket = {
-        code: this.selectedOption,
-        trainnumber: this.trainObject.OperationalTrainNumber,
-        traindate: this.trainObject.EstimatedTimeAtLocation.substring(0, 10)
-      }
+      const mutateTicket = `mutation {
+          createTicket (
+          code: "${this.selectedOption}",
+          trainnumber: "${this.trainObject.OperationalTrainNumber}",
+          traindate: "${this.trainObject.EstimatedTimeAtLocation.substring(0, 10)}"
+          ) { trainnumber }
+      }`
 
-      fetch(`${baseURL}/tickets`, {
-        body: JSON.stringify(newTicket),
-        headers: {
-          'content-type': 'application/json'
-        },
-        method: 'POST'
+      try {
+      // Fetch data via graphql
+      fetch(`${graphqlURL}`, {
+      method: 'POST',
+      headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+      },
+      body: JSON.stringify({ query: mutateTicket })
       })
-        .then((response) => response.json())
-        .then((result) => {
-          if (result) {
-            this.$emit('ticketAdded', result.data);
-          }
+      .then(response => response.json())
+      .then(result => {
+        // Store received data in component variable
+        //TODO Adjust what data should be returned?
+        // console.log(result.data.createTicket.trainnumber);
+        this.$emit('ticketAdded', result.data);
       })
+    } catch (error) {
+      console.error('Error fetching data:', error);
+    }
     }
   }
 }
