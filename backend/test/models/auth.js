@@ -113,8 +113,6 @@ describe('Test model', () => {
         it('should return object when trying to log in with jwt', async () => {
             const res = await authModel.login(credentials);
             const jwtRegex = /^[A-Za-z0-9-_]+\.[A-Za-z0-9-_]+\.[A-Za-z0-9-_]+$/;
-            
-            console.dir(res);
 
             res.should.be.a('object');
             res.should.have.property('jwt');
