@@ -26,12 +26,7 @@ const auth = {
     register: async function register({ email, password }) {
         // Return error message if missing some input
         if (!email || !password) {
-            return {
-                errors: {
-                    title: "Register error",
-                    detail: "Missing email or password."
-                }
-            };
+            throw new Error('Missing email or password.');
         }
 
         // TODO email and password validation
@@ -40,12 +35,7 @@ const auth = {
         const user = await auth._emailExist(email);
 
         if (user) {
-            return {
-                errors: {
-                    title: "Register error.",
-                    detail: "User already exists."
-                }
-            };
+            throw new Error('User already exists');
         }
 
         // db needs to be defined outside try/catch/finally to work
@@ -68,12 +58,9 @@ const auth = {
                 message: "User successfully registred."
             };
         } catch (err) {
-            return {
-                errors: {
-                    title: "Db input error",
-                    detail: err
-                }
-            };
+            console.log(err);
+            // Throwing new error since graphQL uses errors for printout
+            throw new Error('Db input error');
         } finally {
             await db.client.close();
         }

@@ -28,9 +28,11 @@ describe('route /graphql', () => {
         const db = await database.openDb();
 
         try {
-            const col = await db.collection('tickets');
+            const colTickets = await db.collection('tickets');
+            const colUsers = await db.collection('users');
 
-            await col.deleteMany(); // This deletes the data in the collection
+            await colTickets.deleteMany(); // This deletes the data in the collection
+            await colUsers.deleteMany(); // This deletes the data in the collection
         } catch (err) {
             console.log("During setup following error occured:", err);
         } finally {
@@ -323,4 +325,92 @@ describe('route /graphql', () => {
                 });
         });
     });
+
+    // Create a new user
+    describe('creating a new user', () => {
+        const mutation = `mutation {
+            createUser(
+                email: "routeTest@graph.ql"
+                password: "hejpASo1234"
+            ) {
+                message
+            }
+        }`;
+
+        // Creating a user
+        it('should return a successfully message', (done) => {
+            chai.request(httpServer)
+                .post('/graphql')
+                .set('Content-Type', 'application/json')
+                .set('Accept', 'application/json')
+                .send({query: mutation})
+                .end((err, res) => {
+                    res.should.have.status(200);
+                    res.body.should.have.property('data');
+                    res.body.data.createUser.message.should.include('successfully');
+                    done();
+                });
+        })
+
+        // Trying creating user with with already exisiting email
+        it('should return error since user already exists', (done) => {
+            chai.request(httpServer)
+                .post('/graphql')
+                .set('Content-Type', 'application/json')
+                .set('Accept', 'application/json')
+                .send({query: mutation})
+                .end((err, res) => {
+                    res.should.have.status(200);
+                    res.body.should.have.property('errors');
+                    res.body.errors[0].message.should.include('User already exists');
+                    done();
+                });
+        })
+
+        // Trying creating user with without password
+        it('should return error since missing password', (done) => {
+            const mutation = `mutation {
+                createUser(
+                    email: "routeTest@graph.ql"
+                    password: ""
+                ) {
+                    message
+                }
+            }`;
+            chai.request(httpServer)
+                .post('/graphql')
+                .set('Content-Type', 'application/json')
+                .set('Accept', 'application/json')
+                .send({query: mutation})
+                .end((err, res) => {
+                    res.should.have.status(200);
+                    res.body.should.have.property('errors');
+                    res.body.errors[0].message.should.include('Missing email or password.');
+                    done();
+                });
+        })
+
+        // Trying creating user with without email
+        it('should return error since missing email', (done) => {
+            const mutation = `mutation {
+                createUser(
+                    email: ""
+                    password: "tEsTpAssWooord"
+                ) {
+                    message
+                }
+            }`;
+            chai.request(httpServer)
+                .post('/graphql')
+                .set('Content-Type', 'application/json')
+                .set('Accept', 'application/json')
+                .send({query: mutation})
+                .end((err, res) => {
+                    res.should.have.status(200);
+                    res.body.should.have.property('errors');
+                    res.body.errors[0].message.should.include('Missing email or password.');
+                    done();
+                });
+        })
+    })
 });

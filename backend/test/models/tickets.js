@@ -67,11 +67,15 @@ describe('Test model', () => {
         });
 
         it('should throw TypeError', async () => {
+            let error;
+
             try {
                 await ticketsModel.createTicket();
-            } catch (error) {
-                error.should.be.an.instanceOf(TypeError);
+            } catch (e) {
+                error = e;
             }
+
+            error.should.be.an.instanceOf(TypeError);
         });
     });
 });

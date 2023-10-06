@@ -55,28 +55,35 @@ describe('Test model', () => {
         });
 
         it('should return error message when missing field password', async () => {
-            const res = await authModel.register({
-                email: "test@user.login",
-            });
+            let error;
+        
+            try {
+                await authModel.register({
+                    email: "test@user.login",
+                });
+            } catch (e) {
+                error = e;
+            }
 
-            res.should.be.a('object');
-            res.should.have.property('errors');
-            res.errors.title.should.include('error');
-            res.errors.detail.should.include('Missing');
-            res.errors.detail.should.include('password');
+            error.should.be.an('error');
+            error.message.should.include('Missing email or password.');
         });
 
 
         it('should return error message when user exists', async () => {
-            const res = await authModel.register({
-                email: "test@user.login",
-                password: "pAs$w0rD12345"
-            });
+            let error;
 
-            res.should.be.a('object');
-            res.should.have.property('errors');
-            res.errors.title.should.include('Register');
-            res.errors.detail.should.include('already exists');
+            try {
+                const res = await authModel.register({
+                    email: "test@user.login",
+                    password: "pAs$w0rD12345"
+                });
+            } catch (e) {
+                error = e;
+            }
+
+            error.should.be.an('error');
+            error.message.should.include('User already exists');
         });
     });
 

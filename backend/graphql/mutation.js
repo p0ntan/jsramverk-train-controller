@@ -4,8 +4,10 @@ const {
     GraphQLNonNull
 } = require('graphql');
 
+const UserType = require('./user.js');
 const TicketType = require('./ticket.js');
 const ticketsModel = require('../models/tickets.js');
+const authModel = require('../models/auth.js');
 
 const RootMutationType = new GraphQLObjectType({
     name: 'Mutation',
@@ -34,6 +36,23 @@ const RootMutationType = new GraphQLObjectType({
                 }
             }
         },
+        createUser: {
+            type: UserType,
+            description: 'Create a new user',
+            args: {
+                email: { type: GraphQLNonNull(GraphQLString) },
+                password: { type: GraphQLNonNull(GraphQLString) }
+            },
+            resolve: async function(_, args) {
+                try {
+                    const user = await authModel.register(args);
+
+                    return user;
+                } catch (error) {
+                    throw new Error('Error creating a user: ' + error.message);
+                }
+            }
+        }
     }),
 });
 
