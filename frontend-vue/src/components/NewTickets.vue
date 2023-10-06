@@ -57,8 +57,8 @@ export default {
       })
       .then(response => response.json())
       .then(data => {
-        // Store received data in component variable
         this.codes = data.data.codes
+        store.codes = this.codes
       })
     } catch (error) {
       console.error('Error fetching data:', error);
