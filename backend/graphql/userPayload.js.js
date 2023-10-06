@@ -11,7 +11,7 @@ const PayloadType = new GraphQLObjectType({
     fields: () => ({
         email: { type: GraphQLNonNull(GraphQLString)}
     })
-})
+});
 
 const UserPayloadType = new GraphQLObjectType({
     name: 'Userpayload',

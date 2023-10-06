@@ -25,7 +25,7 @@ const RootMutationType = new GraphQLObjectType({
             resolve: async function(_, args, context) {
                 if (!context.req.isAuth) {
                     // IF not authenticated this error-text will show in graphql-response
-                    throw new Error("Not authenticated.")
+                    throw new Error("Not authenticated.");
                 }
 
                 try {

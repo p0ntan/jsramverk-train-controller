@@ -56,7 +56,7 @@ describe('Test model', () => {
 
         it('should return error message when missing field password', async () => {
             let error;
-        
+
             try {
                 await authModel.register({
                     email: "test@user.login",
@@ -74,7 +74,7 @@ describe('Test model', () => {
             let error;
 
             try {
-                const res = await authModel.register({
+                await authModel.register({
                     email: "test@user.login",
                     password: "pAs$w0rD12345"
                 });
@@ -109,7 +109,7 @@ describe('Test model', () => {
             let error;
 
             try {
-                const res = await authModel.login({
+                await authModel.login({
                     email: "secondTest@user.login",
                     password: "thisiswrong"
                 });
@@ -134,7 +134,7 @@ describe('Test model', () => {
             let error;
 
             try {
-                const res = await authModel.login({password: "email missing"});
+                await authModel.login({password: "email missing"});
             } catch (e) {
                 error = e;
             }
@@ -147,7 +147,7 @@ describe('Test model', () => {
             let error;
 
             try {
-                const res = await authModel.login({
+                await authModel.login({
                     email: "doesnotexist@no.where",
                     password: "willnotwork"
                 });

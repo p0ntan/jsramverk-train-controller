@@ -134,7 +134,7 @@ describe('route /graphql', () => {
             }`;
 
             // Stub the jwt.verify function to always return a successful verification
-            const jwtStub = sinon.stub(jwt, 'verify').callsFake((token, secret, callback) => {
+            const jwtStub = sinon.stub(jwt, 'verify').callsFake(() => {
                 return {
                     email: "mockedEmail@example.com"
                 };
@@ -142,7 +142,7 @@ describe('route /graphql', () => {
 
             chai.request(httpServer)
                 .post('/graphql')
-                .set('x-access-token','onlyneededtomakeauthModelusejwtverify')
+                .set('x-access-token', 'onlyneededtomakeauthModelusejwtverify')
                 .set('Content-Type', 'application/json')
                 .set('Accept', 'application/json')
                 .send({query: mutation})
@@ -197,7 +197,7 @@ describe('route /graphql', () => {
             }`;
 
             // Stub the jwt.verify function to always return a successful verification
-            const jwtStub = sinon.stub(jwt, 'verify').callsFake((token, secret, callback) => {
+            const jwtStub = sinon.stub(jwt, 'verify').callsFake(() => {
                 return {
                     email: "mockedEmail@example.com"
                 };
@@ -205,7 +205,7 @@ describe('route /graphql', () => {
 
             chai.request(httpServer)
                 .post('/graphql')
-                .set('x-access-token','onlyneededtomakeauthModelusejwtverify')
+                .set('x-access-token', 'onlyneededtomakeauthModelusejwtverify')
                 .set('Content-Type', 'application/json')
                 .set('Accept', 'application/json')
                 .send({query: mutation})
@@ -350,7 +350,7 @@ describe('route /graphql', () => {
                     res.body.data.createUser.message.should.include('successfully');
                     done();
                 });
-        })
+        });
 
         // Trying creating user with with already exisiting email
         it('should return error since user already exists', (done) => {
@@ -365,7 +365,7 @@ describe('route /graphql', () => {
                     res.body.errors[0].message.should.include('User already exists');
                     done();
                 });
-        })
+        });
 
         // Trying creating user with without password
         it('should return error since missing password', (done) => {
@@ -377,6 +377,7 @@ describe('route /graphql', () => {
                     message
                 }
             }`;
+
             chai.request(httpServer)
                 .post('/graphql')
                 .set('Content-Type', 'application/json')
@@ -388,7 +389,7 @@ describe('route /graphql', () => {
                     res.body.errors[0].message.should.include('Missing email or password.');
                     done();
                 });
-        })
+        });
 
         // Trying creating user with without email
         it('should return error since missing email', (done) => {
@@ -400,6 +401,7 @@ describe('route /graphql', () => {
                     message
                 }
             }`;
+
             chai.request(httpServer)
                 .post('/graphql')
                 .set('Content-Type', 'application/json')
@@ -411,8 +413,8 @@ describe('route /graphql', () => {
                     res.body.errors[0].message.should.include('Missing email or password.');
                     done();
                 });
-        })
-    })
+        });
+    });
 
     // Create a new user
     describe('logging in as a user', () => {
@@ -441,7 +443,7 @@ describe('route /graphql', () => {
                     res.body.data.createUser.message.should.include('successfully');
                     done();
                 });
-        })
+        });
 
         // Try logging in in the wrong way
         it('should return an missing password error', (done) => {
@@ -469,7 +471,7 @@ describe('route /graphql', () => {
                     res.body.errors[0].message.should.include('Missing email or password.');
                     done();
                 });
-        })
+        });
 
         // Try logging in in the wrong way
         it('should return an wrong password error', (done) => {
@@ -497,9 +499,9 @@ describe('route /graphql', () => {
                     res.body.errors[0].message.should.include('Wrong password.');
                     done();
                 });
-        })
+        });
 
-        
+
         // Try logging in in the wrong way
         it('should return an user dosen\'t exist error', (done) => {
             const mutation = `mutation {
@@ -528,7 +530,7 @@ describe('route /graphql', () => {
                     );
                     done();
                 });
-        })
+        });
 
         // Try logging in in the wrong way
         it('should succeed and returning a jwt with userpayload', (done) => {
@@ -556,9 +558,9 @@ describe('route /graphql', () => {
 
                     res.should.have.status(200);
                     userPayload.jwt.should.match(jwtRegex);
-                    userPayload.user.email.should.equal(email)
+                    userPayload.user.email.should.equal(email);
                     done();
                 });
-        })
-    })
+        });
+    });
 });
