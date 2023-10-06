@@ -45,10 +45,11 @@ const io = require("socket.io")(httpServer, {
 const visual = true;
 
 app.use('/graphql', authModel.checkToken); // authentication middleware
-app.all('/graphql', graphqlHTTP({ // Route
+app.all('/graphql', graphqlHTTP((req) => ({ // Route
     schema: schema,
     graphiql: visual,
-}));
+    context: { req } // Needed in mutation for checking if authenticated
+})));
 
 // Routes
 app.get('/', (req, res) => {
@@ -57,6 +58,7 @@ app.get('/', (req, res) => {
     });
 });
 
+// Start server
 httpServer.listen(port, () => {
     console.log(`Example app listening on port ${port}`);
 });

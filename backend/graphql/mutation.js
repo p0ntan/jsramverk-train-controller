@@ -19,7 +19,12 @@ const RootMutationType = new GraphQLObjectType({
                 trainnumber: { type: GraphQLNonNull(GraphQLString) },
                 traindate: { type: GraphQLNonNull(GraphQLString) },
             },
-            resolve: async function(_, args) {
+            resolve: async function(_, args, context) {
+                if (!context.req.isAuth) {
+                    // IF not authenticated this error-text will show in graphql-response
+                    throw new Error("Not authenticated.")
+                }
+
                 try {
                     const newTicket = await ticketsModel.createTicket(args);
 
@@ -27,7 +32,7 @@ const RootMutationType = new GraphQLObjectType({
                 } catch (error) {
                     throw new Error('Error creating a ticket: ' + error.message);
                 }
-            },
+            }
         },
     }),
 });

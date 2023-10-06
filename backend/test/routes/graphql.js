@@ -8,6 +8,8 @@ process.env.NODE_ENV = 'test';
 
 const chai = require('chai');
 const chaiHttp = require('chai-http');
+const sinon = require('sinon');
+const jwt = require('jsonwebtoken');
 const database = require('../../db/database.js');
 const httpServer = require('../../app.js');
 
@@ -46,7 +48,8 @@ describe('route /graphql', () => {
             }
         }`;
 
-        it('query should get status 200 with an array in data', (done) => {
+        // Test to see collection is actually empty
+        it('query should get status 200 with empty array in data', (done) => {
             chai.request(httpServer)
                 .post('/graphql')
                 .set('Content-Type', 'application/json')
@@ -63,7 +66,9 @@ describe('route /graphql', () => {
                     done();
                 });
         });
-        it('mutation should get status 200 with inserted data', (done) => {
+
+        // Test to insert ticket without logging in
+        it('mutation should not succeed since not logged in', (done) => {
             const mutation = `mutation {
                 createTicket(
                     code: "ALATEST01"
@@ -83,6 +88,63 @@ describe('route /graphql', () => {
                 .set('Accept', 'application/json')
                 .send({query: mutation})
                 .end((err, res) => {
+                    res.should.have.status(200); // This is set by graphql
+                    res.body.should.have.property('errors');
+                    res.body.errors[0].should.have.property('message');
+                    res.body.errors[0].message.should.include('Not authenticated.');
+
+                    done();
+                });
+        });
+
+        // Test to control collection is still empty
+        it('query should get status 200 with empty array in data', (done) => {
+            chai.request(httpServer)
+                .post('/graphql')
+                .set('Content-Type', 'application/json')
+                .set('Accept', 'application/json')
+                .send({query: query})
+                .end((err, res) => {
+                    const tickets = res.body.data.tickets;
+
+                    res.should.have.status(200);
+                    res.body.data.should.be.a('object');
+                    res.body.data.should.have.property('tickets');
+                    tickets.should.be.a('array');
+                    tickets.should.have.lengthOf(0);
+                    done();
+                });
+        });
+
+        // Test to add ticket with stub answer from jwt.verify
+        it('mutation should succeed since logged in', (done) => {
+            const mutation = `mutation {
+                createTicket(
+                    code: "ALATEST01"
+                    trainnumber: "12345"
+                    traindate: "2020-02-20"
+                ) {
+                    _id
+                    code
+                    trainnumber
+                    traindate
+                }
+            }`;
+
+            // Stub the jwt.verify function to always return a successful verification
+            const jwtStub = sinon.stub(jwt, 'verify').callsFake((token, secret, callback) => {
+                return {
+                    email: "mockedEmail@example.com"
+                };
+            });
+
+            chai.request(httpServer)
+                .post('/graphql')
+                .set('x-access-token','onlyneededtomakeauthModelusejwtverify')
+                .set('Content-Type', 'application/json')
+                .set('Accept', 'application/json')
+                .send({query: mutation})
+                .end((err, res) => {
                     const ticket = res.body.data.createTicket;
 
                     res.should.have.status(200);
@@ -91,9 +153,13 @@ describe('route /graphql', () => {
                     ticket.code.should.equal('ALATEST01');
                     ticket.trainnumber.should.equal('12345');
                     ticket.traindate.should.equal('2020-02-20');
+
+                    jwtStub.restore();
                     done();
                 });
         });
+
+        // Test to see if the ticket was added
         it('query should get status 200 with array and one item', (done) => {
             chai.request(httpServer)
                 .post('/graphql')
@@ -112,7 +178,9 @@ describe('route /graphql', () => {
                     done();
                 });
         });
-        it('mutation should get status 200 with inserted data', (done) => {
+
+        // Second test with a mocked logged in person
+        it('mutation should succeed since logged in', (done) => {
             const mutation = `mutation {
                 createTicket(
                     code: "ALATEST02"
@@ -126,8 +194,16 @@ describe('route /graphql', () => {
                 }
             }`;
 
+            // Stub the jwt.verify function to always return a successful verification
+            const jwtStub = sinon.stub(jwt, 'verify').callsFake((token, secret, callback) => {
+                return {
+                    email: "mockedEmail@example.com"
+                };
+            });
+
             chai.request(httpServer)
                 .post('/graphql')
+                .set('x-access-token','onlyneededtomakeauthModelusejwtverify')
                 .set('Content-Type', 'application/json')
                 .set('Accept', 'application/json')
                 .send({query: mutation})
@@ -140,9 +216,13 @@ describe('route /graphql', () => {
                     ticket.code.should.equal('ALATEST02');
                     ticket.trainnumber.should.equal('67890');
                     ticket.traindate.should.equal('2022-02-20');
+
+                    jwtStub.restore();
                     done();
                 });
         });
+
+        // See that there a two tickets in the array
         it('query should get status 200 with array and two items', (done) => {
             chai.request(httpServer)
                 .post('/graphql')
