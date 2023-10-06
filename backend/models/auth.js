@@ -121,7 +121,6 @@ const auth = {
                 req.user.email = decoded.email;
                 req.isAuth = true;
             } catch (err) {
-                console.log(err);
                 req.isAuth = false;
             }
         }

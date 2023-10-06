@@ -118,6 +118,38 @@ describe('route /graphql', () => {
                 });
         });
 
+
+        // Test to add ticket with wrong x-access-token
+        it('mutation should not succeed since access token is wrong', (done) => {
+            const mutation = `mutation {
+                createTicket(
+                    code: "ALATESTNOT"
+                    trainnumber: "125345"
+                    traindate: "2020-02-20"
+                ) {
+                    _id
+                    code
+                    trainnumber
+                    traindate
+                }
+            }`;
+
+            chai.request(httpServer)
+                .post('/graphql')
+                .set('x-access-token', 'notaccorecttoken')
+                .set('Content-Type', 'application/json')
+                .set('Accept', 'application/json')
+                .send({query: mutation})
+                .end((err, res) => {
+                    res.should.have.status(200); // This is set by graphql
+                    res.body.should.have.property('errors');
+                    res.body.errors[0].should.have.property('message');
+                    res.body.errors[0].message.should.include('Not authenticated.');
+
+                    done();
+                });
+        });
+
         // Test to add ticket with stub answer from jwt.verify
         it('mutation should succeed since logged in', (done) => {
             const mutation = `mutation {
