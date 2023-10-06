@@ -9,7 +9,7 @@
     "start-dev": "NODE_ENV=development nodemon app.js",
     "eslint": "eslint .",
     "dev-reset-db": "NODE_ENV=development node db/setup.js",
-    "test": "NODE_ENV=test nyc --reporter=html --reporter=text mocha --exit 'test/**/*.js' --timeout 10000"
+    "test": "NODE_ENV=test nyc --reporter=html --reporter=text mocha --exit 'test/*/*.js' --timeout 10000"
   },
   "keywords": [],
   "author": "",
@@ -36,6 +36,7 @@
     "javascript-style-guide": "^1.0.1",
     "mocha": "^10.2.0",
     "nodemon": "^3.0.1",
-    "nyc": "^15.1.0"
+    "nyc": "^15.1.0",
+    "sinon": "^16.1.0"
   }
 }
