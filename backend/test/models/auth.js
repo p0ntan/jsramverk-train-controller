@@ -60,10 +60,10 @@ describe('Test model', () => {
             });
 
             res.should.be.a('object');
-            res.should.have.property('error');
-            res.error.title.should.include('error');
-            res.error.detail.should.include('Missing');
-            res.error.detail.should.include('password');
+            res.should.have.property('errors');
+            res.errors.title.should.include('error');
+            res.errors.detail.should.include('Missing');
+            res.errors.detail.should.include('password');
         });
 
 
@@ -74,9 +74,9 @@ describe('Test model', () => {
             });
 
             res.should.be.a('object');
-            res.should.have.property('error');
-            res.error.title.should.include('Register');
-            res.error.detail.should.include('already exists');
+            res.should.have.property('errors');
+            res.errors.title.should.include('Register');
+            res.errors.detail.should.include('already exists');
         });
     });
 
@@ -105,9 +105,9 @@ describe('Test model', () => {
             });
 
             res.should.be.a('object');
-            res.should.have.property('error');
-            res.error.title.should.include('Login');
-            res.error.detail.should.include('Wrong password');
+            res.should.have.property('errors');
+            res.errors.title.should.include('Login');
+            res.errors.detail.should.include('Wrong password');
         });
 
         it('should return object when trying to log in with jwt', async () => {
@@ -123,9 +123,9 @@ describe('Test model', () => {
             const res = await authModel.login({password: "email missing"});
 
             res.should.be.a('object');
-            res.should.have.property('error');
-            res.error.title.should.include('Login');
-            res.error.detail.should.include('Missing email');
+            res.should.have.property('errors');
+            res.errors.title.should.include('Login');
+            res.errors.detail.should.include('Missing email');
         });
 
         it('should return object with error non existing email', async () => {
@@ -135,9 +135,9 @@ describe('Test model', () => {
             });
 
             res.should.be.a('object');
-            res.should.have.property('error');
-            res.error.title.should.include('Login');
-            res.error.detail.should.include('e-mail doesnotexist@no.where dosen\'t exist');
+            res.should.have.property('errors');
+            res.errors.title.should.include('Login');
+            res.errors.detail.should.include('e-mail doesnotexist@no.where dosen\'t exist');
         });
     });
 });

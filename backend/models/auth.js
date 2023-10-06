@@ -27,7 +27,7 @@ const auth = {
         // Return error message if missing some input
         if (!email || !password) {
             return {
-                error: {
+                errors: {
                     title: "Register error",
                     detail: "Missing email or password."
                 }
@@ -41,7 +41,7 @@ const auth = {
 
         if (user) {
             return {
-                error: {
+                errors: {
                     title: "Register error.",
                     detail: "User already exists."
                 }
@@ -69,7 +69,7 @@ const auth = {
             };
         } catch (err) {
             return {
-                error: {
+                errors: {
                     title: "Db input error",
                     detail: err
                 }
@@ -88,7 +88,7 @@ const auth = {
         // Return error message if missing some input
         if (!email || !password) {
             return {
-                error: {
+                errors: {
                     title: "Login error",
                     detail: "Missing email or password."
                 }
@@ -100,7 +100,7 @@ const auth = {
 
         if (!user) {
             return {
-                error: {
+                errors: {
                     title: "Login error.",
                     detail: `User with e-mail ${email} dosen't exist.`
                 }
@@ -114,7 +114,7 @@ const auth = {
             // If the passwords don't match
             if (!success) {
                 return {
-                    error: {
+                    errors: {
                         title: "Login error",
                         detail: "Wrong password"
                     }
@@ -131,12 +131,38 @@ const auth = {
             };
         } catch (err) {
             return {
-                error: {
+                errors: {
                     title: "bcrypt error",
                     detail: err
                 }
             };
         }
+    },
+
+    /**
+     * Function used as middleware to verify jwt
+     * 
+     * @returns void
+     */
+    checkToken: function checkToken(req, res, next) {
+        const jwtToken = req.headers['x-access-token'];
+        // const jwtToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InNlY29uZFRlc3RAdXNlci5sb2dpbiIsImlhdCI6MTY5NjU3NjM5NywiZXhwIjoxNjk2NjYyNzk3fQ.Q6TaezxcPb-encdtoTECzti6Qem7JVBLc9_nRfydp1E";
+        req.isAuth = false; // Boolean to use check if a user is verified
+
+        if (jwtToken) {
+            try {
+                const decoded = jwt.verify(jwtToken, jwtSecret)
+                req.user = {};
+                req.user.email = decoded.email;
+                req.isAuth = true;
+
+            } catch (err) {
+                console.log(err);
+                req.isAuth = false;
+            }
+        }
+
+        next();
     },
 
     // Function is not supposed to be used outside model
