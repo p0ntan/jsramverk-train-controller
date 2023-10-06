@@ -1,5 +1,6 @@
 const {
     GraphQLObjectType,
+    GraphQLID,
     GraphQLString,
     GraphQLNonNull
 } = require('graphql');
@@ -24,6 +25,23 @@ const RootMutationType = new GraphQLObjectType({
                     const newTicket = await ticketsModel.createTicket(args);
 
                     return newTicket;
+                } catch (error) {
+                    throw new Error('Error creating a ticket: ' + error.message);
+                }
+            },
+        },
+        updateTicket: {
+            type: TicketType,
+            description: 'Update a new ticket',
+            args: {
+                _id: { type: GraphQLNonNull(GraphQLID) },
+                code: { type: GraphQLNonNull(GraphQLString) },
+            },
+            resolve: async function(_, args) {
+                try {
+                    const updatedTicket = await ticketsModel.updateTicket(args);
+
+                    return updatedTicket;
                 } catch (error) {
                     throw new Error('Error creating a ticket: ' + error.message);
                 }

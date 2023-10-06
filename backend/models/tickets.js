@@ -30,6 +30,26 @@ const tickets = {
             trainnumber: args.trainnumber,
             traindate: args.traindate,
         };
+    },
+
+    updateTicket: async function updateTicket(args) {
+        const db = await database.openDb();
+        const collection = await db.collection(tickets.collectionName);
+
+        const result = await collection.updateOne(
+            { _id: args._id },
+            { $set: { code: args.code } }
+        );
+        console.log(result)
+
+        await db.client.close();
+
+        if ( result.modifiedCount ) {
+            return {
+                _id: args._id,
+                code: args.code
+            };
+        }
     }
 };
 
