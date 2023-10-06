@@ -115,7 +115,6 @@ const auth = {
      */
     checkToken: function checkToken(req, res, next) {
         const jwtToken = req.headers['x-access-token'];
-        // const jwtToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InNlY29uZFRlc3RAdXNlci5sb2dpbiIsImlhdCI6MTY5NjU3NjM5NywiZXhwIjoxNjk2NjYyNzk3fQ.Q6TaezxcPb-encdtoTECzti6Qem7JVBLc9_nRfydp1E";
         req.isAuth = false; // Boolean to use check if a user is verified
 
         if (jwtToken) {

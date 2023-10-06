@@ -6,6 +6,7 @@ const {
 
 const UserType = require('./user.js');
 const TicketType = require('./ticket.js');
+const UserPayloadType = require('./userPayload.js');
 const ticketsModel = require('../models/tickets.js');
 const authModel = require('../models/auth.js');
 
@@ -52,8 +53,25 @@ const RootMutationType = new GraphQLObjectType({
                     throw new Error('Error creating a user: ' + error.message);
                 }
             }
+        },
+        authUser: {
+            type: UserPayloadType,
+            description: 'Login with user credentials',
+            args: {
+                email: { type: GraphQLNonNull(GraphQLString) },
+                password: { type: GraphQLNonNull(GraphQLString) }
+            },
+            resolve: async function(_, args) {
+                try {
+                    const userPayload = await authModel.login(args);
+
+                    return userPayload;
+                } catch (error) {
+                    throw new Error('Error logging in: ' + error.message);
+                }
+            }
         }
-    }),
+    })
 });
 
 module.exports = RootMutationType;

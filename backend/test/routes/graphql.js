@@ -413,4 +413,152 @@ describe('route /graphql', () => {
                 });
         })
     })
+
+    // Create a new user
+    describe('logging in as a user', () => {
+        const email = "routeLogin@test.ql";
+        const password = "PossWordali2";
+
+        // First create the user to use for test
+        it('should return a successfully message', (done) => {
+            const mutation = `mutation {
+                createUser(
+                    email: "${email}"
+                    password: "${password}"
+                ) {
+                    message
+                }
+            }`;
+
+            chai.request(httpServer)
+                .post('/graphql')
+                .set('Content-Type', 'application/json')
+                .set('Accept', 'application/json')
+                .send({query: mutation})
+                .end((err, res) => {
+                    res.should.have.status(200);
+                    res.body.should.have.property('data');
+                    res.body.data.createUser.message.should.include('successfully');
+                    done();
+                });
+        })
+
+        // Try logging in in the wrong way
+        it('should return an missing password error', (done) => {
+            const mutation = `mutation {
+                authUser(
+                    email: "${email}"
+                    password: ""
+                ) {
+                    message
+                    jwt
+                    user {
+                        email
+                    }
+                }
+            }`;
+
+            chai.request(httpServer)
+                .post('/graphql')
+                .set('Content-Type', 'application/json')
+                .set('Accept', 'application/json')
+                .send({query: mutation})
+                .end((err, res) => {
+                    res.should.have.status(200);
+                    res.body.should.have.property('errors');
+                    res.body.errors[0].message.should.include('Missing email or password.');
+                    done();
+                });
+        })
+
+        // Try logging in in the wrong way
+        it('should return an wrong password error', (done) => {
+            const mutation = `mutation {
+                authUser(
+                    email: "${email}"
+                    password: "wrongpassword"
+                ) {
+                    message
+                    jwt
+                    user {
+                        email
+                    }
+                }
+            }`;
+
+            chai.request(httpServer)
+                .post('/graphql')
+                .set('Content-Type', 'application/json')
+                .set('Accept', 'application/json')
+                .send({query: mutation})
+                .end((err, res) => {
+                    res.should.have.status(200);
+                    res.body.should.have.property('errors');
+                    res.body.errors[0].message.should.include('Wrong password.');
+                    done();
+                });
+        })
+
+        
+        // Try logging in in the wrong way
+        it('should return an user dosen\'t exist error', (done) => {
+            const mutation = `mutation {
+                authUser(
+                    email: "non@existing.com"
+                    password: "wrongpassword"
+                ) {
+                    message
+                    jwt
+                    user {
+                        email
+                    }
+                }
+            }`;
+
+            chai.request(httpServer)
+                .post('/graphql')
+                .set('Content-Type', 'application/json')
+                .set('Accept', 'application/json')
+                .send({query: mutation})
+                .end((err, res) => {
+                    res.should.have.status(200);
+                    res.body.should.have.property('errors');
+                    res.body.errors[0].message.should.include(
+                        'User with e-mail non@existing.com dosen\'t exist.'
+                    );
+                    done();
+                });
+        })
+
+        // Try logging in in the wrong way
+        it('should succeed and returning a jwt with userpayload', (done) => {
+            const mutation = `mutation {
+                authUser(
+                    email: "${email}"
+                    password: "${password}"
+                ) {
+                    message
+                    jwt
+                    user {
+                        email
+                    }
+                }
+            }`;
+
+            chai.request(httpServer)
+                .post('/graphql')
+                .set('Content-Type', 'application/json')
+                .set('Accept', 'application/json')
+                .send({query: mutation})
+                .end((err, res) => {
+                    const userPayload = res.body.data.authUser;
+                    const jwtRegex = /^[A-Za-z0-9-_]+\.[A-Za-z0-9-_]+\.[A-Za-z0-9-_]+$/;
+
+                    res.should.have.status(200);
+                    userPayload.jwt.should.match(jwtRegex);
+                    userPayload.user.email.should.equal(email)
+                    done();
+                });
+        })
+    })
 });
