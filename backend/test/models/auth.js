@@ -106,15 +106,19 @@ describe('Test model', () => {
         });
 
         it('should return object with error wrong password', async () => {
-            const res = await authModel.login({
-                email: "secondTest@user.login",
-                password: "thisiswrong"
-            });
+            let error;
 
-            res.should.be.a('object');
-            res.should.have.property('errors');
-            res.errors.title.should.include('Login');
-            res.errors.detail.should.include('Wrong password');
+            try {
+                const res = await authModel.login({
+                    email: "secondTest@user.login",
+                    password: "thisiswrong"
+                });
+            } catch (e) {
+                error = e;
+            }
+
+            error.should.be.an('error');
+            error.message.should.include('Wrong password');
         });
 
         it('should return object when trying to log in with jwt', async () => {
@@ -127,24 +131,32 @@ describe('Test model', () => {
         });
 
         it('should return object with error missing email', async () => {
-            const res = await authModel.login({password: "email missing"});
+            let error;
 
-            res.should.be.a('object');
-            res.should.have.property('errors');
-            res.errors.title.should.include('Login');
-            res.errors.detail.should.include('Missing email');
+            try {
+                const res = await authModel.login({password: "email missing"});
+            } catch (e) {
+                error = e;
+            }
+
+            error.should.be.an('error');
+            error.message.should.include('Missing email');
         });
 
         it('should return object with error non existing email', async () => {
-            const res = await authModel.login({
-                email: "doesnotexist@no.where",
-                password: "willnotwork"
-            });
+            let error;
 
-            res.should.be.a('object');
-            res.should.have.property('errors');
-            res.errors.title.should.include('Login');
-            res.errors.detail.should.include('e-mail doesnotexist@no.where dosen\'t exist');
+            try {
+                const res = await authModel.login({
+                    email: "doesnotexist@no.where",
+                    password: "willnotwork"
+                });
+            } catch (e) {
+                error = e;
+            }
+
+            error.should.be.an('error');
+            error.message.should.include('e-mail doesnotexist@no.where dosen\'t exist');
         });
     });
 });

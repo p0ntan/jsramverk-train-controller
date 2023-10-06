@@ -58,9 +58,8 @@ const auth = {
                 message: "User successfully registred."
             };
         } catch (err) {
-            console.log(err);
-            // Throwing new error since graphQL uses errors for printout
-            throw new Error('Db input error');
+            // Throwing error again since graphQL uses errors for printout
+            throw err;
         } finally {
             await db.client.close();
         }
@@ -74,24 +73,14 @@ const auth = {
     login: async function login({ email, password}) {
         // Return error message if missing some input
         if (!email || !password) {
-            return {
-                errors: {
-                    title: "Login error",
-                    detail: "Missing email or password."
-                }
-            };
+            throw new Error('Missing email or password.');
         }
 
         // Check if email exists, if it already does return an object with errormessage
         const user = await auth._emailExist(email);
 
         if (!user) {
-            return {
-                errors: {
-                    title: "Login error.",
-                    detail: `User with e-mail ${email} dosen't exist.`
-                }
-            };
+            throw new Error(`User with e-mail ${email} dosen't exist.`);
         }
 
         try {
@@ -100,12 +89,7 @@ const auth = {
 
             // If the passwords don't match
             if (!success) {
-                return {
-                    errors: {
-                        title: "Login error",
-                        detail: "Wrong password"
-                    }
-                };
+                throw new Error('Wrong password.');
             }
 
             // TODO now payload is only using email, if more data is wanted it can be put here
@@ -113,16 +97,14 @@ const auth = {
             let jwtToken = jwt.sign(payload, jwtSecret, { expiresIn: '24h' });
 
             return {
+                user: payload,
                 jwt: jwtToken,
                 message: "User successfully logged in."
             };
         } catch (err) {
-            return {
-                errors: {
-                    title: "bcrypt error",
-                    detail: err
-                }
-            };
+            // TODO this catches wrong password error and then throwing it again
+            // Needed if other errors are thrown (from bcrypt)
+            throw err;
         }
     },
 
