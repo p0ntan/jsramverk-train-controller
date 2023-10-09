@@ -9,9 +9,6 @@
 </template>
 
 <script>
-// Store is used to store train-data
-import store from '../store/store'
-
 import OldTickets from './OldTickets.vue'
 import NewTickets from './NewTickets.vue'
 
@@ -21,7 +18,7 @@ export default {
     NewTickets
   },
   beforeCreate() {
-    if (!store.train) {
+    if (!this.$store.train) {
       // Checks if there is a train in store, if not redirect to '/'
       this.$router.push('/')
     }

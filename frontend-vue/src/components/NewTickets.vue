@@ -20,8 +20,6 @@
 </template>
 
 <script>
-// Store is used to store train-data when clicking a delayed train
-import store from '../store/store'
 const graphqlURL = import.meta.env.VITE_GRAPHQL_URL
 // Define data needed from backend
 const queryCodes = `{
@@ -43,7 +41,7 @@ export default {
     }
   },
   created() {
-    this.trainObject = store.train
+    this.trainObject = this.$store.train
 
     try {
       // Fetch data via graphql
