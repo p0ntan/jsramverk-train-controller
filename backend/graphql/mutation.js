@@ -4,7 +4,7 @@ const {
     GraphQLNonNull
 } = require('graphql');
 
-const UserType = require('./user.js');
+const UserRegType = require('./userReg.js');
 const TicketType = require('./ticket.js');
 const UserPayloadType = require('./userPayload.js');
 const ticketsModel = require('../models/tickets.js');
@@ -38,7 +38,7 @@ const RootMutationType = new GraphQLObjectType({
             }
         },
         createUser: {
-            type: UserType,
+            type: UserRegType,
             description: 'Create a new user',
             args: {
                 email: { type: GraphQLNonNull(GraphQLString) },

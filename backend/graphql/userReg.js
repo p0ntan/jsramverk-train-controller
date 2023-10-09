@@ -4,14 +4,13 @@ const {
     GraphQLNonNull
 } = require('graphql');
 
-const UserType = new GraphQLObjectType({
+const UserRegType = new GraphQLObjectType({
     name: 'User',
-    description: 'This represents a user',
+    description: 'This represents the response when a user registers',
     fields: () => ({
         email: { type: GraphQLNonNull(GraphQLString) },
-        password: { type: GraphQLNonNull(GraphQLString)},
         message: { type: GraphQLNonNull(GraphQLString)} // Used to message front-end
     })
 });
 
-module.exports = UserType;
+module.exports = UserRegType;
