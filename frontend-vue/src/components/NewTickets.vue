@@ -66,35 +66,41 @@ export default {
     renderTrainsView() {
       this.$router.push('/')
     },
+    // Updated code for adding ticket, only difference is the x-access-token
+    // and the !result.errors part in result
     addNewTicket() {
       const mutateTicket = `mutation {
-          createTicket (
-          code: "${this.selectedOption}",
-          trainnumber: "${this.trainObject.OperationalTrainNumber}",
-          traindate: "${this.trainObject.EstimatedTimeAtLocation.substring(0, 10)}"
-          ) { trainnumber }
+        createTicket (
+        code: "${this.selectedOption}",
+        trainnumber: "${this.trainObject.OperationalTrainNumber}",
+        traindate: "${this.trainObject.EstimatedTimeAtLocation.substring(0, 10)}"
+        ) { trainnumber }
       }`
 
       try {
-      // Fetch data via graphql
-      fetch(`${graphqlURL}`, {
-      method: 'POST',
-      headers: {
-          'Content-Type': 'application/json',
-          'Accept': 'application/json',
-      },
-      body: JSON.stringify({ query: mutateTicket })
-      })
-      .then(response => response.json())
-      .then(result => {
-        // Store received data in component variable
-        //TODO Adjust what data should be returned?
-        // console.log(result.data.createTicket.trainnumber);
-        this.$emit('ticketAdded', result.data);
-      })
-    } catch (error) {
-      console.error('Error fetching data:', error);
-    }
+        // Fetch data via graphql
+        fetch(`${graphqlURL}`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+            'x-access-token': this.$store.jwt // jwt is added from store
+        },
+        body: JSON.stringify({ query: mutateTicket })
+        })
+        .then(response => response.json())
+        .then(result => {
+          if (!result.errors) {
+            //TODO Adjust what data should be returned?
+            this.$emit('ticketAdded', result.data);
+          } else {
+            // TODO make some error handling in browser, will probably not be shown
+            console.log(result.errors);
+          }
+        })
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
     }
   }
 }

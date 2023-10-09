@@ -1,5 +1,9 @@
 <template>
   <div class="ticket-container">
+    <!-- 
+      Only the if-statment below is needed for rendering components when logged in
+      <div v-if="this.$store.jwt" class="ticket"> 
+    -->
     <div class="ticket">
       <NewTickets @ticketAdded="fetchOldTickets"/>
     </div>
