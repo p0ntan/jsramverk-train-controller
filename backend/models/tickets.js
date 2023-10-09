@@ -1,3 +1,4 @@
+const { ObjectId } = require('mongodb');
 const database = require('../db/database.js');
 
 /**
@@ -15,8 +16,11 @@ const tickets = {
     createTicket: async function createTicket(args) {
         const db = await database.openDb();
         const collection = await db.collection(tickets.collectionName);
+        // Create a new ObjectId for the new document
+        const newId = new ObjectId();
 
         const result = await collection.insertOne({
+            _id: newId,
             code: args.code,
             trainnumber: args.trainnumber,
             traindate: args.traindate
@@ -24,8 +28,11 @@ const tickets = {
 
         await db.client.close();
 
+        // Here we return the string of the ObjectId but alternatives are available
+        // https://www.mongodb.com/docs/manual/reference/method/ObjectId/#ObjectId
+        // TODO discuss and agree on returned value
         return {
-            _id: result.insertedId,
+            _id: newId.toString(),
             code: args.code,
             trainnumber: args.trainnumber,
             traindate: args.traindate,
@@ -35,19 +42,19 @@ const tickets = {
     updateTicket: async function updateTicket(args) {
         const db = await database.openDb();
         const collection = await db.collection(tickets.collectionName);
+        // Create ObjectId based on given _id string
+        const ticketId = new ObjectId(args._id)
 
         const result = await collection.updateOne(
-            { _id: args._id },
+            { _id: ticketId },
             { $set: { code: args.code } }
         );
-        console.log(result)
 
         await db.client.close();
 
         if ( result.modifiedCount ) {
             return {
-                _id: args._id,
-                code: args.code
+                _id: args._id
             };
         }
     }
