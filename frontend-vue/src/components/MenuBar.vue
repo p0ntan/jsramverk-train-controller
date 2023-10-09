@@ -1,6 +1,6 @@
 <template>
   <div v-if="this.$store.jwt">
-    Här är den satt
+    <button @click="logOut">Logga ut</button>
   </div>
   <div v-else>
     <button @click="logIn">Logga in</button>
@@ -16,6 +16,9 @@ export default {
   methods: {
     logIn() {
       this.$emit('action', 'login')
+    },
+    logOut() {
+      this.$store.jwt = null;
     },
     register() {
       this.$emit('action','register')

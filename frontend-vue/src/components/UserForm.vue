@@ -48,7 +48,6 @@ export default {
       console.log("Email:", this.email, "Password:", this.password)
       if (this.formType === 'login') {
         this.login()
-        console.log("hejhej");
       } else if (this.formType ==='register') {
         this.register()
       }
@@ -78,6 +77,9 @@ export default {
         .then(result => {
           if (!result.errors) {
             // Login went ok, then do something here
+            console.log(result.data.createUser.message);
+            // TODO ändra flödet, nu loggar den in och stänger boxen när registreringen är ok.
+            this.login()
           } else {
             console.log(result.errors)
           }
@@ -110,6 +112,7 @@ export default {
         .then(result => {
           if (!result.errors) {
             this.$store.jwt = result.data.authUser.jwt
+            this.closeBox()
           } else {
             console.log(result.errors);
           }
