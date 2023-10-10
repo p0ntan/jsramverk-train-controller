@@ -40,7 +40,7 @@ const RootMutationType = new GraphQLObjectType({
         },
         updateTicket: {
             type: TicketType,
-            description: 'Update a new ticket',
+            description: 'Update a given ticket',
             args: {
                 _id: { type: GraphQLNonNull(GraphQLID) },
                 code: { type: GraphQLNonNull(GraphQLString) },
@@ -50,6 +50,22 @@ const RootMutationType = new GraphQLObjectType({
                     const updatedTicket = await ticketsModel.updateTicket(args);
 
                     return updatedTicket;
+                } catch (error) {
+                    throw new Error('Error creating a ticket: ' + error.message);
+                }
+            },
+        },
+        deleteTicket: {
+            type: TicketType,
+            description: 'Delete a given ticket',
+            args: {
+                _id: { type: GraphQLNonNull(GraphQLID) }
+            },
+            resolve: async function(_, args) {
+                try {
+                    const deleteTicket = await ticketsModel.deleteTicket(args);
+
+                    return deleteTicket;
                 } catch (error) {
                     throw new Error('Error creating a ticket: ' + error.message);
                 }
