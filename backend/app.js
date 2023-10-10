@@ -5,19 +5,14 @@ const cors = require('cors');
 const morgan = require('morgan');
 const bodyParser = require('body-parser');
 
-// GraphQL imports & setup
-const visual = true;
+// Things needed for GraphQL
 const { graphqlHTTP } = require('express-graphql');
-const {
-    GraphQLSchema
-} = require("graphql");
-
-const RootQueryType = require("./graphql/root.js");
-const RootMutationType = require("./graphql/mutation.js");
+const schema = require('./graphql/index.js');
+const authModel = require('./models/auth.js'); // For authentication
 
 const fetchTrainPositions = require('./models/trains.js');
-const port = process.env.PORT || 1337;
 
+const port = process.env.PORT || 1337;
 const app = express();
 const httpServer = require("http").createServer(app);
 
@@ -46,16 +41,15 @@ const io = require("socket.io")(httpServer, {
     }
 });
 
-// GraphQL route
-const schema = new GraphQLSchema({
-    query: RootQueryType,
-    mutation: RootMutationType
-});
+// GraphQL
+const visual = true;
 
-app.all('/graphql', graphqlHTTP({
+app.use('/graphql', authModel.checkToken); // authentication middleware
+app.all('/graphql', graphqlHTTP((req) => ({ // Route
     schema: schema,
     graphiql: visual,
-}));
+    context: { req } // Needed in mutation for checking if authenticated
+})));
 
 // Routes
 app.get('/', (req, res) => {
@@ -64,6 +58,7 @@ app.get('/', (req, res) => {
     });
 });
 
+// Start server
 httpServer.listen(port, () => {
     console.log(`Example app listening on port ${port}`);
 });

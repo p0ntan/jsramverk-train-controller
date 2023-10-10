@@ -13,18 +13,18 @@ const ticketsModel = require('../../models/tickets.js');
 chai.should();
 
 describe('Test model', () => {
+    const colName = 'tickets';
     /**
-     * Before test, reset the database and remove all collections
+     * Before test, reset the user database
      */
+
     before(async () => {
         const db = await database.openDb();
 
         try {
-            const collections = await db.listCollections().toArray();
+            const col = await db.collection(colName);
 
-            for (const col of collections) {
-                await db.collection(col.name).drop();
-            }
+            await col.deleteMany(); // This deletes the data in the collection
         } catch (err) {
             console.log("During setup following error occured:", err);
         } finally {
@@ -67,11 +67,15 @@ describe('Test model', () => {
         });
 
         it('should throw TypeError', async () => {
+            let error;
+
             try {
                 await ticketsModel.createTicket();
-            } catch (error) {
-                error.should.be.an.instanceOf(TypeError);
+            } catch (e) {
+                error = e;
             }
+
+            error.should.be.an.instanceOf(TypeError);
         });
     });
 });
