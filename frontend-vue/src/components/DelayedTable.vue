@@ -21,8 +21,6 @@
 </template>
 
 <script>
-// Store is used to store train-data when clicking a delayed train
-import store from '../store/store'
 const graphqlURL = import.meta.env.VITE_GRAPHQL_URL
 // Define data needed from backend
 const queryDelayed = `{
@@ -80,7 +78,7 @@ export default {
   methods: {
     renderTicketView(trainObject) {
       // Save train in store, then change route.
-      store.train = trainObject
+      this.$store.train = trainObject
       this.$router.push('/tickets')
     }
   }

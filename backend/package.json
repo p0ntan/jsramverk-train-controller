@@ -9,12 +9,13 @@
     "start-dev": "NODE_ENV=development nodemon app.js",
     "eslint": "eslint .",
     "dev-reset-db": "NODE_ENV=development node db/setup.js",
-    "test": "NODE_ENV=test nyc --reporter=html --reporter=text mocha --exit 'test/**/*.js' --timeout 10000"
+    "test": "NODE_ENV=test nyc --reporter=html --reporter=text mocha --exit 'test/*/*.js' --timeout 10000"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "bcryptjs": "^2.4.3",
     "body-parser": "^1.20.2",
     "cors": "^2.8.5",
     "dotenv": "^16.0.3",
@@ -22,6 +23,7 @@
     "express": "^4.14.0",
     "express-graphql": "^0.12.0",
     "graphql": "^15.3.0",
+    "jsonwebtoken": "^9.0.2",
     "mongodb": "^6.0.0",
     "morgan": "^1.10.0",
     "node-fetch": "^2.7.0",
@@ -34,6 +36,7 @@
     "javascript-style-guide": "^1.0.1",
     "mocha": "^10.2.0",
     "nodemon": "^3.0.1",
-    "nyc": "^15.1.0"
+    "nyc": "^15.1.0",
+    "sinon": "^16.1.0"
   }
 }

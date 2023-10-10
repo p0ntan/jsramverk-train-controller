@@ -35,7 +35,7 @@ const RootQueryType = new GraphQLObjectType({
             resolve: async function() {
                 return await delayedModel.getDelayedTrains();
             }
-        }
+        },
     })
 });
 

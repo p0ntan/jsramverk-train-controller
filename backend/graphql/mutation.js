@@ -5,8 +5,11 @@ const {
     GraphQLNonNull
 } = require('graphql');
 
+const UserRegType = require('./userReg.js');
 const TicketType = require('./ticket.js');
+const UserPayloadType = require('./userPayload.js');
 const ticketsModel = require('../models/tickets.js');
+const authModel = require('../models/auth.js');
 
 const RootMutationType = new GraphQLObjectType({
     name: 'Mutation',
@@ -20,7 +23,12 @@ const RootMutationType = new GraphQLObjectType({
                 trainnumber: { type: GraphQLNonNull(GraphQLString) },
                 traindate: { type: GraphQLNonNull(GraphQLString) },
             },
-            resolve: async function(_, args) {
+            resolve: async function(_, args, context) {
+                if (!context.req.isAuth) {
+                    // IF not authenticated this error-text will show in graphql-response
+                    throw new Error("Not authenticated.");
+                }
+
                 try {
                     const newTicket = await ticketsModel.createTicket(args);
 
@@ -28,7 +36,7 @@ const RootMutationType = new GraphQLObjectType({
                 } catch (error) {
                     throw new Error('Error creating a ticket: ' + error.message);
                 }
-            },
+            }
         },
         updateTicket: {
             type: TicketType,
@@ -47,7 +55,41 @@ const RootMutationType = new GraphQLObjectType({
                 }
             },
         },
-    }),
+        createUser: {
+            type: UserRegType,
+            description: 'Create a new user',
+            args: {
+                email: { type: GraphQLNonNull(GraphQLString) },
+                password: { type: GraphQLNonNull(GraphQLString) }
+            },
+            resolve: async function(_, args) {
+                try {
+                    const user = await authModel.register(args);
+
+                    return user;
+                } catch (error) {
+                    throw new Error('Error creating a user: ' + error.message);
+                }
+            }
+        },
+        authUser: {
+            type: UserPayloadType,
+            description: 'Login with user credentials',
+            args: {
+                email: { type: GraphQLNonNull(GraphQLString) },
+                password: { type: GraphQLNonNull(GraphQLString) }
+            },
+            resolve: async function(_, args) {
+                try {
+                    const userPayload = await authModel.login(args);
+
+                    return userPayload;
+                } catch (error) {
+                    throw new Error('Error logging in: ' + error.message);
+                }
+            }
+        }
+    })
 });
 
 module.exports = RootMutationType;
