@@ -8,7 +8,7 @@
       <NewTickets @ticketAdded="fetchOldTickets"/>
     </div>
     <br />
-    <OldTickets ref="OldTickets" />
+    <OldTickets ref="OldTickets"/>
   </div>
 </template>
 

@@ -56,7 +56,7 @@ export default {
       .then(response => response.json())
       .then(data => {
         this.codes = data.data.codes
-        store.codes = this.codes
+        this.$store.codes = this.codes
       })
     } catch (error) {
       console.error('Error fetching data:', error);

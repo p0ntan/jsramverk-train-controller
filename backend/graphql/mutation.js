@@ -45,7 +45,11 @@ const RootMutationType = new GraphQLObjectType({
                 _id: { type: GraphQLNonNull(GraphQLID) },
                 code: { type: GraphQLNonNull(GraphQLString) },
             },
-            resolve: async function(_, args) {
+            resolve: async function(_, args, context) {
+                if (!context.req.isAuth) {
+                    // IF not authenticated this error-text will show in graphql-response
+                    throw new Error("Not authenticated.");
+                }
                 try {
                     const updatedTicket = await ticketsModel.updateTicket(args);
 
@@ -61,6 +65,7 @@ const RootMutationType = new GraphQLObjectType({
             args: {
                 _id: { type: GraphQLNonNull(GraphQLID) }
             },
+            // TODO Add authentification check
             resolve: async function(_, args) {
                 try {
                     const deleteTicket = await ticketsModel.deleteTicket(args);

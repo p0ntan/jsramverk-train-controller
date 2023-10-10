@@ -4,9 +4,9 @@
     <div v-if="this.oldTickets">
       <div v-for="ticket in this.oldTickets" :key="ticket">
         <div v-if="this.editItem == ticket._id">
-          <form @submit.prevent="saveEdit">
+          <form @submit.prevent="saveEdit" v-if="codes">
             <span>{{ ticket._id }} - </span>
-            <select v-model="editValue" v-if="codes">
+            <select v-model="newCode">
               <option v-for="code in codes" :key="code" :value="code.Code">
                 {{ code.Code }} - {{ code.Level3Description }}
               </option>
@@ -17,7 +17,7 @@
         </div>
         <div v-else>
           <span>{{ ticket._id }} - {{ ticket.code }} - {{ ticket.trainnumber }} - {{ ticket.traindate }}</span>
-          <button @click="editTicket(ticket._id)">edit</button>
+          <button @click="editTicket(ticket._id, ticket.code)">edit</button>
         </div>
       </div>
     </div>
@@ -25,8 +25,8 @@
 </template>
 
 <script>
-// Store is used to store train-data when clicking a delayed train
-import store from '../store/store'
+import { nextTick } from 'process'
+
 const graphqlURL = import.meta.env.VITE_GRAPHQL_URL
 // Define data needed from backend
 const queryTickets = `{
@@ -43,7 +43,8 @@ export default {
     return {
       oldTickets: [],
       editItem: null,
-      editValue: '',
+      currentCode: '',
+      newCode: '',
       codes: null
     }
   },
@@ -51,16 +52,47 @@ export default {
     this.fetchTickets()
   },
   methods: {
-    editTicket(ticketId) {
+    editTicket(ticketId, ticketCode) {
       // Function to edit the value for Code in the existing tickets
-      // Takes the ticket id as argument
-      this.codes = store.codes
+      // Takes the ticket id and the current ticket code as argument
+      this.codes = this.$store.codes
       this.editItem = ticketId
+      this.currentCode = ticketCode
+      this.newCode = ticketCode
     },
     saveEdit() {
       // Function to save the edit made to a ticket
-      console.log(this.editValue)
-      this.editItem = null
+      if (this.newCode != this.currentCode) {
+        const mutationUpdateTicket = `mutation {
+        updateTicket (
+          _id: "${this.editItem}",
+          code: "${this.newCode}"
+          ){_id}
+        }`
+
+        try {
+          // Fetch data via graphql
+          fetch(`${graphqlURL}`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+              'Accept': 'application/json',
+              'x-access-token': this.$store.jwt
+          },
+          body: JSON.stringify({ query: mutationUpdateTicket })
+          })
+          .then(response => response.json())
+          .then(result => {
+            console.log(result)
+            this.fetchTickets()
+          })
+        } catch (error) {
+          console.error('Error fetching data:', error);
+        }
+      }
+
+      // reset variable
+        this.editItem = null
     },
     fetchTickets() {
       try {
