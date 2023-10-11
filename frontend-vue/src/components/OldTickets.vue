@@ -13,6 +13,7 @@
             </select>
             <span> - {{ ticket.trainnumber }} - {{ ticket.traindate }}</span>
             <button type="submit">save</button>
+            <button @click="editItem = null">cancel</button>
           </form>
         </div>
         <div v-else>
@@ -60,6 +61,7 @@ export default {
       this.currentCode = ticketCode
       this.newCode = ticketCode
     },
+    // TODO Add functionality to delete a ticket
     saveEdit() {
       // Function to save the edit made to a ticket
       if (this.newCode != this.currentCode) {
