@@ -19,7 +19,7 @@ const tickets = {
         // Create a new ObjectId for the new document
         const newId = new ObjectId();
 
-        // TODO Should it be possible to create more than one ticket for the same train?
+        // TODO Discuss which limitations should apply on creating more than one ticket for a train
         const result = await collection.insertOne({
             _id: newId,
             code: args.code,
@@ -31,7 +31,6 @@ const tickets = {
 
         // Here we return the string of the ObjectId but alternatives are available
         // https://www.mongodb.com/docs/manual/reference/method/ObjectId/#ObjectId
-        // TODO discuss and agree on returned value
         return {
             _id: newId.toString(),
             code: args.code,
