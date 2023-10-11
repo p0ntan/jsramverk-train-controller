@@ -1,5 +1,6 @@
 const {
     GraphQLObjectType,
+    GraphQLID,
     GraphQLString,
     GraphQLNonNull
 } = require('graphql');
@@ -36,6 +37,44 @@ const RootMutationType = new GraphQLObjectType({
                     throw new Error('Error creating a ticket: ' + error.message);
                 }
             }
+        },
+        updateTicket: {
+            type: TicketType,
+            description: 'Update a given ticket',
+            args: {
+                _id: { type: GraphQLNonNull(GraphQLID) },
+                code: { type: GraphQLNonNull(GraphQLString) },
+            },
+            resolve: async function(_, args, context) {
+                if (!context.req.isAuth) {
+                    // IF not authenticated this error-text will show in graphql-response
+                    throw new Error("Not authenticated.");
+                }
+                try {
+                    const updatedTicket = await ticketsModel.updateTicket(args);
+
+                    return updatedTicket;
+                } catch (error) {
+                    throw new Error('Error creating a ticket: ' + error.message);
+                }
+            },
+        },
+        deleteTicket: {
+            type: TicketType,
+            description: 'Delete a given ticket',
+            args: {
+                _id: { type: GraphQLNonNull(GraphQLID) }
+            },
+            // TODO Add authentification check
+            resolve: async function(_, args) {
+                try {
+                    const deleteTicket = await ticketsModel.deleteTicket(args);
+
+                    return deleteTicket;
+                } catch (error) {
+                    throw new Error('Error creating a ticket: ' + error.message);
+                }
+            },
         },
         createUser: {
             type: UserRegType,
