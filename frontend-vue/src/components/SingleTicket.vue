@@ -9,7 +9,7 @@
         </select>
         <span> - {{ ticket.trainnumber }} - {{ ticket.traindate }}</span>
         <button type="submit">save</button>
-        <button @click="editItem = null">cancel</button>
+        <button @click="stopEdit()">cancel</button>
     </form>
     </div>
     <div v-else>
@@ -19,9 +19,10 @@
 </template>
 
 <script>
-// import { io } from "socket.io-client"
-// const baseURL = import.meta.env.VITE_BASE_URL
+import { io } from "socket.io-client"
+const baseURL = import.meta.env.VITE_BASE_URL
 const graphqlURL = import.meta.env.VITE_GRAPHQL_URL
+const socket = io(`${baseURL}/`)
 
 export default {
     props: [
@@ -45,8 +46,7 @@ export default {
         this.currentCode = ticketCode
         this.newCode = ticketCode
 
-        // const socket = io(`${baseURL}/`)
-        // socket.emit("edit", ticketId)
+        socket.emit("startEditingTicket", ticketId)
         // // create unique room
         // socket.emit("create", data[_id])
       },
@@ -84,8 +84,16 @@ export default {
           }
         }
 
+        // stop edit
+        socket.emit("stopEditingTicket", this.editItem)
         // reset variable
-          this.editItem = null
+        this.editItem = null
+      },
+      stopEdit() {
+        // stop edit
+        socket.emit("stopEditingTicket", this.editItem)
+        // reset variable
+        this.editItem = null
       }
     }
 }
