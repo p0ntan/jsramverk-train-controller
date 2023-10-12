@@ -13,6 +13,7 @@
 import SingleTicket from './SingleTicket.vue'
 import { io } from "socket.io-client"
 const baseURL = import.meta.env.VITE_BASE_URL
+const socket = io(`${baseURL}/`)
 
 const graphqlURL = import.meta.env.VITE_GRAPHQL_URL
 // Define data needed from backend
@@ -35,11 +36,12 @@ export default {
     }
   },
   mounted() {
-    const socket = io(`${baseURL}/`)
-
     socket.on("tickets", (data) => {
       this.oldTickets = data
     })
+
+    // using null as param to not update anything, just fetching
+    this.fetchTickets(null)
   },
   // created() {
   //   this.fetchTickets()
