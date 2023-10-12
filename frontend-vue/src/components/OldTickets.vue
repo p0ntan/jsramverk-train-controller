@@ -3,7 +3,7 @@
     <h2>Befintliga ärenden</h2>
     <div v-if="this.oldTickets">
       <div v-for="ticket in this.oldTickets" :key="ticket">
-        <SingleTicket :ticket="ticket" @updateTickets="fetchTickets"/>
+        <SingleTicket :ticket="ticket" :localEdit="localEdit" @updateTickets="fetchTickets" @newLocalEdit="setLocalEdit"/>
       </div>
     </div>
   </div>
@@ -32,7 +32,10 @@ export default {
   },
   data() {
     return {
-      oldTickets: []
+      oldTickets: [],
+      localEdit: {
+        id: null
+      }
     }
   },
   mounted() {
@@ -66,6 +69,9 @@ export default {
       // } catch (error) {
       //   console.error('Error fetching data:', error);
       // }
+    },
+    setLocalEdit(ticketId) {
+      this.localEdit.id = ticketId
     }
   }
 }

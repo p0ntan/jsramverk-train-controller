@@ -29,7 +29,6 @@ async function editTicket(io) {
         })
 
         socket.on('updateTickets', async (ticketData) => {
-            console.log(ticketData);
             // Ticketdata is provieded when updating or creating new ticket
             if (ticketData) {
                 let found = false;

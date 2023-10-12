@@ -1,20 +1,20 @@
 <template>
-    <div v-if="this.editItem == ticket._id">
-    <form @submit.prevent="saveEdit" v-if="codes">
-        <span>{{ ticket._id }} - </span>
-        <select v-model="newCode">
-        <option v-for="code in codes" :key="code" :value="code.Code">
-            {{ code.Code }} - {{ code.Level3Description }}
-        </option>
-        </select>
-        <span> - {{ ticket.trainnumber }} - {{ ticket.traindate }}</span>
-        <button type="submit">save</button>
-        <button @click="stopEdit()">cancel</button>
-    </form>
+    <div v-if="edit">
+      <form @submit.prevent="saveEdit" v-if="codes">
+          <span>{{ ticket._id }} - </span>
+          <select v-model="newCode">
+          <option v-for="code in codes" :key="code" :value="code.Code">
+              {{ code.Code }} - {{ code.Level3Description }}
+          </option>
+          </select>
+          <span> - {{ ticket.trainnumber }} - {{ ticket.traindate }}</span>
+          <button type="submit">save</button>
+          <button @click="stopEdit()">cancel</button>
+      </form>
     </div>
     <div v-else>
-    <span>{{ ticket._id }} - {{ ticket.code }} - {{ ticket.trainnumber }} - {{ ticket.traindate }}</span>
-    <button v-if="!blocked.includes(ticket._id)" @click="editTicket(ticket._id, ticket.code)">edit</button>
+      <span>{{ ticket._id }} - {{ ticket.code }} - {{ ticket.trainnumber }} - {{ ticket.traindate }}</span>
+      <button v-if="!blocked.includes(ticket._id)" @click="editTicket">edit</button>
     </div>
 </template>
 
@@ -27,11 +27,12 @@ const socket = io(`${baseURL}/`)
 export default {
     props: [
       'ticket',
-      'fetchTickets'
+      'fetchTickets',
+      'localEdit'
     ],
     data() {
       return {
-        editItem: null,
+        edit: false,
         currentCode: '',
         newCode: '',
         codes: null,
@@ -52,16 +53,24 @@ export default {
       // }
     },
     methods: {
-      editTicket(ticketId, ticketCode) {
-        // console.log(this.editItem)
+      editTicket() {
         // Function to edit the value for Code in the existing tickets
-        // Takes the ticket id and the current ticket code as argument
-        this.codes = this.$store.codes
-        this.editItem = ticketId
-        this.currentCode = ticketCode
-        this.newCode = ticketCode
 
-        socket.emit("startEditingTicket", ticketId)
+        if (this.localEdit.id) {
+          // Remove any existing localEdit.id
+          socket.emit("stopEditingTicket", this.localEdit.id)
+        }
+
+        // Set variables
+        this.edit = true
+        this.codes = this.$store.codes
+        this.currentCode = this.ticket.code
+        this.newCode = this.ticket.code
+
+        // Set new content to global variable localEdit
+        this.$emit("newLocalEdit", this.ticket._id)
+
+        socket.emit("startEditingTicket", this.ticket._id)
       },
       // TODO Add functionality to delete a ticket
       saveEdit() {
@@ -69,7 +78,7 @@ export default {
         if (this.newCode != this.currentCode) {
           const mutationUpdateTicket = `mutation {
           updateTicket (
-            _id: "${this.editItem}",
+            _id: "${this.ticket._id}",
             code: "${this.newCode}"
             ){
               _id
@@ -90,32 +99,36 @@ export default {
             })
             .then(response => response.json())
             .then(result => {
-              console.log(result)
               if (result.errors) {
                 window.alert(result.errors[0].message)
               }
               // stop edit
-              socket.emit("stopEditingTicket", this.editItem)
-              // reset variable
-              this.editItem = null
+              this.stopEdit()
               // refresh
               socket.emit('updateTickets', result.data.updateTicket)
             })
           } catch (error) {
             console.error('Error fetching data:', error)
             // stop edit
-            socket.emit("stopEditingTicket", this.editItem)
-            // reset variable
-            this.editItem = null
+            this.stopEdit()
           }
         }
       },
       stopEdit() {
         // stop edit
-        socket.emit("stopEditingTicket", this.editItem)
-        // reset variable
-        this.editItem = null
+        this.edit = false
+        socket.emit("stopEditingTicket", this.ticket._id)
       }
-    }
+    },
+    // 'Watches' the variable localEdit and runs code upon change
+    watch: {
+      localEdit: {
+        handler(newValue, oldValue) {
+          if (this.localEdit.id !== this.ticket._id)
+            this.edit = false
+        },
+        deep: true
+      }
+  }
 }
 </script>
