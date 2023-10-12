@@ -43,9 +43,17 @@ export default {
         // console.log(data)
         this.blocked = data
       })
+
+      // This is to unlock a ticket if a person leaves the site before saving
+      // if (this.editItem) {
+      //   window.addEventListener('beforeunload', function() {
+      //     socket.emit("stopEditingTicket", this.editItem)
+      //   });
+      // }
     },
     methods: {
       editTicket(ticketId, ticketCode) {
+        // console.log(this.editItem)
         // Function to edit the value for Code in the existing tickets
         // Takes the ticket id and the current ticket code as argument
         this.codes = this.$store.codes
@@ -63,7 +71,10 @@ export default {
           updateTicket (
             _id: "${this.editItem}",
             code: "${this.newCode}"
-            ){_id}
+            ){
+              _id
+              code
+            }
           }`
 
           try {
@@ -79,20 +90,25 @@ export default {
             })
             .then(response => response.json())
             .then(result => {
+              console.log(result)
               if (result.errors) {
                 window.alert(result.errors[0].message)
               }
-              this.fetchTickets()
+              // stop edit
+              socket.emit("stopEditingTicket", this.editItem)
+              // reset variable
+              this.editItem = null
+              // refresh
+              socket.emit('updateTickets', result.data.updateTicket)
             })
           } catch (error) {
-            console.error('Error fetching data:', error);
+            console.error('Error fetching data:', error)
+            // stop edit
+            socket.emit("stopEditingTicket", this.editItem)
+            // reset variable
+            this.editItem = null
           }
         }
-
-        // stop edit
-        socket.emit("stopEditingTicket", this.editItem)
-        // reset variable
-        this.editItem = null
       },
       stopEdit() {
         // stop edit

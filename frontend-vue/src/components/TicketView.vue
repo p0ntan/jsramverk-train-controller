@@ -28,9 +28,9 @@ export default {
     }
   },
   methods: {
-    fetchOldTickets() {
+    fetchOldTickets(data) {
       // Rerender the oldTicket component by "re-fetching" data from API 
-      this.$refs.OldTickets.fetchTickets()
+      this.$refs.OldTickets.fetchTickets(data)
     }
   }
 };

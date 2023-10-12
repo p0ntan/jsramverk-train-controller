@@ -3,7 +3,7 @@
     <h2>Befintliga ärenden</h2>
     <div v-if="this.oldTickets">
       <div v-for="ticket in this.oldTickets" :key="ticket">
-        <SingleTicket :ticket="ticket" :fetchTickets="fetchTickets"/>
+        <SingleTicket :ticket="ticket" @updateTickets="fetchTickets"/>
       </div>
     </div>
   </div>
@@ -35,21 +35,18 @@ export default {
     }
   },
   mounted() {
-    this.fetchTickets();
+    const socket = io(`${baseURL}/`)
+
+    socket.on("tickets", (data) => {
+      this.oldTickets = data
+    })
   },
   // created() {
-  //   // this.fetchTickets()
+  //   this.fetchTickets()
   // },
   methods: {
-    fetchTickets() {
-      console.log("calling fetchTicket method")
-
-      const socket = io(`${baseURL}/`)
-
-      socket.on("tickets", (data) => {
-        // console.log(data)
-        this.oldTickets = data
-      })
+    fetchTickets(data) {
+      socket.emit('updateTickets', data)
       // try {
       //   // Fetch data via graphql
       //   fetch(`${graphqlURL}`, {
