@@ -35,34 +35,38 @@ export default {
     }
   },
   mounted() {
-    const socket = io(`${baseURL}/`)
-    socket.on("tickets", (data) => {
+    this.fetchTickets();
+  },
+  // created() {
+  //   // this.fetchTickets()
+  // },
+  methods: {
+    fetchTickets() {
+      console.log("calling fetchTicket method")
+
+      const socket = io(`${baseURL}/`)
+
+      socket.on("tickets", (data) => {
         // console.log(data)
         this.oldTickets = data
       })
-  },
-  created() {
-    // this.fetchTickets()
-  },
-  methods: {
-    fetchTickets() {
-      try {
-        // Fetch data via graphql
-        fetch(`${graphqlURL}`, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'Accept': 'application/json',
-        },
-        body: JSON.stringify({ query: queryTickets })
-        })
-        .then(response => response.json())
-        .then(data => {
-          this.oldTickets = data.data.tickets
-        })
-      } catch (error) {
-        console.error('Error fetching data:', error);
-      }
+      // try {
+      //   // Fetch data via graphql
+      //   fetch(`${graphqlURL}`, {
+      //   method: 'POST',
+      //   headers: {
+      //       'Content-Type': 'application/json',
+      //       'Accept': 'application/json',
+      //   },
+      //   body: JSON.stringify({ query: queryTickets })
+      //   })
+      //   .then(response => response.json())
+      //   .then(data => {
+      //     this.oldTickets = data.data.tickets
+      //   })
+      // } catch (error) {
+      //   console.error('Error fetching data:', error);
+      // }
     }
   }
 }

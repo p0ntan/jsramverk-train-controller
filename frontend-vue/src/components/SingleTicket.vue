@@ -14,7 +14,7 @@
     </div>
     <div v-else>
     <span>{{ ticket._id }} - {{ ticket.code }} - {{ ticket.trainnumber }} - {{ ticket.traindate }}</span>
-    <button @click="editTicket(ticket._id, ticket.code)">edit</button>
+    <button v-if="!blocked.includes(ticket._id)" @click="editTicket(ticket._id, ticket.code)">edit</button>
     </div>
 </template>
 
@@ -34,8 +34,15 @@ export default {
         editItem: null,
         currentCode: '',
         newCode: '',
-        codes: null
+        codes: null,
+        blocked: []
       }
+    },
+    mounted() {
+      socket.on("blockedTickets", (data) => {
+        // console.log(data)
+        this.blocked = data
+      })
     },
     methods: {
       editTicket(ticketId, ticketCode) {
@@ -47,8 +54,6 @@ export default {
         this.newCode = ticketCode
 
         socket.emit("startEditingTicket", ticketId)
-        // // create unique room
-        // socket.emit("create", data[_id])
       },
       // TODO Add functionality to delete a ticket
       saveEdit() {
