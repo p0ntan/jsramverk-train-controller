@@ -20,7 +20,6 @@ async function editTicket(io) {
         socket.on('startEditingTicket', (data) => {
             // Add the _id of the ticket being modified
             editedTickets.push(data);
-            console.log(editedTickets);
             io.emit('blockedTickets', editedTickets);
         })
 
@@ -28,10 +27,11 @@ async function editTicket(io) {
             let index = editedTickets.indexOf(data);
 
             // Removes the _id of the ticket being modified
-            editedTickets.splice(index, 1);
-            console.log(editedTickets)
-
-            io.emit('blockedTickets', editedTickets);
+            // Making sure nothing is removed by mistake index can't be -1
+            if (index !== -1) {
+                editedTickets.splice(index, 1);
+                io.emit('blockedTickets', editedTickets);
+            }
         })
 
         socket.on('updateTickets', async (ticketData) => {
