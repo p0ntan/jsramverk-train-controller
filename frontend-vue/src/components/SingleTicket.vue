@@ -40,16 +40,17 @@ export default {
       }
     },
     mounted() {
+      socket.emit("fetchBlockedTickets")
+
       socket.on("blockedTickets", (data) => {
         // console.log(data)
         this.blocked = data
       })
-
       // // This is to unlock a ticket if a person leaves the site before saving
       // window.addEventListener('beforeunload', function() {
       //   socket.emit("stopEditingTicket", this.localEdit.id)
       // });
-
+      window.addEventListener('beforeunload', this.onUnload);
     },
     methods: {
       editTicket() {
@@ -117,11 +118,11 @@ export default {
         // stop edit
         this.edit = false
         socket.emit("stopEditingTicket", this.ticket._id)
-      }
-    },
-    unmounted() {
-      if (this.localEdit.id === this.ticket_id) {
-        this.stopEdit()
+      },
+      onUnload() {
+        if (this.localEdit.id === this.ticket._id) {
+          socket.emit("stopEditingTicket", this.localEdit.id)
+        }
       }
     },
     // 'Watches' the variable localEdit and runs code upon change

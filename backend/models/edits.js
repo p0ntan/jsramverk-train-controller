@@ -11,7 +11,10 @@ async function editTicket(io) {
         // Emit all tickets
         socket.on('fetchTickets', () => {
             socket.emit("tickets", allTickets);
-            io.emit("blockedTickets", editedTickets);
+        })
+
+        socket.on('fetchBlockedTickets', () => {
+            socket.emit("blockedTickets", editedTickets);
         })
 
         socket.on('startEditingTicket', (data) => {
