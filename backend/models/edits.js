@@ -9,7 +9,10 @@ async function editTicket(io) {
 
     io.sockets.on('connection', function(socket) {
         // Emit all tickets
-        socket.emit("tickets", allTickets);
+        socket.on('fetchTickets', () => {
+            socket.emit("tickets", allTickets);
+            io.emit("blockedTickets", editedTickets);
+        })
 
         socket.on('startEditingTicket', (data) => {
             // Add the _id of the ticket being modified

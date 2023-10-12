@@ -38,13 +38,21 @@ export default {
       }
     }
   },
-  mounted() {
+  beforeCreate() {
+    socket.emit("fetchTickets")
+
     socket.on("tickets", (data) => {
       this.oldTickets = data
     })
 
-    // using null as param to not update anything, just fetching
-    this.fetchTickets(null)
+    // This is to unlock a ticket if a person leaves the site before saving
+    // window.addEventListener('beforeunload', function() {
+    //   window.alert("unloading")
+    //   socket.emit("stopEditingTicket", this.localEdit.id)
+    // });
+
+    // // using null as param to not update anything, just fetching
+    // this.fetchTickets(null)
   },
   // created() {
   //   this.fetchTickets()

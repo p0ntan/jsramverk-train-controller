@@ -45,12 +45,11 @@ export default {
         this.blocked = data
       })
 
-      // This is to unlock a ticket if a person leaves the site before saving
-      // if (this.editItem) {
-      //   window.addEventListener('beforeunload', function() {
-      //     socket.emit("stopEditingTicket", this.editItem)
-      //   });
-      // }
+      // // This is to unlock a ticket if a person leaves the site before saving
+      // window.addEventListener('beforeunload', function() {
+      //   socket.emit("stopEditingTicket", this.localEdit.id)
+      // });
+
     },
     methods: {
       editTicket() {
@@ -118,6 +117,11 @@ export default {
         // stop edit
         this.edit = false
         socket.emit("stopEditingTicket", this.ticket._id)
+      }
+    },
+    unmounted() {
+      if (this.localEdit.id === this.ticket_id) {
+        this.stopEdit()
       }
     },
     // 'Watches' the variable localEdit and runs code upon change
