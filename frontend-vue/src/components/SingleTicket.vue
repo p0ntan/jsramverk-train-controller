@@ -39,18 +39,24 @@ export default {
         blocked: []
       }
     },
-    mounted() {
+    beforeMount() {
       socket.emit("fetchBlockedTickets")
 
       socket.on("blockedTickets", (data) => {
         // console.log(data)
         this.blocked = data
       })
-      // // This is to unlock a ticket if a person leaves the site before saving
-      // window.addEventListener('beforeunload', function() {
-      //   socket.emit("stopEditingTicket", this.localEdit.id)
-      // });
-      window.addEventListener('beforeunload', this.onUnload);
+
+      // TODO some code needed here let ticket stay in "editmode" when another
+      // client is updating another ticket. Code below almost works,
+      // but makes the changed ticket stay "open" locally.
+      // if (this.localEdit.id === this.ticket._id) {
+      //   // Set variables
+      //   this.edit = true
+      //   this.codes = this.$store.codes
+      //   this.currentCode = this.ticket.code
+      //   this.newCode = this.ticket.code
+      // }
     },
     methods: {
       editTicket() {
@@ -118,22 +124,24 @@ export default {
         // stop edit
         this.edit = false
         socket.emit("stopEditingTicket", this.ticket._id)
-      },
-      onUnload() {
-        if (this.localEdit.id === this.ticket._id) {
-          socket.emit("stopEditingTicket", this.localEdit.id)
-        }
       }
     },
-    // 'Watches' the variable localEdit and runs code upon change
+    unmounted() {
+      // TODO code below unlockes ticket if 'tillbaka' is used. But
+      // creates problem for another client editing a ticket
+      // if (this.edit) {
+      //   this.stopEdit()
+      // }
+    },
     watch: {
+      // 'Watches' the variable localEdit and runs code upon change
       localEdit: {
         handler(newValue, oldValue) {
           if (this.localEdit.id !== this.ticket._id)
             this.edit = false
         },
         deep: true
-      }
-  }
+      },
+    }
 }
 </script>

@@ -39,47 +39,31 @@ export default {
     }
   },
   beforeCreate() {
+    // Makes an emit to fetch tickets from backend, triggering emit "tickets"
     socket.emit("fetchTickets")
-
     socket.on("tickets", (data) => {
       this.oldTickets = data
     })
-
-    // This is to unlock a ticket if a person leaves the site before saving
-    // window.addEventListener('beforeunload', function() {
-    //   window.alert("unloading")
-    //   socket.emit("stopEditingTicket", this.localEdit.id)
-    // });
-
-    // // using null as param to not update anything, just fetching
-    // this.fetchTickets(null)
   },
-  // created() {
-  //   this.fetchTickets()
-  // },
+  mounted() {
+    // This is to unlock a ticket if a person leaves the site before saving
+    // Needs to be added when OldTicket is mounted
+    window.addEventListener('beforeunload', this.onUnload);
+    // TODO something is needed for when "tillbaka" is clicked, an possible solution might be
+    // the localEdit.id to the store and use it in the function for changing route.
+  },
   methods: {
+    // If needing to fetch tickets, used when creating and updating tickets
     fetchTickets(data) {
       socket.emit('updateTickets', data)
-      // try {
-      //   // Fetch data via graphql
-      //   fetch(`${graphqlURL}`, {
-      //   method: 'POST',
-      //   headers: {
-      //       'Content-Type': 'application/json',
-      //       'Accept': 'application/json',
-      //   },
-      //   body: JSON.stringify({ query: queryTickets })
-      //   })
-      //   .then(response => response.json())
-      //   .then(data => {
-      //     this.oldTickets = data.data.tickets
-      //   })
-      // } catch (error) {
-      //   console.error('Error fetching data:', error);
-      // }
     },
+    // Setting localEdit for client
     setLocalEdit(ticketId) {
       this.localEdit.id = ticketId
+    },
+    // Runs when a client is exiting before saving
+    onUnload() {
+      socket.emit("stopEditingTicket", this.localEdit.id)
     }
   }
 }
