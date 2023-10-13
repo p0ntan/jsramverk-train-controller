@@ -24,7 +24,9 @@ async function editTicket(io) {
 
         // Set ticket as locked/blocked when a client is editing
         socket.on('startEditingTicket', (data) => {
-            // Add the _id of the ticket being modified if authorized
+            // Add the _id of the ticket being modified ONLY if authorized
+            // This will stop an unauthorized user from locking tickets,
+            // Control to actually edit tickets in database is done through frontend 
             const isAuth = authModel.ssCheckToken(data.jwt)
 
             if (isAuth) {

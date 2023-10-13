@@ -1,5 +1,4 @@
 <template>
-  <a href="" @click.prevent="renderTrainsView">&#8592; Tillbaka</a>
   <h1>
     Nytt ärende för tåg #<span>{{ trainObject.OperationalTrainNumber }}</span>
   </h1>
@@ -63,9 +62,6 @@ export default {
     }
   },
   methods: {
-    renderTrainsView() {
-      this.$router.push('/')
-    },
     // Updated code for adding ticket, only difference is the x-access-token
     // and the !result.errors part in result
     addNewTicket() {

@@ -1,10 +1,7 @@
 <template>
   <div class="ticket-container">
-    <!-- 
-      Only the if-statment below is needed for rendering components when logged in
-      <div v-if="this.$store.jwt" class="ticket"> 
-    -->
-    <div class="ticket">
+    <a href="" @click.prevent="renderTrainsView">&#8592; Tillbaka</a>
+    <div v-if="this.$store.jwt" class="ticket">
       <NewTickets @ticketAdded="fetchOldTickets"/>
     </div>
     <br />
@@ -28,6 +25,9 @@ export default {
     }
   },
   methods: {
+    renderTrainsView() {
+      this.$router.push('/')
+    },
     fetchOldTickets(data) {
       // Rerender the oldTicket component by "re-fetching" data from API 
       this.$refs.OldTickets.fetchTickets(data)

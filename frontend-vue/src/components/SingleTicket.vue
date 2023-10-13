@@ -14,7 +14,7 @@
     </div>
     <div v-else>
       <span>{{ ticket._id }} - {{ ticket.code }} - {{ ticket.trainnumber }} - {{ ticket.traindate }}</span>
-      <button v-if="!blocked.includes(ticket._id)" @click="editTicket">edit</button>
+      <button v-if="!blocked.includes(ticket._id) && this.$store.jwt" @click="editTicket">edit</button>
     </div>
 </template>
 
