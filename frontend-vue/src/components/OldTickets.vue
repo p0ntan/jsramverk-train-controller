@@ -65,6 +65,9 @@ export default {
     onUnload() {
       socket.emit("stopEditingTicket", this.localEdit.id)
     }
+  },
+  beforeUnmount() {
+    this.onUnload()
   }
 }
 </script>

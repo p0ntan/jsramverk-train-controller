@@ -126,13 +126,6 @@ export default {
         socket.emit("stopEditingTicket", this.ticket._id)
       }
     },
-    unmounted() {
-      // TODO code below unlockes ticket if 'tillbaka' is used. But
-      // creates problem for another client editing a ticket
-      // if (this.edit) {
-      //   this.stopEdit()
-      // }
-    },
     watch: {
       // 'Watches' the variable localEdit and runs code upon change
       localEdit: {
