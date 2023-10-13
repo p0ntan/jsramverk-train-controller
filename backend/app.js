@@ -11,6 +11,7 @@ const schema = require('./graphql/index.js');
 const authModel = require('./models/auth.js'); // For authentication
 
 const fetchTrainPositions = require('./models/trains.js');
+const editTicket = require('./models/edits.js');
 
 const port = process.env.PORT || 1337;
 const app = express();
@@ -65,6 +66,7 @@ httpServer.listen(port, () => {
 
 // Used for moving trains
 fetchTrainPositions(io);
+editTicket(io);
 
 // For 404-errors when accessing a route that doesn't exist
 app.use((req, res, next) => {

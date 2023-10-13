@@ -128,6 +128,23 @@ const auth = {
         next();
     },
 
+    /**
+     * Function used to check jwt on server
+     * 
+     * @returns bool
+     */
+    ssCheckToken: function ssCheckToken(jwtToken) {
+        if (jwtToken) {
+            try {
+                jwt.verify(jwtToken, jwtSecret);
+
+                return true;
+            } catch (err) {
+                return false;
+            }
+        }
+    },
+
     // Function is not supposed to be used outside model
     _emailExist: async function _emailExist(email) {
         const db = await database.openDb();

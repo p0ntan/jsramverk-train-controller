@@ -1,5 +1,4 @@
 <template>
-  <a href="" @click.prevent="renderTrainsView">&#8592; Tillbaka</a>
   <h1>
     Nytt ärende för tåg #<span>{{ trainObject.OperationalTrainNumber }}</span>
   </h1>
@@ -63,9 +62,6 @@ export default {
     }
   },
   methods: {
-    renderTrainsView() {
-      this.$router.push('/')
-    },
     // Updated code for adding ticket, only difference is the x-access-token
     // and the !result.errors part in result
     addNewTicket() {
@@ -74,7 +70,11 @@ export default {
         code: "${this.selectedOption}",
         trainnumber: "${this.trainObject.OperationalTrainNumber}",
         traindate: "${this.trainObject.EstimatedTimeAtLocation.substring(0, 10)}"
-        ) { trainnumber }
+        ) { 
+          _id
+          code
+          traindate
+          trainnumber }
       }`
 
       try {
@@ -92,10 +92,10 @@ export default {
         .then(result => {
           if (!result.errors) {
             //TODO Adjust what data should be returned?
-            this.$emit('ticketAdded', result.data);
+            this.$emit('ticketAdded', result.data.createTicket);
           } else {
             // TODO make some error handling in browser, will probably not be shown
-            console.log(result.errors);
+            window.alert(result.errors[0].message)
           }
         })
       } catch (error) {
