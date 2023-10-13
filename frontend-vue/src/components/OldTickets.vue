@@ -51,6 +51,12 @@ export default {
     window.addEventListener('beforeunload', this.onUnload);
     // TODO something is needed for when "tillbaka" is clicked, an possible solution might be
     // the localEdit.id to the store and use it in the function for changing route.
+    // if (!this.localEdit.id) {
+    //   socket.on("tickets", (data) => {
+    //     window.alert("Här ska man va inne när man trykcer cancel");
+    //     this.oldTickets = data
+    //   })
+    // }
   },
   methods: {
     // If needing to fetch tickets, used when creating and updating tickets

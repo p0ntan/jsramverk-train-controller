@@ -124,6 +124,8 @@ export default {
         // stop edit
         this.edit = false
         socket.emit("stopEditingTicket", this.ticket._id)
+        // this.$emit("newLocalEdit", null)
+        // socket.emit("fetchTickets")
       }
     },
     watch: {
