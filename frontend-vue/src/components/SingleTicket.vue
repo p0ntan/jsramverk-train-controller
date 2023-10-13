@@ -43,20 +43,17 @@ export default {
       socket.emit("fetchBlockedTickets")
 
       socket.on("blockedTickets", (data) => {
-        // console.log(data)
         this.blocked = data
       })
 
-      // TODO some code needed here let ticket stay in "editmode" when another
-      // client is updating another ticket. Code below almost works,
-      // but makes the changed ticket stay "open" locally.
-      // if (this.localEdit.id === this.ticket._id) {
-      //   // Set variables
-      //   this.edit = true
-      //   this.codes = this.$store.codes
-      //   this.currentCode = this.ticket.code
-      //   this.newCode = this.ticket.code
-      // }
+      // When ticket is mounted it checks if it should be in "editmode"
+      if (this.localEdit.id === this.ticket._id) {
+        // Set variables
+        this.edit = true
+        this.codes = this.$store.codes
+        this.currentCode = this.ticket.code
+        this.newCode = this.ticket.code
+      }
     },
     methods: {
       editTicket() {
@@ -123,9 +120,8 @@ export default {
       stopEdit() {
         // stop edit
         this.edit = false
+        this.$emit("newLocalEdit", null)
         socket.emit("stopEditingTicket", this.ticket._id)
-        // this.$emit("newLocalEdit", null)
-        // socket.emit("fetchTickets")
       }
     },
     watch: {

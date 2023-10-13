@@ -45,18 +45,10 @@ export default {
       this.oldTickets = data
     })
   },
-  mounted() {
+  beforeMount() {
     // This is to unlock a ticket if a person leaves the site before saving
     // Needs to be added when OldTicket is mounted
     window.addEventListener('beforeunload', this.onUnload);
-    // TODO something is needed for when "tillbaka" is clicked, an possible solution might be
-    // the localEdit.id to the store and use it in the function for changing route.
-    // if (!this.localEdit.id) {
-    //   socket.on("tickets", (data) => {
-    //     window.alert("Här ska man va inne när man trykcer cancel");
-    //     this.oldTickets = data
-    //   })
-    // }
   },
   methods: {
     // If needing to fetch tickets, used when creating and updating tickets
@@ -70,6 +62,7 @@ export default {
     // Runs when a client is exiting before saving
     onUnload() {
       socket.emit("stopEditingTicket", this.localEdit.id)
+      this.setLocalEdit(null)
     }
   },
   beforeUnmount() {
