@@ -46,7 +46,7 @@ export default {
         this.blocked = data
       })
 
-      // When ticket is mounted it checks if it should be in "editmode"
+      // When ticket is mounted it checks if it should be in "edit-mode"
       if (this.localEdit.id === this.ticket._id) {
         // Set variables
         this.edit = true
@@ -73,6 +73,7 @@ export default {
         // Set new content to global variable localEdit
         this.$emit("newLocalEdit", this.ticket._id)
 
+        // Start edit and add ticket._id to blockedTickets list
         socket.emit("startEditingTicket", {
           id: this.ticket._id,
           jwt: this.$store.jwt
@@ -108,20 +109,20 @@ export default {
               if (result.errors) {
                 window.alert(result.errors[0].message)
               }
-              // stop edit
+              // Stop edit
               this.stopEdit()
-              // refresh
+              // Refresh
               socket.emit('updateTickets', result.data.updateTicket)
             })
           } catch (error) {
             console.error('Error fetching data:', error)
-            // stop edit
+            // Stop edit
             this.stopEdit()
           }
         }
       },
       stopEdit() {
-        // Stop edit, setting localEdit.id to null and remove from socket block-list
+        // Stop edit, setting localEdit.id to null and remove from blockedTickets list
         this.edit = false
         this.$emit("newLocalEdit", null)
         socket.emit("stopEditingTicket", this.ticket._id)

@@ -48,9 +48,9 @@ async function editTicket(io) {
             }
         })
 
-        // Update tickets when needed, when creating or chaningin
+        // Update tickets when needed, when creating or changing
         socket.on('updateTickets', async (ticketData) => {
-            // Ticketdata is provieded when updating or creating new ticket
+            // ticketData is provided when updating or creating new ticket
             if (ticketData) {
                 allTickets = await tickets.getTickets();
             }
