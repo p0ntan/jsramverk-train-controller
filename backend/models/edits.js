@@ -1,6 +1,9 @@
 // Function that handles the separation of tickets being updated
 const tickets = require('./tickets');
 
+// Auth model
+const authModel = require('./auth');
+
 async function editTicket(io) {
     // Get all tickets
     let allTickets = [];
@@ -21,9 +24,13 @@ async function editTicket(io) {
 
         // Set ticket as locked/blocked when a client is editing
         socket.on('startEditingTicket', (data) => {
-            // TODO should add some jwtAuth here to make sure a person is authorized
-            // Add the _id of the ticket being modified
-            editedTickets.push(data);
+            // Add the _id of the ticket being modified if authorized
+            const isAuth = authModel.ssCheckToken(data.jwt)
+
+            if (isAuth) {
+                editedTickets.push(data.id);
+            }
+
             io.emit('blockedTickets', editedTickets);
         })
 

@@ -73,7 +73,10 @@ export default {
         // Set new content to global variable localEdit
         this.$emit("newLocalEdit", this.ticket._id)
 
-        socket.emit("startEditingTicket", this.ticket._id)
+        socket.emit("startEditingTicket", {
+          id: this.ticket._id,
+          jwt: this.$store.jwt
+        })
       },
       // TODO Add functionality to delete a ticket
       saveEdit() {
