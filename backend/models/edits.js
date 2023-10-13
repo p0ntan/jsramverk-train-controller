@@ -3,10 +3,9 @@ const tickets = require('./tickets');
 
 async function editTicket(io) {
     // Get all tickets
-    // let allTickets = await tickets.getTickets();
-    let allTickets = []
+    let allTickets = [];
     // List with tickets that are being edited
-    let editedTickets = []
+    let editedTickets = [];
 
     io.sockets.on('connection', function(socket) {
         // Emit all tickets
@@ -22,6 +21,7 @@ async function editTicket(io) {
 
         // Set ticket as locked/blocked when a client is editing
         socket.on('startEditingTicket', (data) => {
+            // TODO should add some jwtAuth here to make sure a person is authorized
             // Add the _id of the ticket being modified
             editedTickets.push(data);
             io.emit('blockedTickets', editedTickets);

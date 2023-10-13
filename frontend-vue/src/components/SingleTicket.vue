@@ -118,7 +118,7 @@ export default {
         }
       },
       stopEdit() {
-        // stop edit
+        // Stop edit, setting localEdit.id to null and remove from socket block-list
         this.edit = false
         this.$emit("newLocalEdit", null)
         socket.emit("stopEditingTicket", this.ticket._id)

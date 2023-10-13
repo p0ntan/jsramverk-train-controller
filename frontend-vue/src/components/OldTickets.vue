@@ -15,17 +15,6 @@ import { io } from "socket.io-client"
 const baseURL = import.meta.env.VITE_BASE_URL
 const socket = io(`${baseURL}/`)
 
-const graphqlURL = import.meta.env.VITE_GRAPHQL_URL
-// Define data needed from backend
-const queryTickets = `{
-  tickets {
-    _id
-    code
-    trainnumber
-    traindate
-  }
-}`
-
 export default {
   components: {
     SingleTicket
