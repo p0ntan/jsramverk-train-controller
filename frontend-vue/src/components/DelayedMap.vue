@@ -35,8 +35,8 @@ export default {
             iconAnchor: [12, 41],
       });
 
-      // Having two layers for hidden and shown markers, based on what is located
-      // in the store.showOnMap. If showOnMap.lenght = 0 show all delayed trains
+      // Having a layer with visable trains, and storing all markers in this.delayedMarkers.
+      // If showOnMap.lenght = 0 show all delayed trains else only the ones in array
       this.visibleLayer = L.layerGroup().addTo(this.map);
       this.hiddenLayer = L.layerGroup();
 
@@ -49,18 +49,19 @@ export default {
 
             marker.setLatLng(data.position)
           } else {
-            // Create marker and find index from showTrains
+            // Create marker and find if train in showOnMap array
             const marker = L.marker(data.position, {
               icon: trainMarker,
               trainNumber: data.trainnumber // Trainnumber to use for filtering trains
             }).bindPopup(data.trainnumber)
-            const index = this.$store.showOnMap.indexOf(data.trainnumber)
+            const inArray = this.$store.showOnMap.includes(data.trainnumber)
 
             // Add marker to map if array is empty or train is in in array
-            if (this.$store.showOnMap.length === 0 || index !== -1) {
+            if (this.$store.showOnMap.length === 0 || inArray) {
               marker.addTo(this.visibleLayer)
             }
 
+            // Adds or remove train from showOnMap array
             marker.on('click', this.updateShownOnMap)
 
             // Add marker to object to keep track of position even if not showing on map
@@ -71,18 +72,17 @@ export default {
     },
     updateShownOnMap(e) {
       const trainNumber = e.target.options.trainNumber
-      const index = this.$store.showOnMap.indexOf(trainNumber)
 
-      if (index === -1) {
+      if (this.$store.showOnMap.includes(trainNumber)) {
+        // Remove train, this can proably be changed but needed for reactivity
+        this.$store.showOnMap = this.$store.showOnMap.filter(train => train !== trainNumber)
+      } else {
         // Add marker to array, this way is needed because of reactivity
         this.$store.showOnMap = [...this.$store.showOnMap, trainNumber]
         // Open the marker's popup, for some reason it won't work without a timeout
         setTimeout(function () {
           e.target.openPopup();
-        }, 10);
-      } else {
-        // This can proably be changed but needed for reactivity
-        this.$store.showOnMap = this.$store.showOnMap.filter(train => train !== trainNumber)
+        }, 10);      
       }
     }
   },
@@ -90,6 +90,7 @@ export default {
     this.setupMap()
   },
   watch: {
+    // Watch showOnMap and make changes on map according to what changes
     '$store.showOnMap': {
       handler(newValue, oldValue) {
         // If new length is 0 all trains should show 

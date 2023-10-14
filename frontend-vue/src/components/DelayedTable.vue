@@ -2,8 +2,13 @@
   <div class="delayed">
     <h1>Försenade Tåg</h1>
     <div class="delayed-trains" v-if="delayedTrains">
-      <div v-for="train in delayedTrains" :key="train" @click="renderTicketView(train)">
-        <DelayedTableItem :train="train"/>
+      <div v-for="train in delayedTrains"
+        :key="train"
+        @click="renderTicketView(train)"
+        class="train"
+        :class="classChosen(train.OperationalTrainNumber)"
+      >
+        <DelayedTableItem :train="train" />
       </div>
     </div>
     <div v-else>Loading...</div>
@@ -33,7 +38,7 @@ export default {
   data() {
     return {
       delayedTrains: null,
-      delays: null
+      delays: null,
     }
   },
   components: {
@@ -81,6 +86,20 @@ export default {
       this.$store.train = trainObject
       this.$router.push('/tickets')
     }
+  },
+  computed: {
+    // Computes and sets the class to chosen if train is chosen, works for button and marker
+    classChosen() {
+      return (selectedTrainNumber) => {
+        return this.$store.showOnMap.includes(selectedTrainNumber) ? 'chosen' : ''
+      };
+    }
   }
 }
 </script>
+
+<style>
+.chosen {
+  outline: 2px solid red;
+}
+</style>
