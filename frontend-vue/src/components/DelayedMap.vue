@@ -61,11 +61,25 @@ export default {
               marker.addTo(this.visibleLayer)
             }
 
+            marker.on('click', this.updateShownOnMap)
+
             // Add marker to object to keep track of position even if not showing on map
             this.delayedMarkers[data.trainnumber] = marker
           }
         }
       })
+    },
+    updateShownOnMap(e) {
+      const trainNumber = e.target.options.trainNumber
+      const index = this.$store.showOnMap.indexOf(trainNumber)
+
+      if (index === -1) {
+        // This way is needed because of reactivity
+        this.$store.showOnMap = [...this.$store.showOnMap, trainNumber]
+      } else {
+        // This can proably be changed but needed for reactivity
+        this.$store.showOnMap = this.$store.showOnMap.filter(train => train !== trainNumber)
+      }
     }
   },
   mounted() {
