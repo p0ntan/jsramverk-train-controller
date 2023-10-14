@@ -28,9 +28,11 @@ export default {
       const index = this.$store.showOnMap.indexOf(trainNumber)
 
       if (index === -1) {
-        this.$store.showOnMap.push(trainNumber);
+        // This way is needed because of reactivity
+        this.$store.showOnMap = [...this.$store.showOnMap, trainNumber]
       } else {
-        this.$store.showOnMap.splice(index, 1);
+        // This can proably be changed but needed for reactivity
+        this.$store.showOnMap = this.$store.showOnMap.filter(train => train !== trainNumber)
       }
     }
   }

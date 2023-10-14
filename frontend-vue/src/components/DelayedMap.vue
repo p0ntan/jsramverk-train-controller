@@ -13,7 +13,7 @@ export default {
     return {
       center: [62.173276, 14.942265],
       delayedMarkers: {},
-      showTrains: this.$store.showOnMap,
+      // showTrains: this.$store.showOnMap,
       visibleLayer: null,
       hiddenLayer: null
     }
@@ -49,19 +49,19 @@ export default {
 
             marker.setLatLng(data.position)
           } else {
-            // Use hiddenLayer as default
-            let layerToUse = this.hiddenLayer
-            const index = this.showTrains.indexOf(data.trainnumber)
+            // Create marker and find index from showTrains
+            const marker = L.marker(data.position, {
+              icon: trainMarker,
+              trainNumber: data.trainnumber // Trainnumber to use for filtering trains
+            }).bindPopup(data.trainnumber)
+            const index = this.$store.showOnMap.indexOf(data.trainnumber)
 
-            // Change layer if array is (no train chosen) or if train is in showTrains
-            if (this.showTrains.length === 0 || index !== -1) {
-              layerToUse = this.visibleLayer 
+            // Add marker to map if array is empty or train is in in array
+            if (this.$store.showOnMap.length === 0 || index !== -1) {
+              marker.addTo(this.visibleLayer)
             }
 
-            // Create marker and add it to the layer to use
-            const marker = L.marker(data.position, {icon: trainMarker})
-              .bindPopup(data.trainnumber).addTo(layerToUse)
-
+            // Add marker to object to keep track of position even if not showing on map
             this.delayedMarkers[data.trainnumber] = marker
           }
         }
@@ -72,23 +72,40 @@ export default {
     this.setupMap()
   },
   watch: {
-    showTrains: {
+    '$store.showOnMap': {
       handler(newValue, oldValue) {
-        // If length is 0 all trains should show 
+        // If new length is 0 all trains should show 
         if (newValue.length === 0) {
-          // Iterate over all the markers in the hiddenLayer and move
-          // all trains to visible layer
-          this.hiddenLayer.eachLayer((marker) => {
-            this.hiddenLayer.removeLayer(marker);
-            this.visibleLayer.addLayer(marker);
-          });
+          // Clear layer and add all markers to visibleLayer
+          // Clearing the layer first will stop possibilty for double markers on same train
+          this.visibleLayer.clearLayers()
+          for (const trainNumber in this.delayedMarkers) {
+            const marker = this.delayedMarkers[trainNumber]
+
+            marker.addTo(this.visibleLayer)
+          }
         } else if (newValue.length < oldValue.length) {
           // Find the removed trainnumber from oldvalue
-        } else if (newValue.length < oldValue.length) {
-          // Last value is the new value, add it to the visible layer
+          const trainNumber = oldValue.filter(item => !newValue.includes(item))
+          
+          this.visibleLayer.removeLayer(this.delayedMarkers[trainNumber])
+
+        } else if (newValue.length > oldValue.length) {
+          // Get trainnumber from last item in list
+          const trainNumber = newValue[newValue.length - 1]
+
+          // If oldValue was 0 remove all trains
+          if (oldValue.length === 0) {
+            this.visibleLayer.clearLayers();
+          }
+          
+          // If data has been recived from socket, train will be in delayedMarkers and it
+          // can be added to map. If not it will be added when data is recived through socket
+          if (trainNumber in this.delayedMarkers) {
+            this.delayedMarkers[trainNumber].addTo(this.visibleLayer)
+          }
         }
-      },
-      deep: true
+      }
     }
   }
 }
