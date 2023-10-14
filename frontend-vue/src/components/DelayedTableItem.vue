@@ -24,6 +24,7 @@ export default {
       // Save train in store, or remove if already in there.
       // FIXME OperationalTrainNumber is used here but AdvertisedTrainNumber in map from backend
       // decide on which one to use, but should be the same?
+      // TODO decide what to use, using OperationalTrainNumber in backend seams to work better
       const trainNumber = this.train.OperationalTrainNumber
       const index = this.$store.showOnMap.indexOf(trainNumber)
 

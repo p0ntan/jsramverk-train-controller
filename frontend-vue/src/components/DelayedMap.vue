@@ -74,8 +74,12 @@ export default {
       const index = this.$store.showOnMap.indexOf(trainNumber)
 
       if (index === -1) {
-        // This way is needed because of reactivity
+        // Add marker to array, this way is needed because of reactivity
         this.$store.showOnMap = [...this.$store.showOnMap, trainNumber]
+        // Open the marker's popup, for some reason it won't work without a timeout
+        setTimeout(function () {
+          e.target.openPopup();
+        }, 10);
       } else {
         // This can proably be changed but needed for reactivity
         this.$store.showOnMap = this.$store.showOnMap.filter(train => train !== trainNumber)
