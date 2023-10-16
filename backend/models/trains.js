@@ -41,7 +41,6 @@ async function fetchTrainPositions(io) {
                 if (parsedData) {
                     const changedPosition = parsedData.RESPONSE.RESULT[0].TrainPosition[0];
 
-
                     const matchCoords = /(\d*\.\d+|\d+),?/g;
 
                     const position = changedPosition.Position.WGS84.match(matchCoords).map(
