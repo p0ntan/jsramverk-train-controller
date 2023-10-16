@@ -41,7 +41,6 @@ async function fetchTrainPositions(io) {
                 if (parsedData) {
                     const changedPosition = parsedData.RESPONSE.RESULT[0].TrainPosition[0];
 
-
                     const matchCoords = /(\d*\.\d+|\d+),?/g;
 
                     const position = changedPosition.Position.WGS84.match(matchCoords).map(
@@ -49,7 +48,7 @@ async function fetchTrainPositions(io) {
                     ).reverse();
 
                     const trainObject = {
-                        trainnumber: changedPosition.Train.OperationalTrainNumber,
+                        trainnumber: changedPosition.Train.AdvertisedTrainNumber,
                         position: position,
                         timestamp: changedPosition.TimeStamp,
                         bearing: changedPosition.Bearing,
@@ -57,11 +56,11 @@ async function fetchTrainPositions(io) {
                         speed: changedPosition.Speed,
                     };
 
-                    if (changedPosition.Train.OperationalTrainNumber in trainPositions) {
+                    if (changedPosition.Train.AdvertisedTrainNumber in trainPositions) {
                         socket.emit("message", trainObject);
                     }
 
-                    trainPositions[changedPosition.Train.OperationalTrainNumber] = trainObject;
+                    trainPositions[changedPosition.Train.AdvertisedTrainNumber] = trainObject;
                 }
             } catch (e) {
                 console.log(e);
