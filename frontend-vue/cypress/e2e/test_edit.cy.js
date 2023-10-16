@@ -5,9 +5,9 @@ describe('Test editing tickets', () => {
             password: Cypress.env('pw1')
         }
         // Bypass the login before each test
-        cy.bypassLogin(user);
-        cy.get('.delayed-trains')
-        .find('div').first().click()
+        cy.bypassLogin(user)
+
+        cy.get('.delayed-trains').find('.train').first().find('button').click()
         cy.url().should('contain', '/tickets')
     });
     it('edit button exists', () => {
