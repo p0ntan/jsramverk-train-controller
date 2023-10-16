@@ -88,7 +88,6 @@ export default {
       // TODO decide what to use, using OperationalTrainNumber in backend seams to work better
       if (this.$store.showOnMap.includes(trainNumber)) {
         // This can proably be changed but needed for reactivity, splice dosn't work as wanted
-        // TODO this triggers a possible bug in Vue according to console, better to find another way
         this.$store.showOnMap = this.$store.showOnMap.filter(train => train !== trainNumber)
       } else {
         // This way is needed because of reactivity
@@ -100,7 +99,12 @@ export default {
     // Computes and sets the class to chosen if train is chosen, works for button and marker
     classChosen() {
       return (selectedTrainNumber) => {
-        return this.$store.showOnMap.includes(selectedTrainNumber) ? 'chosen' : ''
+        const inArray = this.$store.showOnMap.includes(selectedTrainNumber)
+        if (this.$store.showOnMap.length === 0 || inArray) {
+          return  "on-map"
+        }
+        return "not-on-map"
+        
       };
     },
     // Sort the train by trainnumber, more functions can be added in the same way to have
@@ -115,7 +119,7 @@ export default {
 </script>
 
 <style>
-.chosen {
-  outline: 2px solid red;
+.not-on-map {
+  color: rgb(161, 161, 161);
 }
 </style>
