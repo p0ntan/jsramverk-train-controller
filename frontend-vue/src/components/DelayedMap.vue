@@ -40,6 +40,9 @@ export default {
 
       socket.on('message', (data) => {
         // First a control that the train is actually delayed, and if add it into this.delayedMarkers
+        if (data.trainnumber == "34594") {
+          console.log(data);
+        }
         if (data.trainnumber in this.$store.delayedTrains) {
           if (data.trainnumber in this.delayedMarkers) {
             // If marker already exists, just update the marker location. Even if not shown on map
@@ -86,6 +89,25 @@ export default {
   },
   mounted() {
     this.setupMap()
+
+    // If trains are cached, add them to this.delayedMarkers
+    for (const [key, value] of Object.entries(this.$store.cachedTrains)) {
+      if (key in this.$store.delayedTrains) {
+        this.delayedMarkers[key] = value
+      }
+    }
+
+    // "Resetting" showOnMap to show all trains and add the cached trains to map
+    this.$store.showOnMap = []
+    for (const trainNumber in this.delayedMarkers) {
+      const marker = this.delayedMarkers[trainNumber]
+
+      marker.addTo(this.visibleLayer)
+    }
+
+  },
+  beforeUnmount() {
+    this.$store.cachedTrains = {...this.delayedMarkers}
   },
   watch: {
     // Watch showOnMap and make changes on map according to what changes

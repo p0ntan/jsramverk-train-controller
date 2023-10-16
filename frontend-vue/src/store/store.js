@@ -5,7 +5,8 @@ const store = reactive({
   train: '',
   jwt: '',
   showOnMap: [],
-  delayedTrains: {}
+  delayedTrains: {},
+  cachedTrains: {}
 })
 
 export default store
