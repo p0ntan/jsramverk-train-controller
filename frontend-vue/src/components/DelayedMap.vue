@@ -12,10 +12,9 @@ export default {
   data() {
     return {
       center: [62.173276, 14.942265],
+      // TODO put this in the store if going to tickets? Will save state so trains can show up instanly when going back
       delayedMarkers: {},
-      // showTrains: this.$store.showOnMap,
       visibleLayer: null,
-      hiddenLayer: null
     }
   },
   methods: {
@@ -36,9 +35,8 @@ export default {
       });
 
       // Having a layer with visable trains, and storing all markers in this.delayedMarkers.
-      // If showOnMap.lenght = 0 show all delayed trains else only the ones in array
+      // If this.$store.showOnMap.length = 0 show all delayed trains else only the ones in array
       this.visibleLayer = L.layerGroup().addTo(this.map);
-      this.hiddenLayer = L.layerGroup();
 
       socket.on('message', (data) => {
         // First a control that the train is actually delayed, and if add it into this.delayedMarkers
