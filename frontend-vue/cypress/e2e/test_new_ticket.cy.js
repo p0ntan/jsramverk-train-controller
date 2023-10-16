@@ -6,46 +6,44 @@ describe('New ticket', () => {
         }
         // Bypass the login before each test
         cy.bypassLogin(user);
-        cy.get('.delayed-trains')
-        .find('div').first().click()
-        cy.url().should('contain', '/tickets')
     });
     it('created successfully', () => {
-        // Form to create new Ticket should exist
-        cy.find('form').should('exist')
-        cy.find('select').should('exist')
-        // // The uncommented code modifies the deployed db
-        // // TODO look up how to use a test database
-        // // Save train number in the first element
-        // let trainNumber
+        // The uncommented code modifies the deployed db
+        // TODO look up how to use a test database
 
-        // cy.get('.train-number').first().then(($element) => {
-        //     trainNumber = $element.text()
-        //     expect(trainNumber).to.exist
+        // Save train number in the first element
+        let trainNumber
 
-        //     // Navigate to the TicketView
-        //     cy.get('.delayed-trains')
-        //     .find('div').first().click()
+        cy.get('.train-number').first().then(($element) => {
+            trainNumber = $element.text()
+            expect(trainNumber).to.exist
 
-        //     // Select option ANA031
-        //     cy.get('select').select('ANA031 - Kort tåg')
+            // Navigate to the TicketView for that train
+            cy.get('.delayed-trains').find('.train').first().find('button').click()
+            cy.url().should('contain', '/tickets')
 
-        //     // Submit choice
-        //     cy.get('input[type="submit"]').should('exist')
-        //     cy.get('input[type="submit"]').click()
+            // Form to create new Ticket should exist
+            cy.get('form').should('exist')
+            cy.get('select').should('exist')
+            cy.get('select').find('option').its('length').should('be.gt', 1)
 
-        //     // Ticket list
-        //     cy.get('.old-tickets').find('div').last().should('exist')
+            // Select option ANA031
+            // cy.get('select').select('ANA031 - Kort tåg')
 
-        //     cy.get('.old-tickets').find('div').last().invoke('text').should('include', 'ANA031')
+            // Submit choice
+            cy.get('input[type="submit"]').should('exist')
+            // cy.get('input[type="submit"]').click()
 
-        //     cy.get('.old-tickets').find('div').last().should('contain', trainNumber)
-        // })
+            // Check ticket added to ticket list
+            // cy.get('.old-tickets').find('div').last().should('exist')
+            // cy.get('.old-tickets').find('div').last().invoke('text').should('include', 'ANA031')
+            // cy.get('.old-tickets').find('div').last().should('contain', trainNumber)
+        })
     });
-    // after(() => {
-    //     // Perform a logout action to end the session
-    //     cy.get('a').click()
-    //     cy.get('#logoutUser').click()
-    //     cy.get('#loginUser').should('exist')
-    // })
+    after(() => {
+        // Perform a logout action to end the session
+        cy.get('a').click()
+        cy.get('#logoutUser').click()
+        cy.get('#loginUser').should('exist')
+    })
 });
