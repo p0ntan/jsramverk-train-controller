@@ -2,18 +2,13 @@
   <div class="delayed">
     <h1>Försenade Tåg</h1>
     <div class="delayed-trains" v-if="delayedTrains">
-      <div v-for="trains in delayedTrains" :key="trains" @click="renderTicketView(trains)">
-        <div class="train-number">
-          {{ trains.OperationalTrainNumber }}
-        </div>
-        <div class="current-station">
-          <div>{{ trains.LocationSignature }}</div>
-          <div v-if="trains.FromLocation && trains.ToLocation">
-            {{ trains.FromLocation[0].LocationName }} -> {{ trains.ToLocation[0].LocationName }}
-          </div>
-          <div v-else></div>
-        </div>
-        <div class="delay">{{ trains.delayInMin }} minuter</div>
+      <div v-for="train in sortByTrainNumber(delayedTrains)"
+        :key="train"
+        @click="showOnMap(train.OperationalTrainNumber)"
+        class="train"
+        :class="classChosen(train.OperationalTrainNumber)"
+      >
+        <DelayedTableItem :train="train" />
       </div>
     </div>
     <div v-else>Loading...</div>
@@ -22,6 +17,7 @@
 
 <script>
 const graphqlURL = import.meta.env.VITE_GRAPHQL_URL
+import DelayedTableItem from "./DelayedTableItem.vue";
 // Define data needed from backend
 const queryDelayed = `{
   delayed {
@@ -42,8 +38,11 @@ export default {
   data() {
     return {
       delayedTrains: null,
-      delays: null
+      delays: null,
     }
+  },
+  components: {
+    DelayedTableItem
   },
   created() {
       try {
@@ -70,17 +69,57 @@ export default {
             // Add delay to object
             this.delayedTrains[i].delayInMin = differenceInMinutes
           }
+          // Adding delayedTrains id into the store for easier access on map
+          // Using object with trainnumber as key
+          this.delayedTrains.forEach(train => {
+            const trainId = train.OperationalTrainNumber
+            this.$store.delayedTrains[trainId] = train
+          });
         })
       } catch (error) {
         console.error('Error fetching data:', error);
       }
     },
   methods: {
-    renderTicketView(trainObject) {
-      // Save train in store, then change route.
-      this.$store.train = trainObject
-      this.$router.push('/tickets')
+    showOnMap(trainNumber) {
+      // Save train in store, or remove if already in there.
+      // FIXME OperationalTrainNumber is used here but AdvertisedTrainNumber in map from backend
+      // decide on which one to use, but should be the same?
+      // TODO decide what to use, using OperationalTrainNumber in backend seams to work better
+      if (this.$store.showOnMap.includes(trainNumber)) {
+        // This can proably be changed but needed for reactivity, splice dosn't work as wanted
+        this.$store.showOnMap = this.$store.showOnMap.filter(train => train !== trainNumber)
+      } else {
+        // This way is needed because of reactivity
+        this.$store.showOnMap = [...this.$store.showOnMap, trainNumber]
+      }
+    }
+  },
+  computed: {
+    // Computes and sets the class to chosen if train is chosen, works for button and marker
+    classChosen() {
+      return (selectedTrainNumber) => {
+        const inArray = this.$store.showOnMap.includes(selectedTrainNumber)
+        if (this.$store.showOnMap.length === 0 || inArray) {
+          return  "on-map"
+        }
+        return "not-on-map"
+        
+      };
+    },
+    // Sort the train by trainnumber, more functions can be added in the same way to have
+    // more options for a user
+    sortByTrainNumber() {
+      return (delayedTrains) => {
+        return delayedTrains.sort((a, b) => a.OperationalTrainNumber - b.OperationalTrainNumber)
+      }
     }
   }
 }
 </script>
+
+<style>
+.not-on-map {
+  color: rgb(161, 161, 161);
+}
+</style>
