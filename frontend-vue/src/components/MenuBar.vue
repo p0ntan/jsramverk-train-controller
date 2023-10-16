@@ -5,6 +5,7 @@
   <div v-else>
     <button id="loginUser" @click="logIn">Logga in</button>
     <button id="registerUser" @click="register">Registrera</button>
+    <a id="nav-tickets" href="/tickets">Visa ärenden</a>
   </div>
 </template>
 

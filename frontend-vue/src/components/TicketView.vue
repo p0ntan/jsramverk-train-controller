@@ -19,8 +19,9 @@ export default {
     NewTickets
   },
   beforeCreate() {
-    if (!this.$store.train) {
-      // Checks if there is a train in store, if not redirect to '/'
+    // When logged in
+    // Check if there is a train in store, if not redirect to '/'
+    if (this.$store.jwt && !this.$store.train) {
       this.$router.push('/')
     }
   },
