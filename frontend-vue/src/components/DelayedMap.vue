@@ -91,36 +91,41 @@ export default {
     // Watch showOnMap and make changes on map according to what changes
     '$store.showOnMap': {
       handler(newValue, oldValue) {
-        // If new length is 0 all trains should show 
-        if (newValue.length === 0) {
-          // Clear layer and add all markers to visibleLayer
-          // Clearing the layer first will stop possibilty for double markers on same train
-          this.visibleLayer.clearLayers()
-          for (const trainNumber in this.delayedMarkers) {
-            const marker = this.delayedMarkers[trainNumber]
+        try {
+          // If new length is 0 all trains should show 
+          if (newValue.length === 0) {
+            // Clear layer and add all markers to visibleLayer
+            // Clearing the layer first will stop possibilty for double markers on same train
+            this.visibleLayer.clearLayers()
+            for (const trainNumber in this.delayedMarkers) {
+              const marker = this.delayedMarkers[trainNumber]
 
-            marker.addTo(this.visibleLayer)
-          }
-        } else if (newValue.length < oldValue.length) {
-          // Find the removed trainnumber from oldvalue
-          const trainNumber = oldValue.filter(item => !newValue.includes(item))
-          
-          this.visibleLayer.removeLayer(this.delayedMarkers[trainNumber])
+              marker.addTo(this.visibleLayer)
+            }
+          } else if (newValue.length < oldValue.length) {
+            // Find the removed trainnumber from oldvalue
+            const trainNumber = oldValue.filter(item => !newValue.includes(item))
+            
+            this.visibleLayer.removeLayer(this.delayedMarkers[trainNumber])
 
-        } else if (newValue.length > oldValue.length) {
-          // Get trainnumber from last item in list
-          const trainNumber = newValue[newValue.length - 1]
+          } else if (newValue.length > oldValue.length) {
+            // Get trainnumber from last item in list
+            const trainNumber = newValue[newValue.length - 1]
 
-          // If oldValue was 0 remove all trains
-          if (oldValue.length === 0) {
-            this.visibleLayer.clearLayers();
-          }
-          
-          // If data has been recived from socket, train will be in delayedMarkers and it
-          // can be added to map. If not it will be added when data is recived through socket
-          if (trainNumber in this.delayedMarkers) {
-            this.delayedMarkers[trainNumber].addTo(this.visibleLayer)
-          }
+            // If oldValue was 0 remove all trains
+            if (oldValue.length === 0) {
+              this.visibleLayer.clearLayers();
+            }
+            
+            // If data has been recived from socket, train will be in delayedMarkers and it
+            // can be added to map. If not it will be added when data is recived through socket
+            if (trainNumber in this.delayedMarkers) {
+              this.delayedMarkers[trainNumber].addTo(this.visibleLayer)
+            }
+          }          
+        } catch (error) {
+          // This is just to catch an error that Vue says is "This is likely a Vue internals bug."
+          // when clicking the buttons in table too fast. The watcher seams to not be fast enough.
         }
       }
     }
