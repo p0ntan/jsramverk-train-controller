@@ -45,7 +45,7 @@ describe('Test editing tickets', () => {
         // Check that the save button works
         cy.get('#old-tickets').find('button').last().click()
 
-        cy.get('#old-tickets').get('select').find('option:selected').invoke('val').then(val => {
+        cy.get('#old-tickets').find('option:selected').invoke('val').then(val => {
             cy.log(val)
 
             // Select another option (ANA002)
