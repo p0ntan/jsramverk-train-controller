@@ -42,7 +42,9 @@ const RootQueryType = new GraphQLObjectType({
             type: GraphQLList(TrainType),
             description: 'A list of trains with positions',
             resolve: async function() {
-                return await trainsModel.getTrains();
+                const result = await trainsModel.getTrains();
+
+                return result.TrainPosition;
             }
         },
     })
