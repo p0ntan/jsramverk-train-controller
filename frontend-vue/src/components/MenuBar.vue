@@ -1,10 +1,11 @@
 <template>
   <div v-if="this.$store.jwt">
-    <button @click="logOut">Logga ut</button>
+    <button id="logoutUser" @click="logOut">Logga ut</button>
   </div>
   <div v-else>
-    <button @click="logIn">Logga in</button>
-    <button @click="register">Registera</button>
+    <button id="loginUser" @click="logIn">Logga in</button>
+    <button id="registerUser" @click="register">Registrera</button>
+    <a id="nav-tickets" href="/tickets">Visa ärenden</a>
   </div>
 </template>
 

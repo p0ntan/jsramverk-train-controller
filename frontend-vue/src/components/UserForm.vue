@@ -5,7 +5,7 @@
       <button @click="closeBox">X</button>
       <!-- Heading depending on what form is used -->
       <h2 v-if="formType === 'login'">Logga in</h2>
-      <h2 v-else-if="formType === 'register'">Registera</h2>
+      <h2 v-else-if="formType === 'register'">Registrera</h2>
 
       <form @submit.prevent="handleSubmit">
         <div>
@@ -20,7 +20,7 @@
 
         <!-- Button depending on what form is used -->
         <button v-if="formType === 'login'" type="submit">Logga in</button>
-        <button v-else-if="formType === 'register'" type="submit">Registera</button>
+        <button v-else-if="formType === 'register'" type="submit">Registrera</button>
       </form>
     </div>
 </template>
@@ -81,7 +81,9 @@ export default {
             // TODO ändra flödet, nu loggar den in och stänger boxen när registreringen är ok.
             this.login()
           } else {
+            //TODO Notify the user of success and failure in login process
             console.log(result.errors)
+            window.alert(result.errors[0].message)
           }
         })
       } catch (err) {
@@ -114,7 +116,9 @@ export default {
             this.$store.jwt = result.data.authUser.jwt
             this.closeBox()
           } else {
+            //TODO Notify the user of success and failure in login process
             console.log(result.errors);
+            window.alert(result.errors[0].message);
           }
         })
       } catch (err) {

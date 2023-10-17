@@ -1,4 +1,4 @@
-describe('The Page Navigation', () => {
+describe('Visit tickets while logged out', () => {
 it('works successfully', () => {
     cy.visit('/')
 
@@ -6,8 +6,7 @@ it('works successfully', () => {
 
     cy.get('.delayed')
 
-    cy.get('.delayed-trains')
-    .find('div').first().click()
+    cy.get('#nav-tickets').click()
 
     cy.contains('h2', 'Befintliga ärenden').should('exist');
 
