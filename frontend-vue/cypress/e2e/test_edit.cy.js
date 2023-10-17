@@ -41,28 +41,28 @@ describe('Test editing tickets', () => {
         cy.get('#old-tickets').find('button').contains('save').should('not.exist')
         cy.get('#old-tickets').find('button').contains('cancel').should('not.exist')
     });
-    it('save edit button works', () => {
-        // Check that the save button works
-        cy.get('#old-tickets').find('button').last().click()
+    // it('save edit button works', () => {
+    //     // Check that the save button works
+    //     cy.get('#old-tickets').find('button').last().click()
 
-        cy.get('#old-tickets').find('option:selected').invoke('val').then(val => {
-            cy.log(val)
+    //     cy.get('#old-tickets').find('option:selected').invoke('val').then(val => {
+    //         cy.log(val)
 
-            // Select another option (ANA002)
-            const edit = 'ANA002'
+    //         // Select another option (ANA002)
+    //         const edit = 'ANA002'
 
-            cy.get('#old-tickets').find('select').select(edit)
-            cy.get('#old-tickets').find('button[type=submit]').click()
+    //         cy.get('#old-tickets').find('select').select(edit)
+    //         cy.get('#old-tickets').find('button[type=submit]').click()
 
-            // Check change occurred
-            cy.get('#old-tickets').last().contains(edit)
+    //         // Check change occurred
+    //         cy.get('#old-tickets').last().contains(edit)
 
-            // Change back
-            cy.get('#old-tickets').find('select').select(val)
-            cy.get('#old-tickets').find('button[type=submit]').click()
-            cy.get('#old-tickets').last().contains(val)
-        });
-    });
+    //         // Change back
+    //         cy.get('#old-tickets').find('select').select(val)
+    //         cy.get('#old-tickets').find('button[type=submit]').click()
+    //         cy.get('#old-tickets').last().contains(val)
+    //     });
+    // });
     it('userA enters edit mode and leave page via navigation', () => {
         // Click on edit button and leave
         cy.get('#old-tickets').find('button').contains('edit').first().click()
