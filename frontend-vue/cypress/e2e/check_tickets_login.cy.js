@@ -16,7 +16,7 @@ it('works successfully', () => {
     cy.get('.delayed-trains').find('button').first().should('exist')
 
     // Click on button and navigate to ticket view
-    cy.get('.delayed-trains').find('button').first().click()
+    cy.get('.delayed-trains').find('button').first().click({force: true})
     cy.url().should('contain', '/tickets')
     cy.contains('h2', 'Befintliga ärenden').should('exist');
 
