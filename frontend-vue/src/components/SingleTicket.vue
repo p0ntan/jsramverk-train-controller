@@ -8,13 +8,14 @@
           </option>
           </select>
           <span> - {{ ticket.trainnumber }} - {{ ticket.traindate }}</span>
-          <button type="submit">save</button>
-          <button @click="stopEdit()">cancel</button>
+          <button type="submit">Spara</button>
+          <button @click="stopEdit()">Avbryt</button>
+          <button @click="removeTicket()">Ta bort</button>
       </form>
     </div>
     <div v-else>
       <span>{{ ticket._id }} - {{ ticket.code }} - {{ ticket.trainnumber }} - {{ ticket.traindate }}</span>
-      <button v-if="!blocked.includes(ticket._id) && this.$store.jwt" @click="editTicket">edit</button>
+      <button v-if="!blocked.includes(ticket._id) && this.$store.jwt" @click="editTicket">Redigera</button>
     </div>
 </template>
 
@@ -79,7 +80,6 @@ export default {
           jwt: this.$store.jwt
         })
       },
-      // TODO Add functionality to delete a ticket
       saveEdit() {
         // Function to save the edit made to a ticket
         if (this.newCode != this.currentCode) {
@@ -126,6 +126,43 @@ export default {
         this.edit = false
         this.$emit("newLocalEdit", null)
         socket.emit("stopEditingTicket", this.ticket._id)
+      },
+      removeTicket() {
+        // Function to remove ticket in edit mode
+        const mutationRemoveTicket = `mutation {
+          deleteTicket (
+            _id: "${this.ticket._id}",
+            ){
+              _id
+            }
+          }`
+
+          try {
+            // Fetch data via graphql
+            fetch(`${graphqlURL}`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+                'Accept': 'application/json',
+                'x-access-token': this.$store.jwt
+            },
+            body: JSON.stringify({ query: mutationRemoveTicket })
+            })
+            .then(response => response.json())
+            .then(result => {
+              if (result.errors) {
+                console.error(result.errors[0].message)
+              }
+              // Stop edit
+              this.stopEdit()
+              // Refresh
+              socket.emit('updateTickets', result.data.deleteTicket)
+            })
+          } catch (error) {
+            console.error('Error fetching data:', error)
+            // Stop edit
+            this.stopEdit()
+          }
       }
     },
     watch: {
