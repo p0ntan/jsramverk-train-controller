@@ -7,9 +7,11 @@ const {
 const TicketType = require("./ticket.js");
 const CodeType = require("./code.js");
 const DelayedType = require("./delayed.js");
+const TrainType = require("./trains.js");
 const ticketsModel = require('../models/tickets.js');
 const codeModel = require('../models/codes.js');
 const delayedModel = require('../models/delayed.js');
+const trainsModel = require('../models/trains.js');
 
 const RootQueryType = new GraphQLObjectType({
     name: 'Query',
@@ -34,6 +36,13 @@ const RootQueryType = new GraphQLObjectType({
             description: 'A list of delayed trains',
             resolve: async function() {
                 return await delayedModel.getDelayedTrains();
+            }
+        },
+        trains: {
+            type: GraphQLList(TrainType),
+            description: 'A list of trains with positions',
+            resolve: async function() {
+                return await trainsModel.getTrains();
             }
         },
     })
