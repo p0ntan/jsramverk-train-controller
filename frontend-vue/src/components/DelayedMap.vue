@@ -40,9 +40,6 @@ export default {
 
       socket.on('message', (data) => {
         // First a control that the train is actually delayed, and if add it into this.delayedMarkers
-        if (data.trainnumber == "34594") {
-          console.log(data);
-        }
         if (data.trainnumber in this.$store.delayedTrains) {
           if (data.trainnumber in this.delayedMarkers) {
             // If marker already exists, just update the marker location. Even if not shown on map
