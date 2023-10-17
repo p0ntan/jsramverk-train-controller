@@ -7,6 +7,7 @@ import 'leaflet/dist/leaflet.css'
 import L from 'leaflet'
 import io from 'socket.io-client'
 const baseURL = import.meta.env.VITE_BASE_URL
+const graphqlURL = import.meta.env.VITE_GRAPHQL_URL
 
 export default {
   data() {
@@ -15,6 +16,7 @@ export default {
       // TODO put this in the store if going to tickets? Will save state so trains can show up instanly when going back
       delayedMarkers: {},
       visibleLayer: null,
+      initialTrainFetch: {}
     }
   },
   methods: {
@@ -36,7 +38,8 @@ export default {
 
       // Having a layer with visable trains, and storing all markers in this.delayedMarkers.
       // If this.$store.showOnMap.length = 0 show all delayed trains else only the ones in array
-      this.visibleLayer = L.layerGroup().addTo(this.map);
+      this.visibleLayer = L.layerGroup().addTo(this.map)
+      this.fetchTrains()
 
       socket.on('message', (data) => {
         // First a control that the train is actually delayed, and if add it into this.delayedMarkers
@@ -68,6 +71,62 @@ export default {
         }
       })
     },
+    fetchTrains() {
+    const queryTrains = `{
+      trains {
+        Train {
+          OperationalTrainNumber
+          AdvertisedTrainNumber
+        }
+        Position {
+          SWEREF99TM
+          WGS84
+        }
+      }
+    }`
+
+    try {
+      // Fetch data via graphql
+      fetch(`${graphqlURL}`, {
+      method: 'POST',
+      headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+      },
+      body: JSON.stringify({ query: queryTrains })
+      })
+      .then(response => response.json())
+      .then(data => {
+        for (const train of data.data.trains) {
+          if (train.Train.AdvertisedTrainNumber in this.$store.delayedTrains) {
+            let trainMarker = L.icon({
+              iconUrl: "icons/marker-icon.png",
+              iconSize: [25, 41],
+              iconAnchor: [12, 41],
+            });
+
+            const matchCoords = /(\d*\.\d+|\d+),?/g;
+            const position = train.Position.WGS84.match(matchCoords).map(
+              (t=>parseFloat(t))
+            ).reverse();
+            const marker = L.marker(position, {
+              icon: trainMarker,
+              trainNumber: train.Train.AdvertisedTrainNumber  // Trainnumber to use for filtering trains
+            }).bindPopup(train.Train.AdvertisedTrainNumber)
+
+            // Adds or remove train from showOnMap array
+            marker.on('click', this.updateShownOnMap)
+
+            this.delayedMarkers[train.Train.AdvertisedTrainNumber] = marker
+
+            marker.addTo(this.visibleLayer)
+          }
+        }
+      });
+    } catch (error) {
+      console.error('Error fetching trains:', error);
+    }
+  },
     updateShownOnMap(e) {
       const trainNumber = e.target.options.trainNumber
 
@@ -87,14 +146,7 @@ export default {
   mounted() {
     this.setupMap()
 
-    // If trains are cached, add them to this.delayedMarkers
-    for (const [key, value] of Object.entries(this.$store.cachedTrains)) {
-      if (key in this.$store.delayedTrains) {
-        this.delayedMarkers[key] = value
-      }
-    }
-
-    // "Resetting" showOnMap to show all trains and add the cached trains to map
+    // "Resetting" showOnMap to show all trains
     this.$store.showOnMap = []
     for (const trainNumber in this.delayedMarkers) {
       const marker = this.delayedMarkers[trainNumber]
@@ -102,9 +154,6 @@ export default {
       marker.addTo(this.visibleLayer)
     }
 
-  },
-  beforeUnmount() {
-    this.$store.cachedTrains = {...this.delayedMarkers}
   },
   watch: {
     // Watch showOnMap and make changes on map according to what changes
