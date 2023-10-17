@@ -1,5 +1,7 @@
 describe('Visit tickets while logged in', () => {
 it('works successfully', () => {
+    cy.visit('/')
+
     const user = {
         username: Cypress.env('user1'),
         password: Cypress.env('pw1')

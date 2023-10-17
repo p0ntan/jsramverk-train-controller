@@ -1,5 +1,7 @@
 describe('Test editing tickets', () => {
     beforeEach(() => {
+        cy.visit('/')
+
         const user = {
             username: Cypress.env('user1'),
             password: Cypress.env('pw1')

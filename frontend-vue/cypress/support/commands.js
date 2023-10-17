@@ -25,8 +25,6 @@
 // Cypress.Commands.overwrite('visit', (originalFn, url, options) => { ... })
 
 Cypress.Commands.add('bypassLogin', (user) => {
-    cy.visit('/')
-
     // Register
     cy.get('#registerUser').click()
     cy.get('form').get('input[type="email"]').type(user.username)
