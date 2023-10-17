@@ -23,6 +23,7 @@ const queryDelayed = `{
   delayed {
     AdvertisedTimeAtLocation
     EstimatedTimeAtLocation
+    AdvertisedTrainIdent
     OperationalTrainNumber
     LocationSignature
     FromLocation {
@@ -72,7 +73,11 @@ export default {
           // Adding delayedTrains id into the store for easier access on map
           // Using object with trainnumber as key
           this.delayedTrains.forEach(train => {
-            const trainId = train.OperationalTrainNumber
+            const trainId = train.AdvertisedTrainIdent || train.OperationalTrainNumber
+
+            // Setting OperationalTrainNumber to the AdvertisedTrainIdent if exist
+            // This is what is used at sj.se
+            train.OperationalTrainNumber = trainId
             this.$store.delayedTrains[trainId] = train
           });
         })
