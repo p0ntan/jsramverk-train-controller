@@ -19,6 +19,8 @@ jobs:
       ATLAS_USERNAME: ${{ secrets.ATLAS_USERNAME }}
       ATLAS_PASSWORD: ${{ secrets.ATLAS_PASSWORD }}
       JWT_SECRET: ${{ secrets.JWT_SECRET }}
+      TEST_USER1: ${{ secrets.TEST_USER1 }}
+      TEST_PW1: ${{ secrets.TEST_PW1 }}
 
     strategy:
       matrix:
