@@ -42,6 +42,8 @@ describe('New ticket', () => {
             cy.get('.old-tickets').find('div').last().should('exist')
             cy.get('.old-tickets').find('div').last().invoke('text').should('include', 'ANA031')
             cy.get('.old-tickets').find('div').last().should('contain', trainNumber)
+
+            //TODO Remove ticket at the end
         })
     });
     after(() => {
