@@ -2,27 +2,27 @@
   <div class="fullsize-wrapper">
   </div>
   <div class="user-form">
-      <button @click="closeBox">X</button>
-      <!-- Heading depending on what form is used -->
-      <h2 v-if="formType === 'login'">Logga in</h2>
-      <h2 v-else-if="formType === 'register'">Registrera</h2>
+    <button @click="closeBox">X</button>
+    <!-- Heading depending on what form is used -->
+    <h2 v-if="formType === 'login'">Logga in</h2>
+    <h2 v-else-if="formType === 'register'">Registrera</h2>
 
-      <form @submit.prevent="handleSubmit">
-        <div>
-          <label for="email">Email:</label>
-          <input type="email" id="email" v-model="email" required placeholder="Enter your email">
-        </div>
-        
-        <div>
-          <label for="password">Password:</label>
-          <input type="password" id="password" v-model="password" required placeholder="Enter your password">
-        </div>
+    <form @submit.prevent="handleSubmit">
+      <div>
+        <label for="email">Email:</label>
+        <input type="email" id="email" v-model="email" required placeholder="Enter your email">
+      </div>
+      
+      <div>
+        <label for="password">Password:</label>
+        <input type="password" id="password" v-model="password" required placeholder="Enter your password">
+      </div>
 
-        <!-- Button depending on what form is used -->
-        <button v-if="formType === 'login'" type="submit">Logga in</button>
-        <button v-else-if="formType === 'register'" type="submit">Registrera</button>
-      </form>
-    </div>
+      <!-- Button depending on what form is used -->
+      <button v-if="formType === 'login'" type="submit">Logga in</button>
+      <button v-else-if="formType === 'register'" type="submit">Registrera</button>
+    </form>
+  </div>
 </template>
 
 <script>
@@ -53,7 +53,6 @@ export default {
       }
     },
     closeBox() {
-      // this.$emit('update:modelValue', false)
       this.$emit('close', null)
     },
     showToast(message) {
