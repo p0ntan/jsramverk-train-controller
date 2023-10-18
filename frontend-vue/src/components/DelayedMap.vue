@@ -13,10 +13,8 @@ export default {
   data() {
     return {
       center: [62.173276, 14.942265],
-      // TODO put this in the store if going to tickets? Will save state so trains can show up instanly when going back
       delayedMarkers: {},
       visibleLayer: null,
-      initialTrainFetch: {}
     }
   },
   methods: {
@@ -39,7 +37,8 @@ export default {
       // Having a layer with visable trains, and storing all markers in this.delayedMarkers.
       // If this.$store.showOnMap.length = 0 show all delayed trains else only the ones in array
       this.visibleLayer = L.layerGroup().addTo(this.map)
-      this.fetchTrains()
+      // Fetch all trains that can be shown on the map  
+      this.fetchTrains(trainMarker)
 
       socket.on('message', (data) => {
         // First a control that the train is actually delayed, and if add it into this.delayedMarkers
@@ -57,76 +56,73 @@ export default {
             }).bindPopup(data.trainnumber)
             const inArray = this.$store.showOnMap.includes(data.trainnumber)
 
-            // Add marker to map if array is empty or train is in in array
-            if (this.$store.showOnMap.length === 0 || inArray) {
-              marker.addTo(this.visibleLayer)
-            }
-
             // Adds or remove train from showOnMap array
             marker.on('click', this.updateShownOnMap)
 
             // Add marker to object to keep track of position even if not showing on map
             this.delayedMarkers[data.trainnumber] = marker
+
+            // Add marker to map if array is empty or train is in in array
+            if (this.$store.showOnMap.length === 0 || inArray) {
+              marker.addTo(this.visibleLayer)
+            }
+
           }
         }
       })
     },
-    fetchTrains() {
-    const queryTrains = `{
-      trains {
-        Train {
-          OperationalTrainNumber
-          AdvertisedTrainNumber
-        }
-        Position {
-          SWEREF99TM
-          WGS84
-        }
-      }
-    }`
-
-    try {
-      // Fetch data via graphql
-      fetch(`${graphqlURL}`, {
-      method: 'POST',
-      headers: {
-          'Content-Type': 'application/json',
-          'Accept': 'application/json',
-      },
-      body: JSON.stringify({ query: queryTrains })
-      })
-      .then(response => response.json())
-      .then(data => {
-        for (const train of data.data.trains) {
-          if (train.Train.AdvertisedTrainNumber in this.$store.delayedTrains) {
-            let trainMarker = L.icon({
-              iconUrl: "icons/marker-icon.png",
-              iconSize: [25, 41],
-              iconAnchor: [12, 41],
-            });
-
-            const matchCoords = /(\d*\.\d+|\d+),?/g;
-            const position = train.Position.WGS84.match(matchCoords).map(
-              (t=>parseFloat(t))
-            ).reverse();
-            const marker = L.marker(position, {
-              icon: trainMarker,
-              trainNumber: train.Train.AdvertisedTrainNumber  // Trainnumber to use for filtering trains
-            }).bindPopup(train.Train.AdvertisedTrainNumber)
-
-            // Adds or remove train from showOnMap array
-            marker.on('click', this.updateShownOnMap)
-
-            this.delayedMarkers[train.Train.AdvertisedTrainNumber] = marker
-
-            marker.addTo(this.visibleLayer)
+    fetchTrains(trainMarker) {
+      const queryTrains = `{
+        trains {
+          Train {
+            OperationalTrainNumber
+            AdvertisedTrainNumber
+          }
+          Position {
+            SWEREF99TM
+            WGS84
           }
         }
-      });
-    } catch (error) {
-      console.error('Error fetching trains:', error);
-    }
-  },
+      }`
+
+      try {
+        // Fetch data via graphql
+        fetch(`${graphqlURL}`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+        },
+        body: JSON.stringify({ query: queryTrains })
+        })
+        .then(response => response.json())
+        .then(data => {
+          for (const train of data.data.trains) {
+            const advTrainNumber = train.Train.AdvertisedTrainNumber
+
+            if (advTrainNumber in this.$store.delayedTrains) {
+              const matchCoords = /(\d*\.\d+|\d+),?/g;
+              const position = train.Position.WGS84.match(matchCoords).map(
+                (t=>parseFloat(t))
+              ).reverse();
+              const marker = L.marker(position, {
+                icon: trainMarker,
+                trainNumber: advTrainNumber  // Trainnumber to use for filtering trains
+              }).bindPopup(advTrainNumber)
+
+              // Adds or remove train from showOnMap array
+              marker.on('click', this.updateShownOnMap)
+
+              this.delayedMarkers[advTrainNumber] = marker
+
+              marker.addTo(this.visibleLayer)
+            }
+          }
+        });
+      } catch (error) {
+        console.error('Error fetching trains:', error);
+      }
+    },
     updateShownOnMap(e) {
       const trainNumber = e.target.options.trainNumber
 
@@ -139,21 +135,16 @@ export default {
         // Open the marker's popup, for some reason it won't work without a timeout
         setTimeout(function () {
           e.target.openPopup();
-        }, 10);      
+        }, 100);
       }
     }
   },
   mounted() {
     this.setupMap()
-
-    // "Resetting" showOnMap to show all trains
+  },
+  beforeUnmount() {
+    // "Resetting" showOnMap
     this.$store.showOnMap = []
-    for (const trainNumber in this.delayedMarkers) {
-      const marker = this.delayedMarkers[trainNumber]
-
-      marker.addTo(this.visibleLayer)
-    }
-
   },
   watch: {
     // Watch showOnMap and make changes on map according to what changes
@@ -162,27 +153,25 @@ export default {
         try {
           // If new length is 0 all trains should show 
           if (newValue.length === 0) {
-            // Clear layer and add all markers to visibleLayer
-            // Clearing the layer first will stop possibilty for double markers on same train
-            this.visibleLayer.clearLayers()
-            for (const trainNumber in this.delayedMarkers) {
-              const marker = this.delayedMarkers[trainNumber]
-
-              marker.addTo(this.visibleLayer)
+            // Reset icon to not use any extra class
+            for (const key in this.delayedMarkers) {
+              this.delayedMarkers[key].addTo(this.visibleLayer)
             }
+
           } else if (newValue.length < oldValue.length) {
             // Find the removed trainnumber from oldvalue
             const trainNumber = oldValue.filter(item => !newValue.includes(item))
-            
-            this.visibleLayer.removeLayer(this.delayedMarkers[trainNumber])
 
+            this.delayedMarkers[trainNumber].remove()
           } else if (newValue.length > oldValue.length) {
             // Get trainnumber from last item in list
             const trainNumber = newValue[newValue.length - 1]
 
             // If oldValue was 0 remove all trains
             if (oldValue.length === 0) {
-              this.visibleLayer.clearLayers();
+              this.visibleLayer.eachLayer((marker) => {
+                marker.remove()
+              })
             }
             
             // If data has been recived from socket, train will be in delayedMarkers and it
