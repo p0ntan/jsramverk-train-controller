@@ -8,7 +8,7 @@
         <DelayedTable />
       </div>
       <DelayedMap />
-      <UserForm v-if="isVisible" :formType="currentForm" @close="renderForm" @show-toast="displayToast"/>
+      <UserForm v-if="isVisible" :formType="currentForm" @show-toast="displayToast" v-model="isVisible"/>
     </div>
 </div>
 </template>

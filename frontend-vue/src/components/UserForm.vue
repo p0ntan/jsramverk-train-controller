@@ -30,12 +30,13 @@ const graphqlURL = import.meta.env.VITE_GRAPHQL_URL
 
 export default {
   props: {
+    modelValue: Boolean,
     formType: {
       type: String,
       required: true
     }
   },
-  emits: ['close', 'show-toast'],
+  emits: ['update:modelValue', 'show-toast'],
   data() {
     return {
       email: '',
@@ -53,7 +54,7 @@ export default {
       }
     },
     closeBox() {
-      this.$emit('close', null)
+      this.$emit('update:modelValue', false)
     },
     showToast(message) {
       this.$emit('show-toast', message)
@@ -118,6 +119,7 @@ export default {
             this.closeBox()
             this.showToast('Login successful!')
           } else {
+            this.closeBox()
             this.showToast(result.errors[0].message)
           }
         })
