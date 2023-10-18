@@ -23,6 +23,7 @@ const queryDelayed = `{
   delayed {
     AdvertisedTimeAtLocation
     EstimatedTimeAtLocation
+    AdvertisedTrainIdent
     OperationalTrainNumber
     LocationSignature
     FromLocation {
@@ -72,7 +73,11 @@ export default {
           // Adding delayedTrains id into the store for easier access on map
           // Using object with trainnumber as key
           this.delayedTrains.forEach(train => {
-            const trainId = train.OperationalTrainNumber
+            const trainId = train.AdvertisedTrainIdent || train.OperationalTrainNumber
+
+            // Setting OperationalTrainNumber to the AdvertisedTrainIdent if exist
+            // This is what is used at sj.se and seams to more correct
+            train.OperationalTrainNumber = trainId
             this.$store.delayedTrains[trainId] = train
           });
         })
@@ -83,9 +88,6 @@ export default {
   methods: {
     showOnMap(trainNumber) {
       // Save train in store, or remove if already in there.
-      // FIXME OperationalTrainNumber is used here but AdvertisedTrainNumber in map from backend
-      // decide on which one to use, but should be the same?
-      // TODO decide what to use, using OperationalTrainNumber in backend seams to work better
       if (this.$store.showOnMap.includes(trainNumber)) {
         // This can proably be changed but needed for reactivity, splice dosn't work as wanted
         this.$store.showOnMap = this.$store.showOnMap.filter(train => train !== trainNumber)
@@ -121,5 +123,8 @@ export default {
 <style>
 .not-on-map {
   color: rgb(161, 161, 161);
+}
+.delayed {
+  scroll-behavior: smooth;
 }
 </style>
