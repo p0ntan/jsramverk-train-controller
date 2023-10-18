@@ -10,7 +10,7 @@ const { graphqlHTTP } = require('express-graphql');
 const schema = require('./graphql/index.js');
 const authModel = require('./models/auth.js'); // For authentication
 
-const fetchTrainPositions = require('./models/trains.js');
+const trainsModel = require('./models/trains.js');
 const editTicket = require('./models/edits.js');
 
 const port = process.env.PORT || 1337;
@@ -65,7 +65,7 @@ httpServer.listen(port, () => {
 });
 
 // Used for moving trains
-fetchTrainPositions(io);
+trainsModel.fetchTrainPositions(io);
 editTicket(io);
 
 // For 404-errors when accessing a route that doesn't exist
