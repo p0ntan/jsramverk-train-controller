@@ -30,12 +30,12 @@ const graphqlURL = import.meta.env.VITE_GRAPHQL_URL
 
 export default {
   props: {
-    modelValue: Boolean,
     formType: {
       type: String,
       required: true
     }
   },
+  emits: ['close', 'show-toast'],
   data() {
     return {
       email: '',
@@ -45,7 +45,7 @@ export default {
   methods: {
     handleSubmit() {
       // Handle the login logic here.
-      console.log("Email:", this.email, "Password:", this.password)
+      // console.log("Email:", this.email, "Password:", this.password)
       if (this.formType === 'login') {
         this.login()
       } else if (this.formType ==='register') {
@@ -53,7 +53,11 @@ export default {
       }
     },
     closeBox() {
-      this.$emit('update:modelValue', false)
+      // this.$emit('update:modelValue', false)
+      this.$emit('close', null)
+    },
+    showToast(message) {
+      this.$emit('show-toast', message)
     },
     register() {
       const mutateTicket = `mutation {
@@ -76,14 +80,12 @@ export default {
         .then(response => response.json())
         .then(result => {
           if (!result.errors) {
-            // Login went ok, then do something here
-            console.log(result.data.createUser.message);
-            // TODO ändra flödet, nu loggar den in och stänger boxen när registreringen är ok.
+            // Login went ok
+            // console.log(result.data.createUser.message);
             this.login()
           } else {
-            //TODO Notify the user of success and failure in login process
-            console.log(result.errors)
-            window.alert(result.errors[0].message)
+            this.closeBox()
+            this.showToast(result.errors[0].message)
           }
         })
       } catch (err) {
@@ -115,10 +117,9 @@ export default {
           if (!result.errors) {
             this.$store.jwt = result.data.authUser.jwt
             this.closeBox()
+            this.showToast('Login successful!')
           } else {
-            //TODO Notify the user of success and failure in login process
-            console.log(result.errors);
-            window.alert(result.errors[0].message);
+            this.showToast(result.errors[0].message)
           }
         })
       } catch (err) {
