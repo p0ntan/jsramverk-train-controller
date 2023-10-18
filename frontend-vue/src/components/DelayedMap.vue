@@ -53,7 +53,7 @@ export default {
             const marker = L.marker(data.position, {
               icon: trainMarker,
               trainNumber: data.trainnumber // Trainnumber to use for filtering trains
-            }).bindPopup(data.trainnumber)
+            })
             const inArray = this.$store.showOnMap.includes(data.trainnumber)
 
             // Adds or remove train from showOnMap array
@@ -108,7 +108,7 @@ export default {
               const marker = L.marker(position, {
                 icon: trainMarker,
                 trainNumber: advTrainNumber  // Trainnumber to use for filtering trains
-              }).bindPopup(advTrainNumber)
+              })
 
               // Adds or remove train from showOnMap array
               marker.on('click', this.updateShownOnMap)
@@ -132,10 +132,6 @@ export default {
       } else {
         // Add marker to array, this way is needed because of reactivity
         this.$store.showOnMap = [...this.$store.showOnMap, trainNumber]
-        // Open the marker's popup, for some reason it won't work without a timeout
-        setTimeout(function () {
-          e.target.openPopup();
-        }, 100);
       }
     }
   },

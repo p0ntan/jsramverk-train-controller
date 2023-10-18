@@ -124,4 +124,7 @@ export default {
 .not-on-map {
   color: rgb(161, 161, 161);
 }
+.delayed {
+  scroll-behavior: smooth;
+}
 </style>
