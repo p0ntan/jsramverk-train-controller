@@ -50,12 +50,10 @@ export default {
 }
 
 .old-ticket {
-  height: 100vh;
   flex: 1;
 }
 
 .ticket {
-  height: 100vh;
   width: 40vw;
   /* border-right: 2px solid #30404B; */
 }
