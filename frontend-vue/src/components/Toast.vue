@@ -31,7 +31,6 @@ watch: {
 
 <style scoped>
 .toast {
-/* display: block; */
 position: absolute;
 bottom: 20px;
 left: 40%;
