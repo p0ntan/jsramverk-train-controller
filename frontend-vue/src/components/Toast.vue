@@ -31,11 +31,17 @@ watch: {
 
 <style scoped>
 .toast {
-display: block;
+/* display: block; */
+position: absolute;
+bottom: 20px;
+left: 40%;
+z-index: 5000;
+height: 100px;
+min-width: 200px;
+border-radius: 4px;
 color: #000;
 text-align: center;
-padding: 10px 20px;
-z-index: 1;
+padding: 20px 20px 10px;
 }
 
 .success {
