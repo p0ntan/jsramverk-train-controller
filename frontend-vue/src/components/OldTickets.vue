@@ -1,7 +1,7 @@
 <template>
   <div class="old-tickets" id="old-tickets">
     <h2>Befintliga ärenden</h2>
-    <div v-if="this.oldTickets">
+    <div class="single-old-tickets" v-if="this.oldTickets">
       <div v-for="ticket in this.oldTickets" :key="ticket">
         <SingleTicket :ticket="ticket" :localEdit="localEdit" @updateTickets="fetchTickets" @newLocalEdit="setLocalEdit"/>
       </div>
@@ -59,3 +59,16 @@ export default {
   }
 }
 </script>
+
+<style>
+.single-old-tickets  > div {
+  padding: 0.2rem 0.4rem;
+  border-top: 1px solid #d8d8d8;
+  width: 100%;
+  max-width: 1080px;
+}
+
+.single-old-tickets > div:nth-of-type(2n) {
+  background-color: #eee;
+}
+</style>

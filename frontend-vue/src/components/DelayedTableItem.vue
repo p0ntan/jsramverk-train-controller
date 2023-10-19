@@ -10,7 +10,7 @@
       <div v-else></div>
   </div>
   <div class="delay">{{ train.delayInMin }} minuter</div>
-  <button v-if="this.$store.jwt" @click.stop="renderTicketView">Lägg till ärende</button>
+  <button class="button-blue" v-if="this.$store.jwt" @click.stop="renderTicketView">Lägg till ärende</button>
 </template>
 
 <script>
@@ -51,3 +51,19 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+.train-number {
+  font-size: 2rem;
+  font-weight: bold;
+  width: 30%;
+}
+
+.current-station {
+  width: 30%;
+}
+
+button {
+  margin: 0 0 0 auto !important;
+}
+</style>

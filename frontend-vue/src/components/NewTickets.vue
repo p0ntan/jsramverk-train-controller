@@ -1,7 +1,7 @@
 <template>
-  <h1>
+  <h2>
     Nytt ärende för tåg #<span>{{ trainObject.OperationalTrainNumber }}</span>
-  </h1>
+  </h2>
   <h3 v-if="trainObject.FromLocation && trainObject.ToLocation">
     Tåg från {{ trainObject.FromLocation[0].LocationName }} till
     {{ trainObject.ToLocation[0].LocationName }}. Just nu i {{ trainObject.LocationSignature }}.
@@ -14,7 +14,7 @@
         {{ code.Code }} - {{ code.Level3Description }}
       </option></select
     ><br /><br />
-    <input type="submit" value="Skapa nytt ärende" />
+    <input class="button-green" type="submit" value="Skapa nytt ärende" />
   </form>
 </template>
 
