@@ -127,6 +127,7 @@ export default {
   padding: 1rem 2rem;
   overflow: scroll;
   background-color: white;
+  overflow-x: hidden;
 }
 
 .delayed-trains {
