@@ -122,7 +122,7 @@ export default {
 
 <style>
 .delayed {
-  height: 100vh;
+  height: calc(100vh - 65px);
   width: 50vw;
   padding: 1rem 2rem;
   overflow: scroll;
