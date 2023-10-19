@@ -2,7 +2,7 @@
   <div class="fullsize-wrapper">
   </div>
   <div class="user-form">
-      <button @click="closeBox">X</button>
+      <button class="button-close" @click="closeBox">X</button>
       <!-- Heading depending on what form is used -->
       <h2 v-if="formType === 'login'">Logga in</h2>
       <h2 v-else-if="formType === 'register'">Registrera</h2>
@@ -130,64 +130,70 @@ export default {
 </script>
 
 <style scoped>
-  .fullsize-wrapper {
-    position: fixed;
-    width: 100%;
-    height: 100%;
-    left: 0;
-    top: 0;
-    background-color: white;
-    opacity: 0.6;
-    z-index: 2000;
-  }
-  .user-form {
-    position: absolute;
-    display: flex;
-    flex-direction: column;
-    background-color: white;
-    transform: translate(-50%, -50%);
-    width: 360px;
-    height: 480px;
-    top: 50%;
-    left: 50%;
-    z-index: 5000;
-    padding: 1rem;
-  }
-</style>
+.fullsize-wrapper {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  left: 0;
+  top: 0;
+  background-color: white;
+  opacity: 0.6;
+  z-index: 2000;
+}
+.user-form {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  background-color: white;
+  transform: translate(-50%, -50%);
+  width: 360px;
+  height: 480px;
+  top: 50%;
+  left: 50%;
+  z-index: 5000;
+  padding: 1rem;
+  border-radius: 12px;
+  box-shadow: 0 0 8px 0 #30404b38;
+}
 
-<style scoped>
-  .fullsize-wrapper {
-    position: fixed;
-    width: 100%;
-    height: 100%;
-    left: 0;
-    top: 0;
-    background-color: white;
-    opacity: 0.6;
-    z-index: 2000;
-  }
-  .user-form {
-    position: absolute;
-    display: flex;
-    flex-direction: column;
-    gap: 0.2rem;
-    background-color: white;
-    transform: translate(-50%, -50%);
-    width: 360px;
-    height: 480px;
-    top: 50%;
-    left: 50%;
-    z-index: 5000;
-    padding: 1rem;
-  }
+.user-form h2 {
+  margin-left: 0.6rem;
+}
+.user-form form {
+  margin: 0.4rem 0.6rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
 
-  .user-form h2 {
-    margin-left: 0.6rem;
-  }
-  .user-form form {
-    margin: 0.4rem 0.6rem;
-    display: flex;
-    flex-direction: column;
-    gap: 0.6rem;
-  }
+.button-close {
+  width: 44px;
+  height: 44px;
+  margin-left: auto;
+  border: 1px solid #dddddd;
+}
+
+form {
+  flex: 1;
+}
+
+label {
+  display: block;
+  margin-bottom: 0.2rem;
+}
+
+form > div {
+  margin-bottom: 0.5rem;
+}
+
+form input {
+  min-width: 100%;
+  max-width: 100%;
+}
+
+form button {
+  font-size: 1.5rem;
+  margin-top: auto;
+}
 </style>

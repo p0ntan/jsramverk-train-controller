@@ -54,6 +54,8 @@ input[type=submit] {
   padding: 0.2rem 1.2rem 0.6rem;
   border: none;
   border-radius: 5px;
+  cursor: pointer;
+  box-shadow: 0 0 8px 0 #30404b38;
 }
 
 button:hover,
