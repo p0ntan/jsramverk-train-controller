@@ -114,9 +114,11 @@ export default {
               marker.on('click', this.updateShownOnMap)
 
               this.delayedMarkers[advTrainNumber] = marker
-
-              marker.addTo(this.visibleLayer)
             }
+          }
+          // Then add all markers in delayedMarkers object to visibleLayer
+          for (const marker of Object.values(this.delayedMarkers)) {
+            marker.addTo(this.visibleLayer)
           }
         });
       } catch (error) {
