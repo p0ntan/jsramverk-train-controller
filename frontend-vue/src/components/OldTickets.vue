@@ -1,6 +1,6 @@
 <template>
   <div class="old-tickets" id="old-tickets">
-    <h1>Befintliga ärenden</h1>
+    <h2>Befintliga ärenden</h2>
     <div class="single-old-tickets" v-if="this.oldTickets">
       <div v-for="ticket in this.oldTickets" :key="ticket">
         <SingleTicket :ticket="ticket" :localEdit="localEdit" @updateTickets="fetchTickets" @newLocalEdit="setLocalEdit"/>
