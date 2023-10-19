@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "deploy": "npm run build && rsync -av --delete dist/ poak22@ssh.student.bth.se:www/train",
+    "deploy": "npm run build && rsync -av --delete dist/ elmo22@ssh.student.bth.se:www/train",
     "preview": "vite preview",
     "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs --fix --ignore-path .gitignore",
     "format": "prettier --write src/",
