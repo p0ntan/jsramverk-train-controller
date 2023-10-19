@@ -62,8 +62,10 @@ export default {
 
 <style>
 .single-old-tickets  > div {
-  padding: 0.4rem;
+  padding: 0.2rem 0.4rem;
   border-top: 1px solid #d8d8d8;
+  width: 100%;
+  max-width: 1080px;
 }
 
 .single-old-tickets > div:nth-of-type(2n) {

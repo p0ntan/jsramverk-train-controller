@@ -49,6 +49,11 @@ export default {
   padding: 2rem 0rem;
 }
 
+.old-ticket {
+  height: 100vh;
+  flex: 1;
+}
+
 .ticket {
   height: 100vh;
   width: 40vw;

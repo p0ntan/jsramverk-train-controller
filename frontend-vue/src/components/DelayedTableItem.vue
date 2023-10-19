@@ -52,7 +52,7 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 .train-number {
   font-size: 2rem;
   font-weight: bold;
@@ -61,5 +61,9 @@ export default {
 
 .current-station {
   width: 30%;
+}
+
+button {
+  margin: 0 0 0 auto !important;
 }
 </style>
