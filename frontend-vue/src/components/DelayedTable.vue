@@ -121,6 +121,32 @@ export default {
 </script>
 
 <style>
+.delayed {
+  height: 100vh;
+  width: 50vw;
+  padding: 1rem 2rem;
+  overflow: scroll;
+  background-color: white;
+}
+
+.delayed-trains {
+  display: flex;
+  flex-direction: column;
+}
+
+.delayed-trains > div {
+  display: flex;
+  flex-direction: row;
+  border-top: 1px solid #ccc;
+  padding: 0.2rem 0.8rem;
+  align-items: center;
+  cursor: pointer;
+}
+
+.delayed-trains > div:nth-of-type(2n) {
+  background-color: #eee;
+}
+
 .not-on-map {
   color: rgb(161, 161, 161);
 }

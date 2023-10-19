@@ -14,7 +14,7 @@
         {{ code.Code }} - {{ code.Level3Description }}
       </option></select
     ><br /><br />
-    <input type="submit" value="Skapa nytt ärende" />
+    <input class="button-green" type="submit" value="Skapa nytt ärende" />
   </form>
 </template>
 

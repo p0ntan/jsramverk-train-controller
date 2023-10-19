@@ -19,8 +19,8 @@
         </div>
 
         <!-- Button depending on what form is used -->
-        <button v-if="formType === 'login'" type="submit">Logga in</button>
-        <button v-else-if="formType === 'register'" type="submit">Registrera</button>
+        <button class="button-green" v-if="formType === 'login'" type="submit">Logga in</button>
+        <button class="button-blue" v-else-if="formType === 'register'" type="submit">Registrera</button>
       </form>
     </div>
 </template>
@@ -152,5 +152,42 @@ export default {
     left: 50%;
     z-index: 5000;
     padding: 1rem;
+  }
+</style>
+
+<style scoped>
+  .fullsize-wrapper {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    left: 0;
+    top: 0;
+    background-color: white;
+    opacity: 0.6;
+    z-index: 2000;
+  }
+  .user-form {
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+    background-color: white;
+    transform: translate(-50%, -50%);
+    width: 360px;
+    height: 480px;
+    top: 50%;
+    left: 50%;
+    z-index: 5000;
+    padding: 1rem;
+  }
+
+  .user-form h2 {
+    margin-left: 0.6rem;
+  }
+  .user-form form {
+    margin: 0.4rem 0.6rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
   }
 </style>

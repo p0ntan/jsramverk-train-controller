@@ -1,11 +1,12 @@
 <template>
   <div class="ticket-container">
-    <a href="" @click.prevent="renderTrainsView">&#8592; Tillbaka</a>
-    <div v-if="this.$store.jwt" class="ticket">
-      <NewTickets @ticketAdded="fetchOldTickets"/>
+    <a class="button button-blue button-big" href="" @click.prevent="renderTrainsView">&#8592; Tillbaka</a>
+    <div class="ticket-view">
+      <div class="ticket" v-if="this.$store.jwt">
+        <NewTickets @ticketAdded="fetchOldTickets"/>
+      </div>
+      <OldTickets class="old-ticket" ref="OldTickets"/>
     </div>
-    <br />
-    <OldTickets ref="OldTickets"/>
   </div>
 </template>
 
@@ -36,3 +37,21 @@ export default {
   }
 };
 </script>
+
+<style>
+.ticket-container {
+  padding: 1rem 2rem;
+}
+
+.ticket-view {
+  display: flex;
+  flex-direction: row;
+  padding: 2rem 0rem;
+}
+
+.ticket {
+  height: 100vh;
+  width: 40vw;
+  /* border-right: 2px solid #30404B; */
+}
+</style>

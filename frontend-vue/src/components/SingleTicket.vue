@@ -1,22 +1,26 @@
 <template>
-    <div v-if="edit">
-      <form @submit.prevent="saveEdit" v-if="codes">
-          <span>{{ ticket._id }} - </span>
-          <select v-model="newCode">
+  <div v-if="edit">
+    <form @submit.prevent="saveEdit" v-if="codes">
+        <!-- <span>{{ ticket._id }}</span> -->
+        <span class="train-number">{{ ticket.trainnumber }}</span>
+        <span>{{ ticket.traindate }}</span>
+        <select v-model="newCode">
           <option v-for="code in codes" :key="code" :value="code.Code">
               {{ code.Code }} - {{ code.Level3Description }}
           </option>
-          </select>
-          <span> - {{ ticket.trainnumber }} - {{ ticket.traindate }}</span>
-          <button type="submit">Spara</button>
-          <button @click="stopEdit()">Avbryt</button>
-          <button @click="removeTicket()">Ta bort</button>
-      </form>
-    </div>
-    <div v-else>
-      <span>{{ ticket._id }} - {{ ticket.code }} - {{ ticket.trainnumber }} - {{ ticket.traindate }}</span>
-      <button v-if="!blocked.includes(ticket._id) && this.$store.jwt" @click="editTicket">Redigera</button>
-    </div>
+        </select>
+        <button class="save-btn" type="submit">Spara</button>
+        <button class="cancel-btn" @click="stopEdit()">Avbryt</button>
+        <button class="delete-btn" @click="removeTicket()">Ta bort</button>
+    </form>
+  </div>
+  <div v-else>
+    <!-- <span>{{ ticket._id }}</span> -->
+    <span>{{ ticket.trainnumber }}</span>
+    <span>{{ ticket.traindate }}</span>
+    <span>{{ ticket.code }}</span>
+    <button class="button-blue" v-if="!blocked.includes(ticket._id) && this.$store.jwt" @click="editTicket">Redigera</button>
+  </div>
 </template>
 
 <script>
@@ -177,3 +181,31 @@ export default {
     }
 }
 </script>
+
+
+<style>
+.train-number {
+  font-size: 2rem;
+  font-weight: bold;
+  width: 30%;
+}
+
+span {
+  margin: 0rem 0.5rem;
+}
+
+.save-btn {
+  color: #000;
+  background-color: #64cb54;
+}
+
+.cancel-btn {
+  color: #000;
+  background-color: #ded733;
+}
+
+.delete-btn {
+  color: #000;
+  background-color: #fd1818;
+}
+</style>
