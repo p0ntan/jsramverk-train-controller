@@ -1,11 +1,12 @@
 <template>
   <div class="ticket-container">
+    <Toast :message="toastMessage" />
     <a class="button button-blue button-big" href="" @click.prevent="renderTrainsView">&#8592; Tillbaka</a>
     <div class="ticket-view">
       <div class="ticket" v-if="this.$store.jwt">
-        <NewTickets @ticketAdded="fetchOldTickets"/>
+        <NewTickets @ticketAdded="fetchOldTickets" @show-toast="displayToast"/>
       </div>
-      <OldTickets class="old-ticket" ref="OldTickets"/>
+      <OldTickets class="old-ticket" ref="OldTickets" @show-toast="displayToast"/>
     </div>
   </div>
 </template>
@@ -13,11 +14,18 @@
 <script>
 import OldTickets from './OldTickets.vue'
 import NewTickets from './NewTickets.vue'
+import Toast from './Toast.vue'
 
 export default {
+  data() {
+    return {
+      toastMessage: ''
+    };
+  },
   components: {
     OldTickets,
-    NewTickets
+    NewTickets,
+    Toast
   },
   beforeCreate() {
     // When logged in
@@ -33,6 +41,9 @@ export default {
     fetchOldTickets(data) {
       // Rerender the oldTicket component by "re-fetching" data from API 
       this.$refs.OldTickets.fetchTickets(data)
+    },
+    displayToast(message) {
+      this.toastMessage = message
     }
   }
 };

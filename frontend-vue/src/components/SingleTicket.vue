@@ -35,6 +35,7 @@ export default {
       'fetchTickets',
       'localEdit'
     ],
+    emits: ['newLocalEdit', 'send-toast'],
     data() {
       return {
         edit: false,
@@ -111,12 +112,14 @@ export default {
             .then(response => response.json())
             .then(result => {
               if (result.errors) {
-                window.alert(result.errors[0].message)
+                // window.alert(result.errors[0].message)
+                this.showToast(result.errors[0].message)
               }
               // Stop edit
               this.stopEdit()
               // Refresh
               socket.emit('updateTickets', result.data.updateTicket)
+              this.showToast(`Edit of ${this.ticket._id} saved.`)
             })
           } catch (error) {
             console.error('Error fetching data:', error)
@@ -155,19 +158,23 @@ export default {
             .then(response => response.json())
             .then(result => {
               if (result.errors) {
-                console.error(result.errors[0].message)
+                this.showToast(result.errors[0].message)
               }
               // Stop edit
               this.stopEdit()
               // Refresh
               socket.emit('updateTickets', result.data.deleteTicket)
+              this.showToast(`Ticket ${this.ticket._id} has been removed.`)
             })
           } catch (error) {
             console.error('Error fetching data:', error)
             // Stop edit
             this.stopEdit()
           }
-      }
+      },
+      showToast(message) {
+        this.$emit('send-toast', message)
+      },
     },
     watch: {
       // 'Watches' the variable localEdit and runs code upon change
