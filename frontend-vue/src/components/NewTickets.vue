@@ -30,7 +30,8 @@ const queryCodes = `{
 
 export default {
   emits: [
-    'ticketAdded'
+    'ticketAdded',
+    'show-toast'
   ],
   data() {
     return {
@@ -91,17 +92,19 @@ export default {
         .then(response => response.json())
         .then(result => {
           if (!result.errors) {
-            //TODO Adjust what data should be returned?
-            this.$emit('ticketAdded', result.data.createTicket);
+            this.$emit('ticketAdded', result.data.createTicket)
+            this.showToast('New ticket successfully added.')
           } else {
-            // TODO make some error handling in browser, will probably not be shown
-            window.alert(result.errors[0].message)
+            this.showToast(result.errors[0].message)
           }
         })
       } catch (error) {
-        console.error('Error fetching data:', error);
+        console.error('Error fetching data:', error)
       }
-    }
+    },
+    showToast(message) {
+      this.$emit('show-toast', message)
+    },
   }
 }
 </script>

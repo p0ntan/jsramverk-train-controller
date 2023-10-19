@@ -3,7 +3,7 @@
     <h2>Befintliga ärenden</h2>
     <div class="single-old-tickets" v-if="this.oldTickets">
       <div v-for="ticket in this.oldTickets" :key="ticket">
-        <SingleTicket :ticket="ticket" :localEdit="localEdit" @updateTickets="fetchTickets" @newLocalEdit="setLocalEdit"/>
+        <SingleTicket :ticket="ticket" :localEdit="localEdit" @updateTickets="fetchTickets" @newLocalEdit="setLocalEdit" @send-toast="forwardToast"/>
       </div>
     </div>
   </div>
@@ -19,6 +19,7 @@ export default {
   components: {
     SingleTicket
   },
+  emits: ['show-toast'],
   data() {
     return {
       oldTickets: [],
@@ -52,6 +53,9 @@ export default {
     onUnload() {
       socket.emit("stopEditingTicket", this.localEdit.id)
       this.setLocalEdit(null)
+    },
+    forwardToast(message) {
+      this.$emit('show-toast', message)
     }
   },
   beforeUnmount() {
