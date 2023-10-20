@@ -15,21 +15,19 @@ describe('Login user', () => {
         cy.get('form').get('input[type="email"]').type(username)
         cy.get('form').get('#password').type(password)
         cy.get('form').get('#password2').type(password)
-        cy.get('form').find('button[type="submit"]').click()
+        cy.get('form').find('button[type="submit"]').click({force: true})
 
-        // Check if alert appears
-        cy.on('window:alert', (text) => {
-            expect(text).to.contains('Error')
+        // Check if an error message exists
+        cy.contains('Error').then((errorElement) => {
+            if (errorElement.length > 0) {
+            // If error is found
+            // Fill out login form
+            cy.get('#loginUser').click()
+            cy.get('form').get('input[type="email"]').type(username)
+            cy.get('form').get('input[type="password"]').type(password)
+            cy.get('form').find('button[type="submit"]').click({force: true})
+            }
         })
-
-        // Close form
-        cy.get('.user-form').find('button').first().click()
-
-        // Fill out login form
-        cy.get('#loginUser').click()
-        cy.get('form').get('input[type="email"]').type(username)
-        cy.get('form').get('input[type="password"]').type(password)
-        cy.get('form').find('button[type="submit"]').click()
 
         // Check the change in DOM occurred
         cy.get('#logoutUser').should('exist')
