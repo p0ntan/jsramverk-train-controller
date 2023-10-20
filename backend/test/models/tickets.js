@@ -36,6 +36,7 @@ describe('Test model', () => {
      * Test the model ticketssetup
      */
     describe('tickets', () => {
+        let ticketId = null;
         // Get tickets, should be empty
         it('should return empty array', async () => {
             const res = await ticketsModel.getTickets();
@@ -55,6 +56,9 @@ describe('Test model', () => {
             res.should.be.a('object');
             res.should.have.property('_id');
             res.code.should.equal('ANAtest03');
+
+            // Set ticket id to use in other test
+            ticketId = res._id;
         });
 
         it('should return array with one item', async () => {
@@ -76,6 +80,38 @@ describe('Test model', () => {
             }
 
             error.should.be.an.instanceOf(TypeError);
+        });
+
+        it('should change code on ticket', async () => {
+            const args = {
+                _id: ticketId,
+                code: "ANAedit020"
+            }
+            
+            let res = await ticketsModel.updateTicket(args)
+
+            res.should.be.a('object');
+            res.should.have.property('_id');
+            res.code.should.equal('ANAedit020');
+
+            res = await ticketsModel.getTickets();
+            res[0].code.should.equal('ANAedit020');
+        });
+
+        it('delete should empty collection', async () => {
+            const args = {
+                _id: ticketId,
+            }
+            
+            let res = await ticketsModel.deleteTicket(args)
+
+            res.should.be.a('object');
+            res.should.have.property('_id');
+            res._id.should.equal(ticketId);
+
+            res = await ticketsModel.getTickets();
+            res.should.be.a('array');
+            res.should.have.lengthOf(0);
         });
     });
 });

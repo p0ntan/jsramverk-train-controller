@@ -12,6 +12,7 @@ const sinon = require('sinon');
 const jwt = require('jsonwebtoken');
 const database = require('../../db/database.js');
 const httpServer = require('../../app.js');
+const ticketsModel = require('../../models/tickets.js');
 
 chai.should();
 
@@ -49,6 +50,7 @@ describe('route /graphql', () => {
                 traindate
             }
         }`;
+        let ticketId = null;
 
         // Test to see collection is actually empty
         it('query should get status 200 with empty array in data', (done) => {
@@ -252,6 +254,9 @@ describe('route /graphql', () => {
                     ticket.traindate.should.equal('2022-02-20');
 
                     jwtStub.restore();
+
+                    // Set for easier access in update/delete tests
+                    ticketId = ticket._id
                     done();
                 });
         });
@@ -274,6 +279,86 @@ describe('route /graphql', () => {
                     tickets[1].trainnumber.should.equal('67890');
                     done();
                 });
+        });
+
+        // Test update ticket with stub answer from jwt.verify
+        it('update should succeed since logged in', (done) => {
+            const mutation = `mutation {
+                updateTicket (
+                  _id: "${ticketId}",
+                  code: "ANAnew101"
+                  ){
+                    _id
+                    code
+                }
+            }`;
+
+            // Stub the jwt.verify function to always return a successful verification
+            const jwtStub = sinon.stub(jwt, 'verify').callsFake(() => {
+                return {
+                    email: "mockedEmail@example.com"
+                };
+            });
+
+            chai.request(httpServer)
+                .post('/graphql')
+                .set('x-access-token', 'onlyneededtomakeauthModelusejwtverify')
+                .set('Content-Type', 'application/json')
+                .set('Accept', 'application/json')
+                .send({query: mutation})
+                .end((err, res) => {
+                    const ticket = res.body.data.updateTicket;
+
+                    res.should.have.status(200);
+                    ticket.should.be.a('object');
+                    ticket.should.have.property('_id');
+                    ticket.code.should.equal('ANAnew101');
+
+                    jwtStub.restore();
+                    done();
+                });
+        });
+
+        // Test update ticket with stub answer from jwt.verify
+        it('delete should succeed since logged in', (done) => {
+            const mutation = `mutation {
+                deleteTicket (
+                  _id: "${ticketId}",
+                  ){
+                    _id
+                }
+            }`;
+
+            // Stub the jwt.verify function to always return a successful verification
+            const jwtStub = sinon.stub(jwt, 'verify').callsFake(() => {
+                return {
+                    email: "mockedEmail@example.com"
+                };
+            });
+
+            chai.request(httpServer)
+                .post('/graphql')
+                .set('x-access-token', 'onlyneededtomakeauthModelusejwtverify')
+                .set('Content-Type', 'application/json')
+                .set('Accept', 'application/json')
+                .send({query: mutation})
+                .end((err, res) => {
+                    const ticket = res.body.data.deleteTicket;
+
+                    res.should.have.status(200);
+                    ticket.should.be.a('object');
+                    ticket.should.have.property('_id');
+
+                    jwtStub.restore();
+                });
+
+            ticketsModel.getTickets()
+                .then((res) => {
+                    res.should.be.a('array');
+                    res.should.have.lengthOf(1);
+                })
+
+            done();
         });
     });
 
