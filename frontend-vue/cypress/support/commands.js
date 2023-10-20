@@ -28,7 +28,8 @@ Cypress.Commands.add('bypassLogin', (user) => {
     // Register
     cy.get('#registerUser').click()
     cy.get('form').get('input[type="email"]').type(user.username)
-    cy.get('form').get('input[type="password"]').type(user.password)
+    cy.get('form').get('#password').type(user.password)
+    cy.get('form').get('#password2').type(user.password)
     cy.get('form').find('button[type=submit]').click()
 
     // Check if alert appears

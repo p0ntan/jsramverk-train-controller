@@ -13,7 +13,8 @@ describe('Login user', () => {
         // Fill out register form
         cy.get('#registerUser').click()
         cy.get('form').get('input[type="email"]').type(username)
-        cy.get('form').get('input[type="password"]').type(password)
+        cy.get('form').get('#password').type(password)
+        cy.get('form').get('#password2').type(password)
         cy.get('form').find('button[type="submit"]').click()
 
         // Check if alert appears
