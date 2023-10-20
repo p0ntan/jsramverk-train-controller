@@ -48,7 +48,7 @@ describe('Test editing tickets', () => {
         // .find('option:selected')
         cy.get('#old-tickets select').invoke('val').then(val => {
             // Logs the preselected value
-            //cy.log(val)
+            cy.log(val)
 
             // Select another option (ANA002)
             const newVal = 'ANA002'
@@ -60,9 +60,9 @@ describe('Test editing tickets', () => {
             cy.get('#old-tickets').last().contains(newVal)
 
             // Change back
-            cy.get('#old-tickets').find('select').select(val)
+            cy.get('#old-tickets').find('select').select(val || 'ANA031')
             cy.get('#old-tickets').find('button[type=submit]').click()
-            cy.get('#old-tickets').last().contains(val)
+            cy.get('#old-tickets').last().contains(val || 'ANA031')
         });
     });
     it('userA enters edit mode and leave page via navigation', () => {

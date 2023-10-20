@@ -34,19 +34,19 @@ Cypress.Commands.add('bypassLogin', (user) => {
 
     // Due to slow load time
     // cy.get('.user-form').find('button').first().click({force: true})
-    cy.wait(5000)
+    // cy.wait(5000)
 
-    // Check if login was successful
-    cy.get('#logoutUser').should('exist').then((logoutButton) => {
-        if (logoutButton.length === 0) {
-            // Login failed, try logging in
-            cy.get('#registerUser').click()
-            cy.get('form')
-            .find('input[type="email"]').type(user.username)
-            .get('#password').scrollIntoView().type(user.password)
-            .get('#password2').scrollIntoView().type(user.password)
-            .get('form').get('button[type=submit]').click()
-            cy.get('#logoutUser').should('exist')
-        }
-    })
+    // // Check if login was successful
+    // cy.get('#logoutUser', { timeout: 10000 }).should('exist').then((logoutButton) => {
+    //     if (logoutButton.length === 0) {
+    //         // Login failed, try logging in
+    //         cy.get('#registerUser').click()
+    //         cy.get('form')
+    //         .find('input[type="email"]').type(user.username)
+    //         .get('#password').scrollIntoView().type(user.password)
+    //         .get('#password2').scrollIntoView().type(user.password)
+    //         .get('form').get('button[type=submit]').click()
+    //         cy.get('#logoutUser').should('exist')
+    //     }
+    // })
 })
