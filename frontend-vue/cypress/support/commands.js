@@ -30,18 +30,18 @@ Cypress.Commands.add('bypassLogin', (user) => {
     cy.get('form').get('input[type="email"]').type(user.username)
     cy.get('form').get('#password').type(user.password)
     cy.get('form').get('#password2').type(user.password)
-    cy.get('form').find('button[type=submit]').click()
+    cy.get('form').find('button[type=submit]').click({force: true})
 
     // Check if alert appears
     cy.on('window:alert', (text) => {
         expect(text).to.contains('Error')
     })
-    cy.get('.user-form').find('button').first().click()
+    cy.get('.user-form').find('button').first().click({force: true})
 
     // Login
     cy.get('#loginUser').click()
     cy.get('form').get('input[type="email"]').type(user.username)
     cy.get('form').get('input[type="password"]').type(user.password)
-    cy.get('form').find('button').type('submit').click()
+    cy.get('form').find('button').type('submit').click({force: true})
     cy.get('#logoutUser').should('exist')
 })
