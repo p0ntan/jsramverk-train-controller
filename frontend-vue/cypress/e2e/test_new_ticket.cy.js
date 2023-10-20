@@ -9,7 +9,7 @@ describe('New ticket', () => {
         // Bypass the login before each test
         cy.bypassLogin(user);
     });
-    it('created successfully', () => {
+    it('created and deleted successfully', () => {
         // Save train number in the first element
         let trainNumber
 
@@ -28,7 +28,7 @@ describe('New ticket', () => {
             cy.get('select').find('option').its('length').should('be.gt', 1)
 
             // The code below modifies the db
-            // Make sure to use the test database
+            // Make sure to use the test database!
 
             // Select option ANA031
             cy.get('select').contains('ANA031').should('exist')
@@ -42,9 +42,12 @@ describe('New ticket', () => {
             cy.get('.old-tickets').find('div').last().should('exist')
             cy.get('.old-tickets').find('div').last().invoke('text').should('include', 'ANA031')
             cy.get('.old-tickets').find('div').last().should('contain', trainNumber)
-
-            //TODO Remove ticket at the end
         })
+
+        // Remove last ticket
+        cy.get('#old-tickets').find('button').last().should('exist')
+        cy.get('#old-tickets').find('button').last().click()
+        cy.get('.old-tickets').get('#remove-ticket').click()
     });
     after(() => {
         // Perform a logout action to end the session

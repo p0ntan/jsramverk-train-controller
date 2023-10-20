@@ -10,7 +10,7 @@
           </option>
         </select>
         <button class="save-btn" type="submit">Spara</button>
-        <button class="delete-btn" @click="removeTicket()">Ta bort</button>
+        <button id="remove-ticket" class="delete-btn" @click="removeTicket()">Ta bort</button>
         <button class="cancel-btn" @click="stopEdit()">Avbryt</button>
     </form>
   </div>
