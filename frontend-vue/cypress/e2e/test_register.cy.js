@@ -20,7 +20,7 @@ describe('Register user', () => {
 
         // Due to slow load time
         // cy.get('.user-form').find('button').first().click({force: true})
-        // cy.wait(10000)
+        cy.wait(15000)
 
         // Check the change in DOM occurred
         cy.get('#logoutUser').should('exist')
