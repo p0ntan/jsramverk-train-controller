@@ -46,7 +46,7 @@ describe('Test editing tickets', () => {
     //     // Click on edit button
     //     cy.get('#old-tickets').find('button').last().click()
 
-    //     cy.get('#old-tickets').find('select).find('option:selected').invoke('val').then(val => {
+    //     cy.get('#old-tickets').find('select').find('option:selected').invoke('val').then(val => {
     //         cy.log(val)
 
     //         // Select another option (ANA002)

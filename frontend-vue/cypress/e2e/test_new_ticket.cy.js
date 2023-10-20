@@ -28,7 +28,7 @@ describe('New ticket', () => {
             cy.get('select').find('option').its('length').should('be.gt', 1)
 
             // The code below modifies the db
-            // Make sure to use the test database // TODO look up alternative
+            // Make sure to use the test database
 
             // Select option ANA031
             cy.get('select').contains('ANA031').should('exist')

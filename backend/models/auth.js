@@ -29,8 +29,6 @@ const auth = {
             throw new Error('Missing email or password.');
         }
 
-        // TODO email and password validation
-
         // Check if email exists, if it already does return an object with errormessage
         const user = await auth._emailExist(email);
 
@@ -92,7 +90,6 @@ const auth = {
             throw new Error('Wrong password.');
         }
 
-        // TODO now payload is only using email, if more data is wanted it can be put here
         let payload = { email: user.email };
         let jwtToken = jwt.sign(payload, jwtSecret, { expiresIn: '24h' });
 

@@ -145,7 +145,7 @@ function renderTicketView(item) {
     fetch("http://localhost:1337/tickets")
         .then((response) => response.json())
         .then((result) => {
-            var lastId = result.data[1] ? result.data[1].id : 0; // TODO this is probably not working as intented with mongoDb
+            var lastId = result.data[1] ? result.data[1].id : 0;
             newTicketId = lastId + 1;
 
             let newTicketIdSpan = document.getElementById("new-ticket-id");
