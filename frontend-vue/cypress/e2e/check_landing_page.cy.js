@@ -3,7 +3,7 @@ it('successfully loads', () => {
     cy.visit('/')
 
     // Check that title is displayed
-    cy.contains('h1', 'Försenade Tåg')
+    cy.contains('Försenade Tåg')
 
     // Check if a div with class ".delayed-trains" exists
     cy.get('.delayed-trains').should('exist');

@@ -43,7 +43,7 @@ const io = require("socket.io")(httpServer, {
 });
 
 // GraphQL
-const visual = true;
+const visual = false;
 
 app.use('/graphql', authModel.checkToken); // authentication middleware
 app.all('/graphql', graphqlHTTP((req) => ({ // Route

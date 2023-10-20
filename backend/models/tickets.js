@@ -19,7 +19,6 @@ const tickets = {
         // Create a new ObjectId for the new document
         const newId = new ObjectId();
 
-        // TODO Discuss which limitations should apply on creating more than one ticket for a train
         const result = await collection.insertOne({
             _id: newId,
             code: args.code,

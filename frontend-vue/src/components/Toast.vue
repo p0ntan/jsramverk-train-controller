@@ -33,7 +33,8 @@ watch: {
 .toast {
 position: absolute;
 bottom: 20px;
-left: 40%;
+left: 50%;
+transform: translateX(-50%);
 z-index: 5000;
 height: 100px;
 min-width: 200px;

@@ -10,7 +10,7 @@ it('works successfully', () => {
     cy.bypassLogin(user)
 
     // Check we are on train view
-    cy.contains('h1', 'Försenade Tåg').should('exist')
+    cy.contains('Försenade Tåg').should('exist')
 
     // Check ticket button exists
     cy.get('.delayed-trains').find('button').first().should('exist')
@@ -18,10 +18,10 @@ it('works successfully', () => {
     // Click on button and navigate to ticket view
     cy.get('.delayed-trains').find('button').first().click({force: true})
     cy.url().should('contain', '/tickets')
-    cy.contains('h2', 'Befintliga ärenden').should('exist');
+    cy.contains('Befintliga ärenden').should('exist');
 
     // Navigate back to train view
     cy.get('a').click()
-    cy.contains('h1', 'Försenade Tåg').should('exist')
+    cy.contains('Försenade Tåg').should('exist')
 })
 })

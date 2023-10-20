@@ -29,8 +29,6 @@ const auth = {
             throw new Error('Missing email or password.');
         }
 
-        // TODO email and password validation
-
         // Check if email exists, if it already does return an object with errormessage
         const user = await auth._emailExist(email);
 
@@ -92,7 +90,6 @@ const auth = {
             throw new Error('Wrong password.');
         }
 
-        // TODO now payload is only using email, if more data is wanted it can be put here
         let payload = { email: user.email };
         let jwtToken = jwt.sign(payload, jwtSecret, { expiresIn: '24h' });
 
@@ -147,9 +144,18 @@ const auth = {
 
     // Function is not supposed to be used outside model
     _emailExist: async function _emailExist(email) {
-        const db = await database.openDb();
-        const collection = await db.collection(auth.collectionName);
-        const user = await collection.findOne({ email: email });
+        let db;
+        let user;
+
+        try {
+            db = await database.openDb();
+            const collection = await db.collection(auth.collectionName);
+            user = await collection.findOne({ email: email });
+        } catch (error) {
+            console.error(error);
+        } finally {
+            db.client.close();
+        }
 
         return user;
     }

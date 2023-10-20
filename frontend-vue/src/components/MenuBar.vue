@@ -1,6 +1,7 @@
 <template>
   <div class="menu-bar" v-if="this.$store.jwt">
     <button id="logoutUser" class="button-blue button-big" @click="logOut">Logga ut</button>
+    <a id="nav-tickets" class="button button-blue button-big" @click.prevent="renderTicketView">Visa ärenden</a>
   </div>
   <div class="menu-bar" v-else>
     <button id="loginUser" class="button-green button-big" @click="logIn">Logga in</button>
@@ -25,6 +26,7 @@ export default {
       this.$emit('action','register')
     },
     renderTicketView() {
+      this.$store.train = null
       this.$router.push('/tickets')
     }
   }

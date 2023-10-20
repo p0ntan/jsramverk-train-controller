@@ -41,29 +41,30 @@ describe('Test editing tickets', () => {
         cy.get('#old-tickets').find('button').contains('Spara').should('not.exist')
         cy.get('#old-tickets').find('button').contains('Avbryt').should('not.exist')
     });
-    // TODO change this to add ticket, change and remove
-    // it('save edit buttons work', () => {
-    //     // Click on edit button
-    //     cy.get('#old-tickets').find('button').last().click()
+    it('save edit buttons work', () => {
+        // Click on edit button of the last ticket
+        cy.get('#old-tickets').find('button').last().click()
 
-    //     cy.get('#old-tickets').find('select).find('option:selected').invoke('val').then(val => {
-    //         cy.log(val)
+        // .find('option:selected')
+        cy.get('#old-tickets select').invoke('val').then(val => {
+            // Logs the preselected value
+            cy.log(val)
 
-    //         // Select another option (ANA002)
-    //         const edit = 'ANA002'
+            // Select another option (ANA002)
+            const newVal = 'ANA002'
 
-    //         cy.get('#old-tickets').find('select').select(edit)
-    //         cy.get('#old-tickets').find('button[type=submit]').click()
+            cy.get('#old-tickets').find('select').select(newVal)
+            cy.get('#old-tickets').find('button[type=submit]').click()
 
-    //         // Check change occurred
-    //         cy.get('#old-tickets').last().contains(edit)
+            // Check change occurred
+            cy.get('#old-tickets').last().contains(newVal)
 
-    //         // Change back
-    //         cy.get('#old-tickets').find('select').select(val)
-    //         cy.get('#old-tickets').find('button[type=submit]').click()
-    //         cy.get('#old-tickets').last().contains(val)
-    //     });
-    // });
+            // Change back
+            cy.get('#old-tickets').find('select').select(val || 'ANA031')
+            cy.get('#old-tickets').find('button[type=submit]').click()
+            cy.get('#old-tickets').last().contains(val || 'ANA031')
+        });
+    });
     it('userA enters edit mode and leave page via navigation', () => {
         // Click on edit button and leave
         cy.get('#old-tickets').find('button').contains('Redigera').first().click()

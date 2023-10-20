@@ -3,7 +3,7 @@
     <Toast :message="toastMessage" />
     <a class="button button-blue button-big" href="" @click.prevent="renderTrainsView">&#8592; Tillbaka</a>
     <div class="ticket-view">
-      <div class="ticket" v-if="this.$store.jwt">
+      <div class="ticket" v-if="this.$store.jwt && this.$store.train">
         <NewTickets @ticketAdded="fetchOldTickets" @show-toast="displayToast"/>
       </div>
       <OldTickets class="old-ticket" ref="OldTickets" @show-toast="displayToast"/>
@@ -26,13 +26,6 @@ export default {
     OldTickets,
     NewTickets,
     Toast
-  },
-  beforeCreate() {
-    // When logged in
-    // Check if there is a train in store, if not redirect to '/'
-    if (this.$store.jwt && !this.$store.train) {
-      this.$router.push('/')
-    }
   },
   methods: {
     renderTrainsView() {

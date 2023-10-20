@@ -10,19 +10,26 @@
     <form @submit.prevent="handleSubmit">
       <div>
         <label for="email">Email:</label>
-        <input type="email" id="email" v-model="email" required placeholder="Enter your email">
+        <input type="email" id="email" v-model="email" required placeholder="Skriv in din epost">
       </div>
       
       <div>
-        <label for="password">Password:</label>
-        <input type="password" id="password" v-model="password" required placeholder="Enter your password">
+        <label for="password">Lösenord:</label>
+        <input type="password" id="password" v-model="password" required placeholder="Skriv in lösenord">
       </div>
 
-        <!-- Button depending on what form is used -->
-        <button class="button-green" v-if="formType === 'login'" type="submit">Logga in</button>
-        <button class="button-blue" v-else-if="formType === 'register'" type="submit">Registrera</button>
-      </form>
-    </div>
+      <div v-if="formType === 'register'">
+        <label for="password2">Lösenord (igen):</label>
+        <input type="password" id="password2" v-model="password2" required placeholder="Skriv in lösenord">
+      </div>
+
+      <!-- Button depending on what form is used -->
+      <p v-if="formType === 'register'" class="small-text">Du loggas in automatiskt vid registrering.</p>
+      <button class="button-green" v-if="formType === 'login'" type="submit">Logga in</button>
+      <button class="button-blue" v-else-if="formType === 'register'" type="submit">Registrera</button>
+    </form>
+
+  </div>
 </template>
 
 <script>
@@ -40,7 +47,8 @@ export default {
   data() {
     return {
       email: '',
-      password: ''
+      password: '',
+      password2: ''
     };
   },
   methods: {
@@ -60,36 +68,42 @@ export default {
       this.$emit('show-toast', message)
     },
     register() {
-      const mutateTicket = `mutation {
-          createUser (
-          email: "${this.email}",
-          password: "${this.password}",
-          ) { message }
-      }`
+      const passwordOk = this.checkPassword()
+      
+      if (!passwordOk) {
+        this.showToast("Error: Lösenorden matchar inte.")
+      } else {
+        const mutateTicket = `mutation {
+            createUser (
+            email: "${this.email}",
+            password: "${this.password}",
+            ) { message }
+        }`
 
-      try {
-        // Fetch data via graphql
-        fetch(`${graphqlURL}`, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'Accept': 'application/json',
-        },
-        body: JSON.stringify({ query: mutateTicket })
-        })
-        .then(response => response.json())
-        .then(result => {
-          if (!result.errors) {
-            // Login went ok
-            // console.log(result.data.createUser.message);
-            this.login()
-          } else {
-            this.closeBox()
-            this.showToast(result.errors[0].message)
-          }
-        })
-      } catch (err) {
-        console.error(err);
+        try {
+          // Fetch data via graphql
+          fetch(`${graphqlURL}`, {
+          method: 'POST',
+          headers: {
+              'Content-Type': 'application/json',
+              'Accept': 'application/json',
+          },
+          body: JSON.stringify({ query: mutateTicket })
+          })
+          .then(response => response.json())
+          .then(result => {
+            if (!result.errors) {
+              // Login went ok
+              // console.log(result.data.createUser.message);
+              this.login()
+            } else {
+              this.closeBox()
+              this.showToast(result.errors[0].message)
+            }
+          })
+        } catch (err) {
+          console.error(err);
+        }
       }
     },
     login() {
@@ -126,6 +140,12 @@ export default {
       } catch (err) {
         console.error(err);
       }
+    },
+    checkPassword() {
+      if (this.password !== this.password2) {
+        return false
+      }
+      return true
     }
   }
 };
@@ -150,7 +170,7 @@ export default {
   background-color: white;
   transform: translate(-50%, -50%);
   width: 360px;
-  height: 480px;
+  height: 520px;
   top: 50%;
   left: 50%;
   z-index: 5000;
@@ -197,5 +217,11 @@ form input {
 form button {
   font-size: 1.5rem;
   margin-top: auto;
+}
+
+.small-text {
+  font-size: 0.8rem;
+  font-style: italic;
+  text-align: center;
 }
 </style>

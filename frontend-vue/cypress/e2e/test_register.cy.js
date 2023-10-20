@@ -1,4 +1,4 @@
-describe('Login user', () => {
+describe('Register user', () => {
     it('works correctly', () => {
         cy.visit('/')
 
@@ -10,12 +10,17 @@ describe('Login user', () => {
         const username = Cypress.env('user1')
         const password = Cypress.env('pw1')
 
-        // Login
-        cy.get('#loginUser').click()
+        // Register
+        cy.get('#registerUser').click()
         cy.get('form')
         .find('input[type="email"]').type(username)
-        .get('input[type="password"]').type(password)
-        .get('button[type="submit"]').click()
+        .get('#password').scrollIntoView().type(password)
+        .get('#password2').scrollIntoView().type(password)
+        .get('form').get('button[type=submit]').click()
+
+        // Due to slow load time
+        // cy.get('.user-form').find('button').first().click({force: true})
+        cy.wait(15000)
 
         // Check the change in DOM occurred
         cy.get('#logoutUser').should('exist')
