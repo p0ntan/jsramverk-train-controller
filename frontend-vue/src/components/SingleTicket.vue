@@ -52,6 +52,12 @@ export default {
         this.blocked = data
       })
 
+      // Only runs if there are no codes saved in store, needed if
+      // visiting page when logged in clicking "visa ärenden"
+      if (!this.$store.codes && this.$store.jwt) {
+        this.fetchCodes()
+      }
+
       // When ticket is mounted it checks if it should be in "edit-mode"
       if (this.localEdit.id === this.ticket._id) {
         // Set variables
@@ -175,6 +181,33 @@ export default {
       showToast(message) {
         this.$emit('send-toast', message)
       },
+      fetchCodes() {
+        // Define data needed from backend
+        const queryCodes = `{
+          codes {
+            Code
+            Level3Description
+          }
+        }`
+
+        try {
+          // Fetch data via graphql
+          fetch(`${graphqlURL}`, {
+          method: 'POST',
+          headers: {
+              'Content-Type': 'application/json',
+              'Accept': 'application/json',
+          },
+          body: JSON.stringify({ query: queryCodes })
+          })
+          .then(response => response.json())
+          .then(data => {
+            this.$store.codes = data.data.codes
+          })
+        } catch (error) {
+          console.error('Error fetching data:', error);
+        }
+      }
     },
     watch: {
       // 'Watches' the variable localEdit and runs code upon change
