@@ -34,6 +34,7 @@ Cypress.Commands.add('bypassLogin', (user) => {
 
     // Due to slow load time
     // cy.get('.user-form').find('button').first().click({force: true})
+    cy.wait(5000)
 
     // Check if login was successful
     cy.get('#logoutUser').should('exist').then((logoutButton) => {

@@ -10,22 +10,28 @@ describe('Login user', () => {
         const username = Cypress.env('user1')
         const password = Cypress.env('pw1')
 
-        // Fill out register form
-        cy.get('#registerUser').click()
-        cy.get('form').get('input[type="email"]').type(username)
-        cy.get('form').get('#password').type(password)
-        cy.get('form').get('#password2').type(password)
-        cy.get('form').find('button[type="submit"]').click({force: true})
+        // Login
+        cy.get('#loginUser').click()
+        cy.get('form')
+        .find('input[type="email"]').type(username)
+        .get('input[type="password"]').type(password)
+        .get('button[type="submit"]').click()
 
-        // Check if an error message exists
-        cy.contains('Error').then((errorElement) => {
-            if (errorElement.length > 0) {
-            // If error is found
-            // Fill out login form
-            cy.get('#loginUser').click()
-            cy.get('form').get('input[type="email"]').type(username)
-            cy.get('form').get('input[type="password"]').type(password)
-            cy.get('form').find('button[type="submit"]').click({force: true})
+        // Due to slow load time
+        // cy.get('.user-form').find('button').first().click({force: true})
+        cy.wait(5000)
+
+        // Check if login was successful
+        cy.get('#logoutUser').should('exist').then((logoutButton) => {
+            if (logoutButton.length === 0) {
+                // Login failed, try logging in
+                cy.get('#registerUser').click()
+                cy.get('form')
+                .find('input[type="email"]').type(username)
+                .get('#password').scrollIntoView().type(password)
+                .get('#password2').scrollIntoView().type(password)
+                .get('form').get('button[type=submit]').click()
+                cy.get('#logoutUser').should('exist')
             }
         })
 
