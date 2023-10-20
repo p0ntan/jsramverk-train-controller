@@ -147,9 +147,18 @@ const auth = {
 
     // Function is not supposed to be used outside model
     _emailExist: async function _emailExist(email) {
-        const db = await database.openDb();
-        const collection = await db.collection(auth.collectionName);
-        const user = await collection.findOne({ email: email });
+        let db;
+        let user;
+
+        try {
+            db = await database.openDb();
+            const collection = await db.collection(auth.collectionName);
+            user = await collection.findOne({ email: email });
+        } catch (error) {
+            console.error(error);
+        } finally {
+            db.client.close();
+        }
 
         return user;
     }
