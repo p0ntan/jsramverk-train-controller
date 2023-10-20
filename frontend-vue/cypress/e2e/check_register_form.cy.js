@@ -7,11 +7,11 @@ describe('Register form', () => {
         cy.get('#registerUser').click()
 
         // Form appears after click
-        cy.get('h2').contains("Registrera").should('exist')
+        cy.contains("Registrera").should('exist')
         cy.get('form').should('exist')
-        cy.get('form').get('input[type="email"]').should('exist')
-        cy.get('form').get('input[type="password"]').should('exist')
-        cy.get('form').find('button').type('submit').should('exist')
+        cy.get('form').find('input[type="email"]').should('exist')
+        cy.get('form').find('input[type="password"]').its('length').should('eq', 2)
+        cy.get('form').find('button').contains('Registrera').should('exist')
 
         // Cancel button exists
         cy.get('.user-form').find('button').should('exist')
