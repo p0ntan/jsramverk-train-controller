@@ -9,7 +9,8 @@
     "start-dev": "NODE_ENV=development nodemon app.js",
     "eslint": "eslint .",
     "dev-reset-db": "NODE_ENV=development node db/setup.js",
-    "test": "NODE_ENV=test nyc --reporter=html --reporter=text mocha --exit 'test/*/*.js' --timeout 10000"
+    "test": "NODE_ENV=test nyc --reporter=html --reporter=text mocha --exit 'test/*/*.js' --timeout 10000",
+    "deploy": "docker build -t jsramverk:latest . && docker tag jsramverk:latest p0ntantest.azurecr.io/jsramverk:latest && docker login p0ntantest.azurecr.io && docker push p0ntantest.azurecr.io/jsramverk:latest"
   },
   "keywords": [],
   "author": "",
