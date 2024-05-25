@@ -18,7 +18,10 @@ const app = express();
 const httpServer = require("http").createServer(app);
 
 app.use(cors());
-app.options('*', cors());
+app.options('*', cors({
+    origin: true,
+    credentials: true
+}));
 
 // For logging, uses morgan when not in test environment
 if (process.env.NODE_ENV !== 'test') {
@@ -34,9 +37,10 @@ app.use(bodyParser.urlencoded({ extended: true })); // for parsing application/x
 const io = require("socket.io")(httpServer, {
     cors: {
         origins: [
+            "http://localhost:4173",
             "http://localhost:5173",
-            "https://www.student.bth.se/~elmo22/train",
-            "https://www.student.bth.se/~poak22/train"
+            "http://jsramverk-frontend.lenticode.com",
+            "https://jsramverk-frontend.lenticode.com",
         ],
         methods: ["GET", "POST"]
     }
