@@ -3,8 +3,7 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
 const jwtSecret = process.env.JWT_SECRET;
-const saltRounds = 10;
-
+const saltRounds = process.env.SALT_ROUNDS;
 /**
  * Object for register, login and other auth related things
  */
@@ -42,7 +41,7 @@ const auth = {
         // Don't catch any errors here, since graphql uses errors. Using finally to close db
         try {
             // Hash password
-            const hash = await bcrypt.hash(password, saltRounds);
+            const hash = await bcrypt.hash(password, Number(saltRounds));
 
             // Open and save new user to database
             db = await database.openDb();
