@@ -25,8 +25,9 @@ const database = {
             } else if (process.env.NODE_ENV === 'development') {
                 dbName = 'development';
             }
-            const dsn = `mongodb+srv://${dbUser}:${dbPass}@jsramverk.a93x1lp.mongodb.net/` +
+            const dsn = `mongodb+srv://${dbUser}:${dbPass}@lenticode-apps.amlgurc.mongodb.net/` +
                 `${dbName}?retryWrites=true&w=majority`;
+            
             const client  = await mongo.connect(dsn);
             const db = await client.db();
 
